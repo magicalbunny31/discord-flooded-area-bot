@@ -1,0 +1,15 @@
+{
+   "name": "flooded-area-suggestions",
+   "version": "1.0.0",
+   "description": "This is a bot solely with the use of suggesting ideas for the game (and the server of) Flooded Area.",
+   "main": "index.js",
+   "type": "module",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "author": "magicalbunny31",
+   "dependencies": {
+      "discord.js": "^14.0.0-dev.1654519696-fba9710",
+      "dotenv": "^16.0.1"
+   }
+}
