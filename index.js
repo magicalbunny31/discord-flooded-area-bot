@@ -15,6 +15,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
+// day.js plugins
+import dayjs from "dayjs";
+
+import utc from "dayjs/plugin/utc.js";
+dayjs.extend(utc);
+
+
 // discord client
 import Discord from "discord.js";
 const client = new Discord.Client({

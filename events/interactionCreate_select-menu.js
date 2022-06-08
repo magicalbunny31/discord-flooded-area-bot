@@ -20,6 +20,7 @@ export default async interaction => {
    // send the correct modal for each suggestion type
    switch (type) {
 
+
       case `game`:
          return await interaction.showModal(
             new Discord.ModalBuilder()
@@ -31,12 +32,23 @@ export default async interaction => {
                         new Discord.TextInputBuilder()
                            .setCustomId(`suggestion`)
                            .setLabel(`YOUR SUGGESTION`)
-                           .setPlaceholder(`What is your suggestion for the game?`)
+                           .setPlaceholder(`🎮 What is your suggestion for the game?`)
                            .setRequired(true)
                            .setStyle(Discord.TextInputStyle.Paragraph)
+                     ]),
+                  new Discord.ActionRowBuilder()
+                     .setComponents([
+                        new Discord.TextInputBuilder()
+                           .setCustomId(`image`)
+                           .setMaxLength(2048)
+                           .setLabel(`IMAGE`)
+                           .setPlaceholder(`🔗 Add an optional image url to show.`)
+                           .setRequired(false)
+                           .setStyle(Discord.TextInputStyle.Short)
                      ])
                ])
          );
+
 
       case `server`:
          return await interaction.showModal(
@@ -49,12 +61,23 @@ export default async interaction => {
                         new Discord.TextInputBuilder()
                            .setCustomId(`suggestion`)
                            .setLabel(`YOUR SUGGESTION`)
-                           .setPlaceholder(`What is your suggestion for the server?`)
+                           .setPlaceholder(`💬 What is your suggestion for the server?`)
                            .setRequired(true)
                            .setStyle(Discord.TextInputStyle.Paragraph)
+                     ]),
+                  new Discord.ActionRowBuilder()
+                     .setComponents([
+                        new Discord.TextInputBuilder()
+                           .setCustomId(`image`)
+                           .setMaxLength(2048)
+                           .setLabel(`IMAGE`)
+                           .setPlaceholder(`🔗 Add an optional image url to show.`)
+                           .setRequired(false)
+                           .setStyle(Discord.TextInputStyle.Short)
                      ])
                ])
          );
+
 
       case `part`:
          return await interaction.showModal(
@@ -65,10 +88,10 @@ export default async interaction => {
                   new Discord.ActionRowBuilder()
                      .setComponents([
                         new Discord.TextInputBuilder()
-                           .setCustomId(`suggestion`)
+                           .setCustomId(`name`)
                            .setMaxLength(1024)
                            .setLabel(`PART NAME`)
-                           .setPlaceholder(`What is this part's name?`)
+                           .setPlaceholder(`🏷️ What is this part's name?`)
                            .setRequired(true)
                            .setStyle(Discord.TextInputStyle.Short)
                      ]),
@@ -78,12 +101,23 @@ export default async interaction => {
                            .setCustomId(`description`)
                            .setMaxLength(1024)
                            .setLabel(`PART DESCRIPTION`)
-                           .setPlaceholder(`Describe what this part does.`)
+                           .setPlaceholder(`📰 Describe what this part does.`)
                            .setRequired(true)
                            .setStyle(Discord.TextInputStyle.Paragraph)
+                     ]),
+                  new Discord.ActionRowBuilder()
+                     .setComponents([
+                        new Discord.TextInputBuilder()
+                           .setCustomId(`image`)
+                           .setMaxLength(2048)
+                           .setLabel(`IMAGE`)
+                           .setPlaceholder(`🔗 Add an optional image url to show.`)
+                           .setRequired(false)
+                           .setStyle(Discord.TextInputStyle.Short)
                      ])
                ])
          );
+
 
    };
 };

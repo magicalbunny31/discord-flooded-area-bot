@@ -9,7 +9,10 @@
    },
    "author": "magicalbunny31",
    "dependencies": {
+      "@magicalbunny31/awesome-utility-stuff": "github:magicalbunny31/awesome-utility-stuff",
+      "dayjs": "^1.11.3",
       "discord.js": "^14.0.0-dev.1654519696-fba9710",
-      "dotenv": "^16.0.1"
+      "dotenv": "^16.0.1",
+      "fuzzysort": "^2.0.1"
    }
 }
