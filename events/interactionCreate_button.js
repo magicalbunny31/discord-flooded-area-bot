@@ -68,9 +68,7 @@ export default async interaction => {
          try {
             // add the suggestion author to the thread
             const authorId = interaction.message.embeds[0].data.author.name.match(/\([^()]*\)/g)?.pop().slice(1, -1);
-            const author = await interaction.guild.members.fetch(authorId);
-
-            await thread.members.add(author);
+            await thread.members.add(authorId);
 
          } catch {
             // an error occurred: the suggestion author probably left the server
