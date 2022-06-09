@@ -3,7 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { colours, noop } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, choice, noop } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
@@ -74,6 +74,15 @@ export default async interaction => {
             // an error occurred: the suggestion author probably left the server
             noop;
          };
+
+         // send who started the thread
+         await thread.send({
+            content: `**Thread started by ${interaction.user}**, ${choice([
+               `say hi!`,                               `I wonder what they've got to say.`,
+               `incoming discussion!`,                  `conversation inbound!`,
+               `looks like they want to discuss this.`, `welcome to the beginning of this awesome channel.`
+            ])}`
+         });
 
          return;
       };
