@@ -34,9 +34,13 @@ export default async message => {
    switch (command) {
 
 
+      /**
+       * adds the "💬 Create Discussion Thread" to older suggestion messages
+       */
       case `add-button`: {
          const [ inChannelId, messageId ] = args;
 
+         // add the button to the message
          const guild   = await message.client.guilds.fetch(`977254354589462618`);
          const channel = await guild.channels.fetch(inChannelId);
          const m       = await channel.messages.fetch(messageId);
@@ -58,7 +62,11 @@ export default async message => {
       };
 
 
+      /**
+       * send the initial suggestions message
+       */
       case `send-suggestion-message`: {
+         // send the message to the same channel as the received message
          const embeds = [
             new Discord.EmbedBuilder()
                .setColor(0x4de94c)
@@ -108,99 +116,7 @@ export default async message => {
             components
          });
 
-         if (message.deletable)
-            await message.delete();
-
-         return;
-      };
-
-
-      case `demo-threads`: {
-         await message.channel.send({
-            embeds: [
-               new Discord.EmbedBuilder()
-                  .setColor(0x4de94c)
-                  .setAuthor({
-                     name: `${message.author.tag}\n(${message.author.id})`,
-                     iconURL: message.author.displayAvatarURL()
-                  })
-                  .setDescription(`this is a suggestion`)
-            ],
-            components: [
-               new Discord.ActionRowBuilder()
-                  .setComponents([
-                     new Discord.ButtonBuilder()
-                        .setCustomId(`create-discussion-thread`)
-                        .setLabel(`Create Discussion Thread`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji(`💬`)
-                  ])
-            ]
-         });
-
-         if (message.deletable)
-            await message.delete();
-
-         return;
-      };
-
-
-      case `demo-votes`: {
-         /**
-          * down:    [ #f60000, #f81e00, #fc4100, #ff6300, #ff8400, #ffa400, #ffc100, #ffd800, #ffe800 ]
-          * neutral: [ #ffee00 ]
-          * up:      [ #faee00, #edef00, #d8ef04, #c0ee16, #a5ee26, #88ec35, #6deb41, #57e949, #4de94c ]
-          */
-
-          const m = await message.channel.send({
-            embeds: [
-               new Discord.EmbedBuilder()
-                  .setColor(0x4de94c)
-                  .setAuthor({
-                     name: `${message.author.tag}\n(${message.author.id})`,
-                     iconURL: message.author.displayAvatarURL()
-                  })
-                  .setDescription(`this suggestion is very awesome`)
-                  .setFooter({
-                     text: `POPULAR! 🎉`
-                  })
-            ],
-            components: [
-               new Discord.ActionRowBuilder()
-                  .setComponents([
-                     new Discord.ButtonBuilder()
-                        .setCustomId(`create-discussion-thread`)
-                        .setLabel(`Create Discussion Thread`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji(`💬`)
-                  ])
-            ]
-         });
-
-         await m.react(`⬆️`);
-         await m.react(`⬇️`);
-
-         if (message.deletable)
-            await message.delete();
-
-         return;
-      };
-
-
-      case `demo-image`: {
-         await message.channel.send({
-            embeds: [
-               new Discord.EmbedBuilder()
-                  .setColor(0xffee00)
-                  .setAuthor({
-                     name: `${message.author.tag}\n(${message.author.id})`,
-                     iconURL: message.author.displayAvatarURL()
-                  })
-                  .setDescription(`suggestion`)
-                  .setImage(`https://foxrudor.de/?aaaaaaaaa=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`)
-            ]
-         });
-
+         // delete the received message (if possible)
          if (message.deletable)
             await message.delete();
 

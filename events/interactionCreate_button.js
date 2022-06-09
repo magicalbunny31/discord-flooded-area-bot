@@ -3,7 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { colours } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, noop } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
@@ -25,6 +25,7 @@ export default async interaction => {
       case `confirm-delete-suggestion`: {
          const [ _type, inChannelId, messageId ] = interaction.customId.split(`:`);
 
+         // "defer" this interaction
          await interaction.update({
             embeds: [
                new Discord.EmbedBuilder()
@@ -34,18 +35,22 @@ export default async interaction => {
             components: []
          });
 
+         // delete the suggestion message
          const channel = await interaction.guild.channels.fetch(inChannelId);
          const message = await channel.messages.fetch(messageId);
 
          await message.delete();
 
-         return await interaction.editReply({
+         // edit the reply to show that the suggestion was deleted
+         await interaction.editReply({
             embeds: [
                new Discord.EmbedBuilder()
                   .setColor(interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor)
                   .setDescription(`**Your suggestion in ${channel} has been deleted.**`)
             ]
          });
+
+         return;
       };
 
 
@@ -66,7 +71,8 @@ export default async interaction => {
          const channel = await interaction.guild.channels.fetch(inChannelId);
          const message = await channel.messages.fetch(messageId);
 
-         return await interaction.update({
+         // ask for confirmation
+         await interaction.update({
             embeds: [
                new Discord.EmbedBuilder()
                   .setColor(colours.red)
@@ -83,6 +89,8 @@ export default async interaction => {
                   ])
             ]
          });
+
+         return;
       };
 
 
