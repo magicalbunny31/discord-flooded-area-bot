@@ -30,7 +30,7 @@ export default async interaction => {
       const channel = await interaction.guild.channels.fetch(channelIds[channelId]);
       const channelMessages = await channel.messages.fetch();
       const userMessages = channelMessages.filter(message => {
-         const author = message?.embeds[0]?.data.author.name;
+         const author = message?.embeds[0]?.data?.author.name;
          const authorId = author?.match(/\([^()]*\)/g)?.pop().slice(1, -1);
          return authorId === interaction.user.id;
       });
