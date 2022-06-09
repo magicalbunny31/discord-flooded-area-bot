@@ -55,13 +55,29 @@ export default async interaction => {
 
 
       case `create-discussion-thread`: {
+         // update the interaction to remove the button from the suggestion's message
          await interaction.update({
             components: []
          });
 
-         return await interaction.message.startThread({
+         // create a thread on the suggestion's message
+         const thread = await interaction.message.startThread({
             name: `Suggestion Discussions`
          });
+
+         try {
+            // add the suggestion author to the thread
+            const authorId = interaction.message.embeds[0].data.author.name.match(/\([^()]*\)/g)?.pop().slice(1, -1);
+            const author = interaction.guild.members.fetch(authorId);
+
+            await thread.members.add(author);
+
+         } catch {
+            // an error occurred: the suggestion author probably left the server
+            noop;
+         };
+
+         return;
       };
 
 
