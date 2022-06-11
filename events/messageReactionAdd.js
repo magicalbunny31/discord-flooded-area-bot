@@ -54,6 +54,22 @@ export default async (messageReaction, user) => {
    await removeAuthorVote();
 
 
+   // removed a banned user's vote
+   const removeBannedVote = async () => {
+      // check if this user is suggestions banned and remove their vote (will have a try/catch just in case)
+      const member = await messageReaction.message.guild.members.fetch(user.id);
+
+      if (!member.roles.cache.has(`979489114153963560`))
+         try {
+            return await messageReaction.users.remove(user.id);
+         } catch {
+            return;
+         };
+   };
+
+   await removeBannedVote();
+
+
    // remove a duplicate vote
    const removeDuplicateVote = async () => {
       // check if they've voted the other

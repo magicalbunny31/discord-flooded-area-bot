@@ -15,6 +15,11 @@ export default async interaction => {
       return;
 
 
+   // this user is banned from making suggestions
+   if (interaction.member.roles.cache.has(`979489114153963560`))
+      return await interaction.respond([]);
+
+
    // ids of the channels for each suggestion type
    const channelIds = {
       game:   `983391293583523881`,

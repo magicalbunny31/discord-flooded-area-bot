@@ -13,6 +13,14 @@ export default async interaction => {
       return;
 
 
+   // this user is banned from making suggestions
+   if (interaction.member.roles.cache.has(`979489114153963560`))
+      return await interaction.reply({
+         content: `You are banned from making suggestions.`,
+         ephemeral: true
+      });
+
+
    // get the type of suggestion
    const [ type ] = interaction.values;
 

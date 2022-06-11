@@ -13,6 +13,14 @@ export default async interaction => {
       return;
 
 
+   // this user is banned from making suggestions
+   if (interaction.member.roles.cache.has(`979489114153963560`))
+      return await interaction.reply({
+         content: `You are banned from making suggestions.`,
+         ephemeral: true
+      });
+
+
    // get this command and the suggestion-message-id
    const command = interaction.commandName;
    const messageId = interaction.options.getString(`suggestion-message-id`);
