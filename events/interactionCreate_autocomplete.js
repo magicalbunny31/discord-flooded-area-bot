@@ -16,7 +16,10 @@ export default async interaction => {
 
 
    // this user is banned from making suggestions
-   if (interaction.member.roles.cache.has(`979489114153963560`))
+   const suggestionsBannedRoleId = `979489114153963560`;
+   const reactionMemberIsSuggestionsBanned = interaction.member.roles.cache.has(suggestionsBannedRoleId);
+
+   if (reactionMemberIsSuggestionsBanned)
       return await interaction.respond([]);
 
 
