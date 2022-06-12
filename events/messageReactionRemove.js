@@ -25,46 +25,70 @@ export default async (messageReaction, user) => {
       return;
 
 
-   // update the embed depending on its total votes
-   const updateEmbed = async () => {
-      // fetch votes
-      const upvotes    = [ ...(await (await messageReaction.message.reactions.resolve(`⬆️`).fetch()).users.fetch()).values() ].length;
-      const downvotes  = [ ...(await (await messageReaction.message.reactions.resolve(`⬇️`).fetch()).users.fetch()).values() ].length;
-
-      const totalVotes = upvotes - downvotes;
+   // reaction enums
+   const upvote   = `⬆️`;
+   const downvote = `⬇️`;
 
 
-      // possible colours for the embed
-      const up      = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
-      const neutral = 0xffee00;
-      const down    = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
-
-      const setColour =
-         totalVotes === 0
-            ? neutral
-            : totalVotes > 0
-               ? up  [         totalVotes ] || up  [8]
-               : down[Math.abs(totalVotes)] || down[8];
+   // ignore reactions that aren't votes
+   if (![ upvote, downvote ].includes(messageReaction.emoji.name))
+      return;
 
 
-      // update the embed
-      const message = await messageReaction.message.fetch();
-      const [ embed ] = message.embeds;
-      embed.data.color = setColour;
-
-      embed.data.footer = {
-         text: totalVotes >= 10 ? `POPULAR! 🎉` : null
-      };
+   // this message
+   const message = await messageReaction.message.fetch();
 
 
+   // this suggestion's votes
+   const partialUpvotes   = messageReaction.message.reactions.resolve(upvote);
+   const partialDownvotes = messageReaction.message.reactions.resolve(downvote);
 
-      // edit the message
-      return await message.edit({
-         embeds: [
-            embed
-         ]
-      });
+   if (!partialUpvotes || !partialDownvotes)
+      return; // this value is required to be present to continue
+
+   const upvotes   = await partialUpvotes  .fetch();
+   const downvotes = await partialDownvotes.fetch();
+
+   const usersWhoHaveUpvoted   = await upvotes  .users.fetch();
+   const usersWhoHaveDownvoted = await downvotes.users.fetch();
+
+
+   // find a colour based on the votes
+   const numberOfUpvotes   = [ ...usersWhoHaveUpvoted  .values() ].length;
+   const numberOfDownvotes = [ ...usersWhoHaveDownvoted.values() ].length;
+
+   const cumulativeVotes = numberOfUpvotes - numberOfDownvotes;
+
+   const positiveColours = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
+   const neutralColour   =   0xffee00;
+   const negativeColours = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
+
+   const newColour =
+      cumulativeVotes === 0
+         ? neutralColour
+         : cumulativeVotes > 0
+            ? positiveColours[         cumulativeVotes ] || positiveColours[8]
+            : negativeColours[Math.abs(cumulativeVotes)] || negativeColours[8];
+
+
+   // the embed hasn't changed
+   const [ embed ] = message.embeds;
+
+   if (embed.data.color === newColour)
+      return;
+
+
+   // update the suggestion's embed
+   embed.data.color = newColour;
+   embed.data.footer = {
+      text: cumulativeVotes >= 10 ? `POPULAR! 🎉` : null
    };
 
-   await updateEmbed();
+
+   // update the suggestion message
+   await message.edit({
+      embeds: [
+         embed
+      ]
+   });
 };
