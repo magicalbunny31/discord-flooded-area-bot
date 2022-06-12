@@ -71,14 +71,9 @@ export default async (messageReaction, user) => {
             : negativeColours[Math.abs(cumulativeVotes)] || negativeColours[8];
 
 
-   // the embed hasn't changed
+   // update the suggestion's embed
    const [ embed ] = message.embeds;
 
-   if (embed.data.color === newColour)
-      return;
-
-
-   // update the suggestion's embed
    embed.data.color = newColour;
    embed.data.footer = {
       text: cumulativeVotes >= 10 ? `POPULAR! 🎉` : null
