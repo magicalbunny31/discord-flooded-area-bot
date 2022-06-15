@@ -110,7 +110,7 @@ export default async interaction => {
 
       case `edit-suggestion`: {
          // preview components
-         const isInvalid = (!suggestionOrName.trim() || (isPartSuggestion && !imageOrNullOrPartDescription?.trim())) && isWellFormedImageURL;
+         const isInvalid = !suggestionOrName.trim() || (isPartSuggestion && !imageOrNullOrPartDescription?.trim()) || !isWellFormedImageURL;
 
          const components = [
             new Discord.ActionRowBuilder()
@@ -357,7 +357,7 @@ export default async interaction => {
 
       case `suggestion`: {
          // preview components
-         const isInvalid = (!suggestionOrName.trim() || (isPartSuggestion && !imageOrNullOrPartDescription?.trim())) && isWellFormedImageURL;
+         const isInvalid = !suggestionOrName.trim() || (isPartSuggestion && !imageOrNullOrPartDescription?.trim()) || !isWellFormedImageURL;
 
          const components = [
             new Discord.ActionRowBuilder()
