@@ -45,7 +45,7 @@ export default async message => {
          const channel = await guild.channels.fetch(inChannelId);
          const m       = await channel.messages.fetch(messageId);
 
-         await m.edit({
+         return await m.edit({
             components: [
                new Discord.ActionRowBuilder()
                   .setComponents([
@@ -57,8 +57,6 @@ export default async message => {
                   ])
             ]
          });
-
-         return;
       };
 
 
@@ -66,6 +64,10 @@ export default async message => {
        * send the initial suggestions message
        */
       case `send-suggestion-message`: {
+         // delete the received message (if possible)
+         if (message.deletable)
+            await message.delete();
+
          // send the message to the same channel as the received message
          const embeds = [
             new Discord.EmbedBuilder()
@@ -111,16 +113,10 @@ export default async message => {
                ])
          ];
 
-         await message.channel.send({
+         return await message.channel.send({
             embeds,
             components
          });
-
-         // delete the received message (if possible)
-         if (message.deletable)
-            await message.delete();
-
-         return;
       };
 
 

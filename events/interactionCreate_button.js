@@ -53,15 +53,13 @@ export default async interaction => {
          await message.delete();
 
          // edit the reply to show that the suggestion was deleted
-         await interaction.editReply({
+         return await interaction.editReply({
             embeds: [
                new Discord.EmbedBuilder()
                   .setColor(interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor)
                   .setDescription(`**Your suggestion in ${channel} has been deleted.**`)
             ]
          });
-
-         return;
       };
 
 
@@ -115,7 +113,7 @@ export default async interaction => {
          const message = await channel.messages.fetch(messageId);
 
          // ask for confirmation
-         await interaction.update({
+         return await interaction.update({
             embeds: [
                new Discord.EmbedBuilder()
                   .setColor(colours.red)
@@ -132,8 +130,6 @@ export default async interaction => {
                   ])
             ]
          });
-
-         return;
       };
 
 
