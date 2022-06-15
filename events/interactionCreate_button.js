@@ -95,7 +95,16 @@ export default async interaction => {
             ])}`
          });
 
-         return;
+         // delete the system message in the channel saying that a thread was created
+         const messages = await interaction.channel.messages.fetch({
+            after: interaction.id
+         });
+         const message = messages.find(message => message.author.id === interaction.client.user.id && message.system);
+
+         if (!message || !message.deletable)
+            return;
+         else
+            return await message.delete();
       };
 
 
