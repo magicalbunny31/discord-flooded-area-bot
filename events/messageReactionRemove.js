@@ -7,17 +7,21 @@ import Discord from "discord.js";
 /**
  * @param {Discord.MessageReaction} messageReaction
  * @param {Discord.User} user
+ * @param {ReturnType<typeof import("redis").createClient>} redis
  */
-export default async (messageReaction, user) => {
+export default async (messageReaction, user, redis) => {
    // only listen for reactions in the suggestion channels
-   const channelIds = [
-      `983391293583523881`,
-      `983391792131108885`,
-      `983391983487815791`
-   ];
+   const rawChannelIds = await redis.HGETALL(`flooded-area:channels:suggestions`);
+   const channelIds = Object.values(rawChannelIds);
 
    if (!channelIds.includes(messageReaction.message?.channel.id) || !messageReaction.message)
       return;
+
+
+   // type of suggestion
+   const channelTypes = Object.fromEntries(Object.entries(rawChannelIds).map(id => id.reverse()));
+   const type = channelTypes[messageReaction.message.channel.id];
+   const suggestion = await redis.HGETALL(`flooded-area:${type}:${messageReaction.message.id}`);
 
 
    // ignore bots
@@ -37,6 +41,7 @@ export default async (messageReaction, user) => {
 
    // this message
    const message = await messageReaction.message.fetch();
+   const suggestionAuthorId = suggestion.suggester;
 
 
    // this suggestion's votes
@@ -86,4 +91,19 @@ export default async (messageReaction, user) => {
          embed
       ]
    });
+
+
+   // update the database
+   const reactionUserHasUpvoted = messageReaction.emoji.id === upvote || messageReaction.emoji.name === upvote;
+   return await redis.HSET(`flooded-area:${type}:${messageReaction.message.id}`,
+      reactionUserHasUpvoted
+         ? {
+            "upvotes": JSON.stringify(numberOfUpvotes - 1),
+            "upvoters": JSON.stringify([ ...usersWhoHaveUpvoted.filter(user => user.id !== messageReaction.client.user.id).values() ])
+         }
+         : {
+            "downvotes": JSON.stringify(numberOfDownvotes - 1),
+            "downvoters": JSON.stringify([ ...usersWhoHaveDownvoted.filter(user => user.id !== messageReaction.client.user.id).values() ])
+         }
+   );
 };

@@ -1,18 +1,26 @@
 {
-   "name": "flooded-area-suggestions",
+   "name": "discord-flooded-area-bot",
    "version": "1.0.0",
-   "description": "This is a bot solely with the use of suggesting ideas for the game (and the server of) Flooded Area.",
+   "description": "Flooded Area Community's Discord bot!",
    "main": "index.js",
    "type": "module",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
    },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/magicalbunny31/discord-flooded-area-bot.git"
+   },
    "author": "magicalbunny31",
+   "bugs": {
+      "url": "https://github.com/magicalbunny31/discord-flooded-area-bot/issues"
+   },
    "dependencies": {
       "@magicalbunny31/awesome-utility-stuff": "github:magicalbunny31/awesome-utility-stuff",
       "dayjs": "^1.11.3",
-      "discord.js": "^14.0.0-dev.1654519696-fba9710",
+      "discord.js": "^14.0.0-dev.1657239101-e78c9c9",
       "dotenv": "^16.0.1",
-      "fuzzysort": "^2.0.1"
+      "fuzzysort": "^2.0.1",
+      "redis": "^4.2.0"
    }
 }

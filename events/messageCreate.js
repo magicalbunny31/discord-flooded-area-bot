@@ -3,12 +3,13 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { strip } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Message} message
+ * @param {ReturnType<typeof import("redis").createClient>} redis
  */
-export default async message => {
+export default async (message, redis) => {
    // don't listen to partials
    if (message.partial)
       return;
@@ -35,32 +36,6 @@ export default async message => {
 
 
       /**
-       * adds the "💬 Create Discussion Thread" to older suggestion messages
-       */
-      case `add-button`: {
-         const [ inChannelId, messageId ] = args;
-
-         // add the button to the message
-         const guild   = await message.client.guilds.fetch(`977254354589462618`);
-         const channel = await guild.channels.fetch(inChannelId);
-         const m       = await channel.messages.fetch(messageId);
-
-         return await m.edit({
-            components: [
-               new Discord.ActionRowBuilder()
-                  .setComponents([
-                     new Discord.ButtonBuilder()
-                        .setCustomId(`create-discussion-thread`)
-                        .setLabel(`Create Discussion Thread`)
-                        .setStyle(Discord.ButtonStyle.Primary)
-                        .setEmoji(`💬`)
-                  ])
-            ]
-         });
-      };
-
-
-      /**
        * send the initial suggestions message
        */
       case `send-suggestion-message`: {
@@ -73,16 +48,26 @@ export default async message => {
             new Discord.EmbedBuilder()
                .setColor(0x4de94c)
                .setDescription(strip`
-                  **Welcome to <#983394106950684704>!**
+                  **__Welcome to <#983394106950684704>!__**
 
-                  Submit any suggestions you have, through ${message.client.user} right here!
-                  Your suggestions will be sent to the selected category's channel and will include your username. 
-                  Others will be able to be able to view all suggestions and vote on them.
-                  Please allocate your suggestions in the correct categories and don't yield any joke suggestions: doing so may result in being blacklisted from this channel.
+                  Submit any suggestions you have right here!
+                  Your suggestions will be sent to the selected category's channel and will include your username#discriminator. 
+                  Others members will be able to be able to view all suggestions and vote on them.
+                  Don't abuse <#983394106950684704>: doing so may result in you being blacklisted from participating in suggestions.
 
-                  You may further discuss individual suggestions by pressing the "💬 **Create Discussion Thread**" button.
-                  To edit one of your suggestions, use the command **/edit-suggestion** with ${message.client.user}.
-                  Similarly, to delete one of your suggestions, use the command **/delete-suggestion** with ${message.client.user}.
+                  You can further discuss individual suggestions by chatting in its corresponding thread.
+                  The suggestion author and the <@&989125486590451732> are able to edit (their own) suggestions or delete them.
+                  Only the <@&989125486590451732> are able to approve/deny or lock a suggestion.
+               `),
+            new Discord.EmbedBuilder()
+               .setColor(0x4de94c)
+               .setDescription(strip`
+                  **__<#983394106950684704> are for your suggestions only.__**
+
+                  Found an exploiter or abuser? Use <#995356930241470514> to report them.
+                  Trying to appeal a ban? Submit it in <#988798222245953566>.
+                  Got a bug to report? You should check out <#977295645603946597>.
+                  Want to suggest a map? Do it in <#977297300567244801>.
                `)
          ];
 
@@ -95,21 +80,34 @@ export default async message => {
                      .setOptions([
                         {
                            label: `Game Suggestions`,
-                           value: `game`,
-                           description: `General suggestions for the game.`,
+                           value: `game-suggestions`,
+                           description: `Suggestions for Flooded Area on Roblox.`,
                            emoji: `<:Flood:983391790348509194>`
                         }, {
                            label: `Server Suggestions`,
-                           value: `server`,
-                           description: `General suggestions for the server.`,
+                           value: `server-suggestions`,
+                           description: `Suggestions for this Discord server.`,
                            emoji: `<:Discord:983413839573962752>`
                         }, {
                            label: `Part Suggestions`,
-                           value: `part`,
-                           description: `Request a new type of part or function.`,
+                           value: `part-suggestions`,
+                           description: `Suggest a new part for Flooded Area on Roblox.`,
                            emoji: `<:Part:983414870970077214>`
                         }
                      ])
+               ]),
+            new Discord.ActionRowBuilder()
+               .setComponents([
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`view-your-suggestions`)
+                     .setLabel(`View Your Suggestions`)
+                     .setEmoji(emojis.flooded_area)
+                     .setStyle(Discord.ButtonStyle.Primary),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`suggestions-tutorial`)
+                     .setLabel(`Suggestions Tutorial`)
+                     .setEmoji(emojis.flooded_area)
+                     .setStyle(Discord.ButtonStyle.Secondary)
                ])
          ];
 
@@ -120,5 +118,88 @@ export default async message => {
       };
 
 
+      case `demo`: {
+         await message.delete();
+
+         const m = await message.channel.send({
+            embeds: [
+               new Discord.EmbedBuilder()
+                  .setColor(0xffee00)
+                  .setAuthor({
+                     name: message.author.tag,
+                     iconURL: message.author.displayAvatarURL()
+                  })
+                  .setDescription(strip`
+                     my suggestion lmao
+                     filler textfiller textfiller textfiller textfiller textfiller textfiller textfiller textfiller textfiller textfiller textfiller text
+                     foxfoxfoxfoxfoxfoxfoxfoxfoxfoxfoxfoxfoxfoxfoxfox
+                  `)
+            ]
+         });
+
+         await m.react(`⬆️`);
+         await m.react(`⬇️`);
+
+         const t = await m.startThread({
+            name: `💬 "my suggestion lmao"`
+         });
+
+         await t.send({
+            embeds: [
+               new Discord.EmbedBuilder()
+                  .setColor(0x4de94c)
+                  .setTitle(`\\#️⃣ Suggestion Discussions`)
+                  .setDescription(strip`
+                     **\\🎫 Status**
+                     > Approved by ${Discord.userMention(`490178047325110282`)} ${Discord.time(1657211713, Discord.TimestampStyles.RelativeTime)}.
+
+                     **\\📝 Edits**
+                     > [Edit](https://nuzzles.dev) from ${Discord.time(1657190113, Discord.TimestampStyles.RelativeTime)} by ${Discord.userMention(`490178047325110282`)}.
+                     > [Edit](https://nuzzles.dev) from ${Discord.time(1657200913, Discord.TimestampStyles.RelativeTime)} by ${Discord.userMention(`330380239735750658`)}.
+                  `)
+            ],
+            components: [
+               new Discord.ActionRowBuilder()
+                  .setComponents([
+                     new Discord.ButtonBuilder()
+                        .setCustomId(`${m.id}:edit-suggestion`)
+                        .setLabel(`Edit Suggestion`)
+                        .setEmoji(`📝`)
+                        .setStyle(Discord.ButtonStyle.Secondary)
+                        .setDisabled(true)
+                  ]),
+               new Discord.ActionRowBuilder()
+                  .setComponents([
+                     new Discord.SelectMenuBuilder()
+                        .setCustomId(`${m.id}:suggestion-settings`)
+                        .setPlaceholder(`🔧 Suggestion Settings..`)
+                        .setOptions([
+                           new Discord.SelectMenuOptionBuilder()
+                              .setLabel(`Approve Suggestion`)
+                              .setDescription(`Set this suggestion's status as approved.`)
+                              .setValue(`approve-suggestion`)
+                              .setEmoji(`✅`),
+                           new Discord.SelectMenuOptionBuilder()
+                              .setLabel(`Deny Suggestion`)
+                              .setDescription(`Set this suggestion's status as denied.`)
+                              .setValue(`deny-suggestion`)
+                              .setEmoji(`❎`),
+                           new Discord.SelectMenuOptionBuilder()
+                              .setLabel(`Lock Suggestion`)
+                              .setDescription(`Prevent further discussion in this thread and release votes.`)
+                              .setValue(`lock-suggestion`)
+                              .setEmoji(`🔒`),
+                           new Discord.SelectMenuOptionBuilder()
+                              .setLabel(`Delete Suggestion`)
+                              .setDescription(`Removes this suggestion and deletes this thread.`)
+                              .setValue(`delete-suggestion`)
+                              .setEmoji(`🗑️`)
+                        ])
+                  ])
+            ]
+         });
+
+         await t.members.add(message.author);
+      };
    };
 };

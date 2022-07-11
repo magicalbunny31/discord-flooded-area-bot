@@ -6,32 +6,87 @@ import Discord from "discord.js";
 
 /**
  * @param {Discord.Client} client
+ * @param {ReturnType<typeof import("redis").createClient>} redis
  */
-export default async client => {
+export default async (client, redis) => {
    // create commands in the Flooded Area Community discord server
    const commandsGuild = `977254354589462618`;
    client.application.commands.set([
-      {
-         name: `edit-suggestion`,
-         description: `📝 Edit one of your suggestions.`,
-         options: [{
-            type: Discord.ApplicationCommandOptionType.String,
-            name: `suggestion-message-id`,
-            description: `🆔 The ID of the suggestion's message to edit.`,
-            autocomplete: true,
-            required: true
-         }]
-      }, {
-         name: `delete-suggestion`,
-         description: `❌ Delete one of your suggestions.`,
-         options: [{
-            type: Discord.ApplicationCommandOptionType.String,
-            name: `suggestion-message-id`,
-            description: `🆔 The ID of the suggestion's message to delete.`,
-            autocomplete: true,
-            required: true
-         }]
-      }
+      new Discord.SlashCommandBuilder()
+         .setName(`set-channel`)
+         .setDescription(`📋 Set a channel for a specified submission.`)
+         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`suggestions`)
+               .setDescription(`💬 Set a channel for suggestion submissions to be sent to.`)
+               .addStringOption(
+                  new Discord.SlashCommandStringOption()
+                     .setName(`type`)
+                     .setDescription(`📄 Type of suggestion's channel to change.`)
+                     .setChoices({
+                        name: `Game Suggestions`,
+                        value: `game-suggestions`
+                     }, {
+                        name: `Server Suggestions`,
+                        value: `server-suggestions`
+                     }, {
+                        name: `Part Suggestions`,
+                        value: `part-suggestions`
+                     })
+                     .setRequired(true)
+               )
+               .addChannelOption(
+                  new Discord.SlashCommandChannelOption()
+                     .setName(`channel`)
+                     .setDescription(`📋 Channel to change where suggestions are sent to.`)
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildText
+                     )
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`support-tickets`)
+               .setDescription(`💬 Set a category for support ticket submissions to be sent to.`)
+               .addStringOption(
+                  new Discord.SlashCommandStringOption()
+                     .setName(`type`)
+                     .setDescription(`📄 Type of support ticket's category to change.`)
+                     .setChoices({
+                        name: `Map Submissions`,
+                        value: `map-tickets`
+                     }, {
+                        name: `Exploiter/Abuser Reports`,
+                        value: `exploiter-tickets`
+                     }, {
+                        name: `Bug Reports`,
+                        value: `bug-tickets`
+                     }, {
+                        name: `Ban Appeals`,
+                        value: `ban-tickets`
+                     })
+                     .setRequired(true)
+               )
+               .addChannelOption(
+                  new Discord.SlashCommandChannelOption()
+                     .setName(`category`)
+                     .setDescription(`📋 Category to change where these support tickets are sent to.`)
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildCategory
+                     )
+                     .setRequired(true)
+               )
+         ),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`flooded-area-statistics`)
+         .setDescription(`🌊 View current statistics for Flooded Area on Roblox.`),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`america`)
+         .setDescription(`america`)
    ], commandsGuild);
 
 
