@@ -67,7 +67,7 @@ for (const file of events) {
 };
 
 
-// connect to te database
+// connect to the database
 await redis.connect();
 
 
