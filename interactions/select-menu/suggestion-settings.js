@@ -15,6 +15,12 @@ export default async (interaction, redis) => {
    const type = channelTypes[interaction.channel.parent.id];
 
 
+   // values
+   const moderationTeam = `989125486590451732`;
+   const magicalbunny31 = `490178047325110282`;
+   const suggestionAuthor = await redis.HGET(`flooded-area:${type}:${id}`, `suggester`);
+
+
    // do the thing what this value does
    switch (value) {
 
@@ -23,9 +29,6 @@ export default async (interaction, redis) => {
       case `deny-suggestion`:
       case `open-suggestion-for-discussion`: {
          // only staff / magicalbunny31 can do this
-         const moderationTeam = `989125486590451732`;
-         const magicalbunny31 = `490178047325110282`;
-
          if (!(interaction.member.roles.cache.has(moderationTeam) || interaction.user.id === magicalbunny31))
             return await interaction.reply({
                content: `Only a member of the ${Discord.roleMention(moderationTeam)} can change a suggestion's status.`,
@@ -50,9 +53,6 @@ export default async (interaction, redis) => {
       case `lock-suggestion`:
       case `unlock-suggestion`: {
          // only staff / magicalbunny31 can do this
-         const moderationTeam = `989125486590451732`;
-         const magicalbunny31 = `490178047325110282`;
-
          if (!(interaction.member.roles.cache.has(moderationTeam) || interaction.user.id === magicalbunny31))
             return await interaction.reply({
                content: `Only a member of the ${Discord.roleMention(moderationTeam)} can lock or unlock a suggestion.`,
@@ -73,10 +73,6 @@ export default async (interaction, redis) => {
 
       case `delete-suggestion`: {
          // only staff / magicalbunny31 / the suggestion author can do this
-         const moderationTeam = `989125486590451732`;
-         const magicalbunny31 = `490178047325110282`;
-         const suggestionAuthor = await redis.HGET(`flooded-area:${type}:${id}`, `suggester`);
-
          if (!(interaction.member.roles.cache.has(moderationTeam) || [ magicalbunny31, suggestionAuthor ].includes(interaction.user.id)))
             return await interaction.reply({
                content: `Only a member of the ${Discord.roleMention(moderationTeam)} or the suggestion author ${Discord.userMention(suggestionAuthor)} can delete a suggestion.`,
