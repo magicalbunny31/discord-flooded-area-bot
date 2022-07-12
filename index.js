@@ -231,15 +231,24 @@ await client.login(process.env.TOKEN);
 
 
 /**
- * command for mods to view suggestions that are open for discussion/approved/denied
+ * slash command for mods to view suggestions that are open for discussion/approved/denied
  *
+ * auto lock votes when approved/denied
  * prevent duplicate suggestions
  * make locked votes suggestions not work
  * - maybe lock thread too??
- * lock thread button
+ * -- lock thread button??
  * ability to edit suggestions
  * add tutorial from button
  * view all suggestions button
+ * improve speed of votes/vote removing/embed colour changing
  *
+ * add counter to /america because funny
+ * add "view popular suggestions" button to #suggestion-submissions
+ * add "view hot suggestions" button #suggestion-submissions (most upvoted in 24hr)
+ * edit name of user#discrim on member update in suggestion embeds
+ * move all of the above commented code to a slash command
+ * - replace message commands with slash commands for myself
+ * reaction roles
  * work on tickets
  */

@@ -56,7 +56,7 @@ export default async (interaction, redis) => {
 
 
    // boolean stuff for setting stuff in database
-   const isPartSuggestion = type === `part-suggestion`;
+   const isPartSuggestion = type === `part-suggestions`;
    const hasImage = !!embeds[0].image?.url;
 
 
