@@ -3,7 +3,6 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { emojis, colours, choice, noop } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction

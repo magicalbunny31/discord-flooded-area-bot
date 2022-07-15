@@ -91,5 +91,5 @@ export default async (client, redis) => {
 
 
    // log to console once everything is done
-   console.log(`Flooded Area Suggestions 🌊 is ready~`);
+   console.log(`Flooded Area 🌊 is ready~`);
 };

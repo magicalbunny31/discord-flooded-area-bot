@@ -4,10 +4,6 @@ export const once = false;
 
 import Discord from "discord.js";
 
-import pkg from "../package.json" assert { type: "json" };
-
-import { noop } from "@magicalbunny31/awesome-utility-stuff";
-
 /**
  * @param {Discord.Interaction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis

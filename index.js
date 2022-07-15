@@ -249,6 +249,8 @@ await client.login(process.env.TOKEN);
  * edit name of user#discrim on member update in suggestion embeds
  * move all of the above commented code to a slash command
  * - replace message commands with slash commands for myself
+ *
  * reaction roles
- * work on tickets
+ *
+ * work on tickets (?? i like current ticket system though)
  */
