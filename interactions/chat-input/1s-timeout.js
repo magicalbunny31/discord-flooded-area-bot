@@ -7,7 +7,7 @@ import Discord from "discord.js";
  */
 export default async (interaction, redis) => {
    // options
-   const user = interaction.options.getUser(`user`);
+   const user = interaction.options.getUser(`member`);
    const member = interaction.options.getMember(`member`);
 
 
