@@ -16,7 +16,7 @@ export default async (oldRole, newRole, redis) => {
 
 
    // this isn't the Flooded Area Community guild
-   if (oldRole.guild.id !== `977254354589462618`)
+   if (oldRole.guild?.id !== `977254354589462618`)
       return;
 
 

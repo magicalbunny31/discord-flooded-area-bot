@@ -53,7 +53,8 @@ const client = new Discord.Client({
       Discord.GatewayIntentBits.Guilds,
       Discord.GatewayIntentBits.GuildMembers,
       Discord.GatewayIntentBits.GuildMessages,
-      Discord.GatewayIntentBits.GuildMessageReactions
+      Discord.GatewayIntentBits.GuildMessageReactions,
+      Discord.GatewayIntentBits.MessageContent
    ]
 });
 
