@@ -98,6 +98,7 @@ export default async (client, redis) => {
                .setDescription(`👥 who we timing out lads`)
                .setRequired(true)
          )
+         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ModerateMembers)
          .setDMPermission(false)
    ], commandsGuild);
 
