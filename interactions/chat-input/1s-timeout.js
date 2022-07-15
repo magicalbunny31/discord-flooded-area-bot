@@ -14,7 +14,7 @@ export default async (interaction, redis) => {
    // this member isn't in this server
    if (!member)
       return await interaction.reply({
-         content: `what are you doing ${user} isn't even from this server`,
+         content: `what are you doing ${user} isn't even in this server`,
          ephemeral: true
       });
 
