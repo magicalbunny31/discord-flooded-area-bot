@@ -78,7 +78,8 @@ export default async (client, redis) => {
                      )
                      .setRequired(true)
                )
-         ),
+         )
+         .setDMPermission(false),
 
       new Discord.SlashCommandBuilder()
          .setName(`flooded-area-statistics`)
@@ -86,7 +87,18 @@ export default async (client, redis) => {
 
       new Discord.SlashCommandBuilder()
          .setName(`america`)
-         .setDescription(`america`)
+         .setDescription(`america`),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`1s-timeout`)
+         .setDescription(`⌚ time out someone for 1 second lmao`)
+         .addUserOption(
+            new Discord.SlashCommandUserOption()
+               .setName(`member`)
+               .setDescription(`👥 who we timing out lads`)
+               .setRequired(true)
+         )
+         .setDMPermission(false)
    ], commandsGuild);
 
 
