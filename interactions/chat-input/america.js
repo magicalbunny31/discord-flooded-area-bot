@@ -6,7 +6,23 @@ import Discord from "discord.js";
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (interaction, redis) => {
-   return await interaction.reply({
-      content: `america`
+   // defer the interaction
+   await interaction.deferReply();
+
+
+   // add to the counter
+   const timesUsed = await redis.INCR(`flooded-area:commands:america`);
+
+
+   // edit the deferred reply
+   return await interaction.editReply({
+      content: `america`,
+      embeds: [
+         new Discord.EmbedBuilder()
+            .setColor(0x4de94c)
+            .setFooter({
+               text: `${timesUsed}`
+            })
+      ]
    });
 };
