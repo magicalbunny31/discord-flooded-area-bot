@@ -9,21 +9,21 @@ import Discord from "discord.js";
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (interaction, redis) => {
-   // this file is for ChatInputCommandInteractions
-   if (!interaction.isChatInputCommand())
+   // this file is for AutocompleteInteractions
+   if (interaction.type !== Discord.InteractionType.ApplicationCommandAutocomplete)
       return;
 
 
-   // get this command's name
+   // get this autocomplete interaction's command's name
    const commandName = interaction.commandName
       .split(`_`)
       .join(`_`);
 
 
-   // get this command's file
-   const file = await import(`../interactions/chat-input/${commandName}.js`);
+   // get this select menu's file
+   const file = await import(`../interactions/autocomplete/${commandName}.js`);
 
 
-   // run the command
+   // run the select menu
    return await file.default(interaction, redis);
 };

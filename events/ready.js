@@ -99,7 +99,20 @@ export default async (client, redis) => {
                .setRequired(true)
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ModerateMembers)
-         .setDMPermission(false)
+         .setDMPermission(false),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`global-ban`)
+         .setDescription(`🔨 just a test rn, waiting for enrise uwu owo`)
+         .addIntegerOption(
+            new Discord.SlashCommandIntegerOption()
+               .setName(`player-id`)
+               .setDescription(`👥 Roblox Player's id to ban.`)
+               .setMinValue(0)
+               .setAutocomplete(true)
+               .setRequired(true)
+         )
+         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ModerateMembers)
    ], commandsGuild);
 
 

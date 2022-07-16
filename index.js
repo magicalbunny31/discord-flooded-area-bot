@@ -232,26 +232,33 @@ await client.login(process.env.TOKEN);
 
 
 /**
- * slash command for mods to view suggestions that are open for discussion/approved/denied
+ * SLASH COMMANDS~
+ * /view-suggestions <open for discussion/approved/denied>: for mods to view suggestions that are open for discussion/approved/denied
+ * /america: add counter because funny
+ * /idk: move all of the above commented code to a slash command
+ *       - replace message commands with slash commands for myself
+ * /global-ban <playerId>: step 1 learn firebase db
  *
- * auto lock votes when approved/denied
+ * SUGGESTIONS~
  * prevent duplicate suggestions
- * make locked votes suggestions not work
+ * auto-lock votes when approved/denied
+ * ability to edit suggestions
+ * make locked votes suggestions actually work
  * - maybe lock thread too??
  * -- lock thread button??
- * ability to edit suggestions
- * add tutorial from button
- * view all suggestions button
  * improve speed of votes/vote removing/embed colour changing
+ * edit name of user#discrim on member update in suggestion embeds through GUILD_MEMBER_UPDATE
  *
- * add counter to /america because funny
+ * SUGGESTION SUBMISSIONS~
+ * add tutorial
+ * add view all suggestions
  * add "view popular suggestions" button to #suggestion-submissions
  * add "view hot suggestions" button #suggestion-submissions (most upvoted in 24hr)
- * edit name of user#discrim on member update in suggestion embeds
- * move all of the above commented code to a slash command
- * - replace message commands with slash commands for myself
  *
- * reaction roles
+ * REACTION ROLES~
+ * add this plox kthx
  *
- * work on tickets (?? i like current ticket system though)
+ * TICKETS~
+ * am i even doing this idk but for now no i like ticket bot
+ * but i will just recreate it if i get bored
  */

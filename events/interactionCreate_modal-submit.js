@@ -22,11 +22,6 @@ export default async (interaction, redis) => {
    const file = await import(`../interactions/modal-submit/${modal}.js`);
 
 
-   // modal doesn't exist locally
-   if (!file)
-      return;
-
-
    // run the modal
    return await file.default(interaction, redis);
 };

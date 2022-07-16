@@ -22,11 +22,6 @@ export default async (interaction, redis) => {
    const file = await import(`../interactions/select-menu/${selectMenu}.js`);
 
 
-   // select menu doesn't exist locally
-   if (!file)
-      return;
-
-
    // run the select menu
    return await file.default(interaction, redis);
 };
