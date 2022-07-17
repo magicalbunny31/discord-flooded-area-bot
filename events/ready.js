@@ -26,7 +26,7 @@ export default async (client, redis) => {
 
       new Discord.SlashCommandBuilder()
          .setName(`america`)
-         .setDescription(`🛢️ america`),
+         .setDescription(`🇺🇸 america`),
 
       new Discord.SlashCommandBuilder()
          .setName(`bun-stuff`)
@@ -45,7 +45,7 @@ export default async (client, redis) => {
                      .setName(`channel`)
                      .setDescription(`💬 channel to send the message in`)
                      .addChannelTypes(
-                        Discord.ChannelType.GuildCategory
+                        Discord.ChannelType.GuildText
                      )
                      .setRequired(false)
                )

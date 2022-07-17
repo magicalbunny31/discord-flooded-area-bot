@@ -233,10 +233,9 @@ await client.login(process.env.TOKEN);
 
 /**
  * SLASH COMMANDS~
- * /view-suggestions <open for discussion/approved/denied>: for mods to view suggestions that are open for discussion/approved/denied
  * /idk: move all of the above commented code to a slash command
  *       - replace message commands with slash commands for myself
- * /global-ban <player-id>: step 1 learn firebase db
+ * /global-ban <player-id>: step 2 wait for enrise
  *
  * SUGGESTIONS~
  * prevent duplicate suggestions
