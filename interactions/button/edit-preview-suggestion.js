@@ -11,7 +11,7 @@ export default async (interaction, redis) => {
 
 
    // get values to fill in in the modal
-   const { suggestionOrPartName, imageOrPartDescriptionOrNull, partImageOrNull } = await redis.HGETALL(`flooded-area:suggestion-values:${id}`);
+   const { suggestionOrPartName, imageOrPartDescriptionOrNull, partImageOrNull } = await redis.HGETALL(`flooded-area:temporary-stuff:${id}`);
 
 
    // send the correct modal for each suggestion type
