@@ -13,10 +13,10 @@ export default async (interaction, redis) => {
 
    // nya~
    const meow = choice([
-      ...autoArray(24, () => ({ field: `meow`,   content: `meow~`,   emoji: `😺` })),
-      ...autoArray(24, () => ({ field: `nya`,    content: `nya~`,    emoji: `😺` })),
-      ...autoArray(24, () => ({ field: `purr`,   content: `purr~`,   emoji: `😺` })),
-      ...autoArray(24, () => ({ field: `mewo`,   content: `mewo~`,   emoji: `😺` })),
+      ...autoArray(24, () => ({ field: `meow`,   content: `meow~`,   emoji: `🐱` })),
+      ...autoArray(24, () => ({ field: `nya`,    content: `nya~`,    emoji: `🐱` })),
+      ...autoArray(24, () => ({ field: `purr`,   content: `purr~`,   emoji: `🐱` })),
+      ...autoArray(24, () => ({ field: `mewo`,   content: `mewo~`,   emoji: `🐱` })),
       {                         field: `cursed`, content: `m̴͔͑ ̷̬͒e̶̽̑ ̸̛̫ǒ̷̊ ̴̃̔w̸̏͘`, emoji: `🐈‍⬛` },
       {                         field: `dog`,    content: `woof`,    emoji: `🐶` },
       {                         field: `wolf`,   content: `awoo`,    emoji: `🐺` },
