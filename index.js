@@ -234,10 +234,9 @@ await client.login(process.env.TOKEN);
 /**
  * SLASH COMMANDS~
  * /view-suggestions <open for discussion/approved/denied>: for mods to view suggestions that are open for discussion/approved/denied
- * /america: add counter because funny
  * /idk: move all of the above commented code to a slash command
  *       - replace message commands with slash commands for myself
- * /global-ban <playerId>: step 1 learn firebase db
+ * /global-ban <player-id>: step 1 learn firebase db
  *
  * SUGGESTIONS~
  * prevent duplicate suggestions
@@ -248,6 +247,7 @@ await client.login(process.env.TOKEN);
  * -- lock thread button??
  * improve speed of votes/vote removing/embed colour changing
  * edit name of user#discrim on member update in suggestion embeds through GUILD_MEMBER_UPDATE
+ * periodically scan through suggestion channels and update their statuses in the database (votes, deleted, etc)
  *
  * SUGGESTION SUBMISSIONS~
  * add tutorial

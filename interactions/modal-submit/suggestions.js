@@ -113,12 +113,12 @@ export default async (interaction, redis) => {
    // temporarily set these values in the database in case they'll be edited again
    await redis
       .multi()
-      .HSET(`flooded-area:suggestion-values:${interaction.id}`, {
+      .HSET(`flooded-area:temporary-stuff:${interaction.id}`, {
          suggestionOrPartName:         suggestionOrPartName.trim()          || ``,
          imageOrPartDescriptionOrNull: imageOrPartDescriptionOrNull?.trim() || ``,
          partImageOrNull:              partImageOrNull?.trim()              || ``
       })
-      .EXPIRE(`flooded-area:suggestion-values:${interaction.id}`, 86400)
+      .EXPIRE(`flooded-area:temporary-stuff:${interaction.id}`, 86400)
       .exec();
 
 
@@ -159,15 +159,15 @@ export default async (interaction, redis) => {
                      name: interaction.user.tag,
                      iconURL: interaction.user.displayAvatarURL()
                   })
-                  .setFields([
-                     {
+                  .setFields(
+                     [{
                         name: `PART NAME`,
                         value: suggestionOrPartName.trim() || `**\`You must enter a name.\`**`
                      }, {
                         name: `PART DESCRIPTION`,
                         value: imageOrPartDescriptionOrNull.trim() || `**\`You must enter a description.\`**`
-                     }
-                  ])
+                     }]
+                  )
                   .setImage(partImageOrNull)
             ]
             : [

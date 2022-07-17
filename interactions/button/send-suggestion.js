@@ -11,7 +11,7 @@ export default async (interaction, redis) => {
    const [ _button, type ] = interaction.customId.split(`:`);
 
 
-   // function to try to fetch something or return null instead of throwing
+   // function to try to fetch something or return undefined instead of throwing
    const tryOrUndefined = async promise => {
       try {
          return await promise;
@@ -62,6 +62,7 @@ export default async (interaction, redis) => {
 
    // add the suggestion to the database
    await redis.HSET(`flooded-area:${type}:${suggestionMessage.id}`, {
+      "id": suggestionMessage.id,
       "suggester": interaction.user.id,
       ...!isPartSuggestion
          ? {
