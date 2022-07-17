@@ -1,9 +1,13 @@
 /**
- * Flooded Area Suggestions
+ * Flooded Area 🌊
  *
  * magicalbunny31 : 2022
  * https://nuzzles.dev
  */
+
+
+// some awesome utilities that i pretty much need or else my code will suck 🐾
+import { sendBotError } from "@magicalbunny31/awesome-utility-stuff";
 
 
 // filesystem
@@ -33,6 +37,10 @@ import utc from "dayjs/plugin/utc.js";
 dayjs.extend(utc);
 
 
+// node-schedule for scheduling tasks
+import { scheduleJob } from "node-schedule";
+
+
 // discord client
 import Discord from "discord.js";
 const client = new Discord.Client({
@@ -56,6 +64,22 @@ const client = new Discord.Client({
       Discord.GatewayIntentBits.GuildMessageReactions,
       Discord.GatewayIntentBits.MessageContent
    ]
+});
+
+
+// send errors to an error webhook
+process.on("uncaughtException", async (error, origin) => {
+   await sendBotError(
+      `uncaughtException`,
+      {
+         url: process.env.WEBHOOK_ERRORS
+      },
+      error
+   );
+
+   console.error(error);
+
+   process.exit(1);
 });
 
 
@@ -121,6 +145,7 @@ await client.login(process.env.TOKEN);
 
 
 //    await redis.HSET(`flooded-area:part-suggestions:${id}`, {
+//       "id": id,
 //       "suggester": userId,
 //       "name": message.embeds[0].fields[0].value,
 //       "description": message.embeds[0].fields[1].value,
