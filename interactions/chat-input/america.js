@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 
 /**
- * view current statistics for flooded area on roblox
+ * america
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -16,13 +16,6 @@ export default async (interaction, redis) => {
 
    // edit the deferred reply
    return await interaction.editReply({
-      content: `america`,
-      embeds: [
-         new Discord.EmbedBuilder()
-            .setColor(0x4de94c)
-            .setFooter({
-               text: `${timesUsed}`
-            })
-      ]
+      content: `america (🇺🇸 ${timesUsed})`
    });
 };
