@@ -3,6 +3,7 @@ export const once = true;
 
 
 import Discord from "discord.js";
+import { choice } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Client} client
@@ -274,6 +275,45 @@ export default async (client, redis) => {
                .setRequired(false)
          )
    ], commandsGuild);
+
+
+   // statuses
+   setInterval(() => {
+      //? random fox variables
+      const fox = choice([ `fox`, `foxie`, `foxxo` ]);
+      const foxes = `${fox}${/x$/.test(fox) ? `es` : `s`}`;
+
+      //? list of statuses
+      const activities = {
+         [Discord.ActivityType.Playing]: [
+            `Flooded Area 🌊`,
+            `with the waves 🌊`
+         ],
+         [Discord.ActivityType.Watching]: [
+            `the waves 🌊`,
+            `your suggestions 📋`
+         ],
+         [Discord.ActivityType.Listening]: [
+            `the waves 🌊`,
+            `your suggestions 📋`
+         ],
+         [Discord.ActivityType.Competing]: [
+            `the best boat ⛵`,
+            `a challenge 🎯`
+         ]
+      };
+
+      const activityType = +choice(Object.keys(activities));
+      const activityName = choice(activities[activityType]);
+
+      client.user.setPresence({
+         status: `online`,
+         activities: [{
+            type: activityType,
+            name: activityName
+         }]
+      });
+   }, 1.8e+6); //? 30 minutes
 
 
    // log to console once everything is done
