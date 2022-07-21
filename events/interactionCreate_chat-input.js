@@ -15,8 +15,12 @@ export default async (interaction, redis) => {
 
 
    // get this command's name
-   const commandName = interaction.commandName
-      .split(`_`)
+   const commandName = [
+      interaction.commandName,
+      interaction.options.getSubcommandGroup(false),
+      interaction.options.getSubcommand(false)
+   ]
+      .filter(Boolean)
       .join(`_`);
 
 

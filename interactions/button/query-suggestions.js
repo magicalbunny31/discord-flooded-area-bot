@@ -22,7 +22,7 @@ export default async (interaction, redis) => {
                url: `https://nuzzles.dev`
             })
             .setDescription(strip`
-               tutorial under development, come back later~
+               feature under development, come back later~
             `)
       ],
       ephemeral: true
