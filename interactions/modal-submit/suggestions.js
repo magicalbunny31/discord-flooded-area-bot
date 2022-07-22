@@ -1,6 +1,4 @@
 import Discord from "discord.js";
-import dayjs from "dayjs";
-
 import pkg from "../../package.json" assert { type: "json" };
 
 import { emojis } from "@magicalbunny31/awesome-utility-stuff";
@@ -204,7 +202,7 @@ export default async (interaction, redis) => {
                .setEmoji(`📝`)
                .setStyle(Discord.ButtonStyle.Primary),
             new Discord.ButtonBuilder()
-               .setCustomId(`send-suggestion:${type}`)
+               .setCustomId(`send-suggestion:${type}:${interaction.id}:false`)
                .setLabel(`Send Suggestion`)
                .setEmoji(`✅`)
                .setStyle(Discord.ButtonStyle.Success)
