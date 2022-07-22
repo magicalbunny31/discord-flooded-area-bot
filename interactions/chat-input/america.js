@@ -9,10 +9,11 @@ import { autoArray, choice } from "@magicalbunny31/awesome-utility-stuff";
 export default async (interaction, redis) => {
    // america
    const america = choice([
-      ...autoArray(97, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
-      {                         field: `amerwica`, content: `amerwica~ nyaa~`,                 emoji: `🇺🇸🐱` },
-      {                         field: `acirema`,  content: `acirema`,                         emoji: `🇺🇸` },
-      {                         field: `flood`,    content: `there is no america, only flood`, emoji: `<:Flood:983391790348509194>` }
+      ...autoArray(969, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
+      ...autoArray(10,  () => ({ field: `amerwica`, content: `amerwica~ nyaa~`,                 emoji: `🇺🇸🐱` })),
+      ...autoArray(10,  () => ({ field: `acirema`,  content: `acirema`,                         emoji: `🇺🇸` })),
+      ...autoArray(10,  () => ({ field: `flood`,    content: `there is no america, only flood`, emoji: `<:Flood:983391790348509194>` })),
+      {                          field: `rare`,     content: `super rare america™️`,             emoji: `🇺🇸` }
    ]);
 
 
