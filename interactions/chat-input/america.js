@@ -7,10 +7,6 @@ import { autoArray, choice } from "@magicalbunny31/awesome-utility-stuff";
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (interaction, redis) => {
-   // defer the interaction
-   await interaction.deferReply();
-
-
    // america
    const america = choice([
       ...autoArray(97, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
@@ -24,8 +20,8 @@ export default async (interaction, redis) => {
    const timesUsed = await redis.HINCRBY(`flooded-area:commands:america`, america.field, 1);
 
 
-   // edit the deferred reply
-   return await interaction.editReply({
+   // reply to the interaction
+   return await interaction.reply({
       content: america.content !== `acirema`
          ? `${america.content} (${america.emoji} \`${timesUsed.toLocaleString()}\`)`
          : `(\`${timesUsed.toLocaleString()}\` ${america.emoji}) ${america.content}`
