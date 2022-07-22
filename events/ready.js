@@ -14,18 +14,6 @@ export default async (client, redis) => {
    const commandsGuild = `977254354589462618`;
    client.application.commands.set([
       new Discord.SlashCommandBuilder()
-         .setName(`1s-timeout`)
-         .setDescription(`⌚ time out someone for 1 second lmao`)
-         .addUserOption(
-            new Discord.SlashCommandUserOption()
-               .setName(`member`)
-               .setDescription(`👥 who we timing out lads`)
-               .setRequired(true)
-         )
-         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ModerateMembers)
-         .setDMPermission(false),
-
-      new Discord.SlashCommandBuilder()
          .setName(`america`)
          .setDescription(`🇺🇸 america`),
 
@@ -91,10 +79,6 @@ export default async (client, redis) => {
                .setRequired(true)
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ModerateMembers),
-
-      new Discord.SlashCommandBuilder()
-         .setName(`meow`)
-         .setDescription(`😺 nya~`),
 
       new Discord.SlashCommandBuilder()
          .setName(`set-channel`)
