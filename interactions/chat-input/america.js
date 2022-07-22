@@ -14,7 +14,7 @@ export default async (interaction, redis) => {
    // america
    const america = choice([
       ...autoArray(97, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
-      {                         field: `amerwica`, content: `amerwica~ nyaa~`,                 emoji: `🇺🇸😺` },
+      {                         field: `amerwica`, content: `amerwica~ nyaa~`,                 emoji: `🇺🇸🐱` },
       {                         field: `acirema`,  content: `acirema`,                         emoji: `🇺🇸` },
       {                         field: `flood`,    content: `there is no america, only flood`, emoji: `<:Flood:983391790348509194>` }
    ]);
