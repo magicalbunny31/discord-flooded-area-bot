@@ -36,7 +36,6 @@ export default async (client, redis) => {
                      .addChannelTypes(
                         Discord.ChannelType.GuildText
                      )
-                     .setRequired(false)
                )
          )
          .addSubcommand(
@@ -64,26 +63,81 @@ export default async (client, redis) => {
          .setDMPermission(false),
 
       new Discord.SlashCommandBuilder()
+         .setName(`flooded-area`)
+         .setDescription(`🌊 Commands for Flooded Area on Roblox.`)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`ban`)
+               .setDescription(`🔨 Permanently ban a player from Flooded Area on Roblox.`)
+               .addIntegerOption(
+                  new Discord.SlashCommandIntegerOption()
+                     .setName(`player-id`)
+                     .setDescription(`👥 Roblox Player's id to ban.`)
+                     .setMinValue(0)
+                     .setAutocomplete(true)
+                     .setRequired(true)
+               )
+               .addStringOption(
+                  new Discord.SlashCommandStringOption()
+                     .setName(`reason`)
+                     .setDescription(`📝 Reason to display to the player why they're banned.`)
+                     .setMaxLength(50)
+                     .setRequired(true)
+               )
+               .addIntegerOption( // TODO datepicker
+                  new Discord.SlashCommandIntegerOption()
+                     .setName(`ban-until`)
+                     .setDescription(`📅 [ OPTION NOT IN USE: VALUE WILL BE IGNORED ]`)
+                     .setMinValue(0)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`get-ban-info`)
+               .setDescription(`📋 Get info of a player's ban from Flooded Area on Roblox.`)
+               .addStringOption(
+                  new Discord.SlashCommandStringOption()
+                     .setName(`player-id`)
+                     .setDescription(`👥 Roblox Player's id's ban to view.`)
+                     .setAutocomplete(true)
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`revoke-ban`)
+               .setDescription(`✅ Revoke a player's ban from Flooded Area on Roblox.`)
+               .addStringOption(
+                  new Discord.SlashCommandStringOption()
+                     .setName(`player-id`)
+                     .setDescription(`👥 Roblox Player's id's ban to revoke.`)
+                     .setAutocomplete(true)
+                     .setRequired(true)
+               )
+         )
+         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.BanMembers),
+
+      new Discord.SlashCommandBuilder()
          .setName(`flooded-area-statistics`)
          .setDescription(`🌊 View current statistics for Flooded Area on Roblox.`),
 
       new Discord.SlashCommandBuilder()
-         .setName(`global-ban`)
-         .setDescription(`🔨 just a test rn, waiting for enrise uwu owo`)
-         .addIntegerOption(
-            new Discord.SlashCommandIntegerOption()
-               .setName(`player-id`)
-               .setDescription(`👥 Roblox Player's id to ban.`)
-               .setMinValue(0)
-               .setAutocomplete(true)
-               .setRequired(true)
-         )
-         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ModerateMembers),
-
-      new Discord.SlashCommandBuilder()
          .setName(`set-channel`)
          .setDescription(`📋 Set a channel for a specified submission.`)
-         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`ban-logs`)
+               .setDescription(`💬 Set a channel for ban logs to be sent to.`)
+               .addChannelOption(
+                  new Discord.SlashCommandChannelOption()
+                     .setName(`channel`)
+                     .setDescription(`📋 Channel to set where ban logs are sent to.`)
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildText
+                     )
+                     .setRequired(true)
+               )
+         )
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
                .setName(`suggestions`)
@@ -107,46 +161,14 @@ export default async (client, redis) => {
                .addChannelOption(
                   new Discord.SlashCommandChannelOption()
                      .setName(`channel`)
-                     .setDescription(`📋 Channel to change where suggestions are sent to.`)
+                     .setDescription(`📋 Channel to set where suggestions are sent to.`)
                      .addChannelTypes(
                         Discord.ChannelType.GuildText
                      )
                      .setRequired(true)
                )
          )
-         .addSubcommand(
-            new Discord.SlashCommandSubcommandBuilder()
-               .setName(`support-tickets`)
-               .setDescription(`💬 Set a category for support ticket submissions to be sent to.`)
-               .addStringOption(
-                  new Discord.SlashCommandStringOption()
-                     .setName(`type`)
-                     .setDescription(`📄 Type of support ticket's category to change.`)
-                     .setChoices({
-                        name: `Map Submissions`,
-                        value: `map-tickets`
-                     }, {
-                        name: `Exploiter/Abuser Reports`,
-                        value: `exploiter-tickets`
-                     }, {
-                        name: `Bug Reports`,
-                        value: `bug-tickets`
-                     }, {
-                        name: `Ban Appeals`,
-                        value: `ban-tickets`
-                     })
-                     .setRequired(true)
-               )
-               .addChannelOption(
-                  new Discord.SlashCommandChannelOption()
-                     .setName(`category`)
-                     .setDescription(`📋 Category to change where these support tickets are sent to.`)
-                     .addChannelTypes(
-                        Discord.ChannelType.GuildCategory
-                     )
-                     .setRequired(true)
-               )
-         )
+         .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)
          .setDMPermission(false),
 
       new Discord.SlashCommandBuilder()
@@ -172,27 +194,23 @@ export default async (client, redis) => {
             new Discord.SlashCommandUserOption()
                .setName(`suggester`)
                .setDescription(`👤 View suggestions from this user (or user's id).`)
-               .setRequired(false)
          )
          .addStringOption(
             new Discord.SlashCommandStringOption()
                .setName(`content`)
                .setDescription(`📋 Fuzzy search for suggestions that may match this content.`)
-               .setRequired(false)
          )
-         .addIntegerOption(
+         .addIntegerOption( // TODO datepicker
             new Discord.SlashCommandIntegerOption()
                .setName(`created-before-date`)
                .setDescription(`📅 [ OPTION NOT IN USE: VALUE WILL BE IGNORED ]`)
                .setMinValue(0)
-               .setRequired(false)
          )
-         .addIntegerOption(
+         .addIntegerOption( // TODO datepicker
             new Discord.SlashCommandIntegerOption()
                .setName(`created-after-date`)
                .setDescription(`📅 [ OPTION NOT IN USE: VALUE WILL BE IGNORED ]`)
                .setMinValue(0)
-               .setRequired(false)
          )
          .addStringOption(
             new Discord.SlashCommandStringOption()
@@ -208,7 +226,6 @@ export default async (client, redis) => {
                   name: `Denied`,
                   value: `denied`
                })
-               .setRequired(false)
          )
          .addStringOption(
             new Discord.SlashCommandStringOption()
@@ -224,7 +241,6 @@ export default async (client, redis) => {
                   name: `View both locked and unlocked suggestions`,
                   value: `both`
                })
-               .setRequired(false)
          )
          .addStringOption(
             new Discord.SlashCommandStringOption()
@@ -240,7 +256,6 @@ export default async (client, redis) => {
                   name: `View both deleted and not deleted suggestions`,
                   value: `both`
                })
-               .setRequired(false)
          )
          .addIntegerOption(
             new Discord.SlashCommandIntegerOption()
@@ -248,7 +263,6 @@ export default async (client, redis) => {
                .setDescription(`⬇️ View suggestions with an overall vote (upvotes - downvotes) greater than or equal to this value.`)
                .setMinValue(-4999)
                .setMaxValue(4999)
-               .setRequired(false)
          )
          .addIntegerOption(
             new Discord.SlashCommandIntegerOption()
@@ -256,7 +270,6 @@ export default async (client, redis) => {
                .setDescription(`⬆️ View suggestions with an overall vote (upvotes - downvotes) less than or equal to this value.`)
                .setMinValue(-4999)
                .setMaxValue(4999)
-               .setRequired(false)
          )
    ], commandsGuild);
 

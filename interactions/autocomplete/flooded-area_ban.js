@@ -17,11 +17,6 @@ export default async (interaction, redis) => {
 
       // player-id
       case `player-id`: {
-         // no input
-         if (!input)
-            return await interaction.respond([]);
-
-
          // input length must be 3 or more characters long
          if (input.length <= 2)
             return await interaction.respond([]);
