@@ -35,7 +35,7 @@ export default async (interaction, redis) => {
             **__Welcome to <#983394106950684704>!__**
 
             Submit any suggestions you have right here!
-            Abusing suggestions will result in being <@&979489114153963560>.
+            Abusing suggestions will result in you being <@&979489114153963560>.
 
             When you submit a suggestion...
             > It will include your username and discriminator.

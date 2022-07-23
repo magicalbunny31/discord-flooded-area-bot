@@ -23,6 +23,10 @@ export default async (interaction, redis) => {
             })
             .setDescription(strip`
                feature under development, come back later~
+
+               ..or actually
+               - go to <#977267452050280498>
+               - use the command ${emojis.flooded_area} **/view-suggestions**
             `)
       ],
       ephemeral: true
