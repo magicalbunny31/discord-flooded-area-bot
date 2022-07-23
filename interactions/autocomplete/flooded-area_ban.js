@@ -3,7 +3,7 @@ import Discord from "discord.js";
 import pkg from "../../package.json" assert { type: "json" };
 
 /**
- * ban someone from the flooded area roblox game
+ * permanently ban a player from flooded area on roblox
  * @param {Discord.AutocompleteInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
