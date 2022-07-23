@@ -3,6 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
+import { sendBotError } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
@@ -15,15 +16,32 @@ export default async (interaction, redis) => {
 
 
    // get this autocomplete interaction's command's name
-   const commandName = interaction.commandName
-      .split(`_`)
+   const commandName = [
+      interaction.commandName,
+      interaction.options.getSubcommandGroup(false),
+      interaction.options.getSubcommand(false)
+   ]
+      .filter(Boolean)
       .join(`_`);
 
 
-   // get this select menu's file
+   // get this autocomplete's file
    const file = await import(`../interactions/autocomplete/${commandName}.js`);
 
 
-   // run the select menu
-   return await file.default(interaction, redis);
+   // run the autocomplete interaction
+   try {
+      return await file.default(interaction, redis);
+
+
+   } catch (error) {
+      // autocomplete is a bit finicky, so catch whatever error is caught here
+      return await sendBotError(
+         interaction,
+         {
+            url: process.env.WEBHOOK_ERRORS
+         },
+         error
+      );
+   };
 };
