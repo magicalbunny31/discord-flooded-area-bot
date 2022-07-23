@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * send the initial suggestions message
@@ -30,7 +30,7 @@ export default async (interaction, redis) => {
    // embeds
    const embeds = [
       new Discord.EmbedBuilder()
-         .setColor(0x4de94c)
+         .setColor(colours.flooded_area)
          .setDescription(strip`
             **__Welcome to <#983394106950684704>!__**
 
