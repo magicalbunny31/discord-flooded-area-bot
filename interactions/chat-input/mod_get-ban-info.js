@@ -6,7 +6,7 @@ import pkg from "../../package.json" assert { type: "json" };
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * view current statistics for flooded area on roblox
+ * get some pawesome info of a player's roblox Flooded Area ban
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -16,7 +16,9 @@ export default async (interaction, redis) => {
 
 
    // defer the interaction
-   await interaction.deferReply();
+   await interaction.deferReply({
+      ephemeral: true
+   });
 
 
    // get this banned user
@@ -43,11 +45,11 @@ export default async (interaction, redis) => {
    if (bannedUser?.ok === false)
       return await interaction.editReply({
          content: strip`
-            ❌ **Couldn't get this ban entry.**
+            ❌ **can't get this ban entry**
             > ${
                bannedUser.status === 404
-                  ? `Id \`${playerId}\` wasn't found in the list of banned users.` // not found
-                  : `An error occurred trying to fetch this user, try again later.`
+                  ? `the id \`${playerId}\` wasn't found in the ban list chief` // not found
+                  : `some scary error occurred with the ban list! try again later maybe`
             }
          `
       });
@@ -105,7 +107,6 @@ export default async (interaction, redis) => {
 
    const displayName =     userProfile?.displayName || `???`;
    const name        = `@${userProfile?.name        || `???`}`;
-   const isBanned    =     userProfile?.isBanned;
 
    const profileURL = userProfile
       ? `https://www.roblox.com/users/${playerId}/profile`
@@ -122,27 +123,18 @@ export default async (interaction, redis) => {
             url: profileURL
          })
          .setDescription(strip`
-            📝 **Ban reason**
+            📝 **ban reason**
             > ${reason}
 
-            🔨 **Banned on Roblox**
-            > ${
-               isBanned === undefined
-                  ? `???`
-                  : userProfile.isBanned === true
-                     ? `yes`
-                     : `no`
-            }
-
-            ⌚ **Dates**
-            > Ban created at ${Discord.time(createdAtTimestamp)}
-            > Ban last edited at ${Discord.time(updatedAtTimestamp)}
+            🗓️ **date stuffs**
+            > created at ${Discord.time(createdAtTimestamp)}
+            > last edited at ${Discord.time(updatedAtTimestamp)}
          `)
          .setFooter({
             text: robloxApiErrored
                ? strip`
-                  💥 The Roblox API errored during these requests.
-                  🔎 This may be because this user may not exist on Roblox or it is currently down.
+                  💥 the roblox api is mean and errored
+                  🔎 ..well probably because this user doesn't exist or roblox is dead rn
                `
                : null
          })

@@ -5,7 +5,7 @@ import pkg from "../../package.json" assert { type: "json" };
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * view current statistics for flooded area on roblox
+ * revoke a player's ban from roblox Flooded Area
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -15,7 +15,9 @@ export default async (interaction, redis) => {
 
 
    // defer the interaction
-   await interaction.deferReply();
+   await interaction.deferReply({
+      ephemeral: true
+   });
 
 
    // delete this banned user from the database
@@ -42,11 +44,11 @@ export default async (interaction, redis) => {
    if (bannedUser?.ok === false)
       return await interaction.editReply({
          content: strip`
-            ❌ **Couldn't revoke this ban.**
+            ❌ **can't revoke this ban**
             > ${
                bannedUser.status === 404
-                  ? `Id \`${playerId}\` wasn't found in the list of banned users.` // not found
-                  : `An error occurred trying to fetch this user, try again later.`
+                  ? `the id \`${playerId}\` wasn't found in the ban list chief` // not found
+                  : `some scary error occurred with the ban list! try again later maybe`
             }
          `
       });
@@ -116,17 +118,23 @@ export default async (interaction, redis) => {
             url: profileURL
          })
          .setDescription(strip`
-            ✅ **Revoked \`${userProfile?.name ? `@${userProfile?.name}` : playerId}\`'s ban.**
-            > Bans are refreshed at a 30 second interval.
-            > It may take a bit of time before \`${userProfile?.name ? `@${userProfile?.name}` : playerId}\`'s ban is actually revoked.
+            ✅ **revoked \`${userProfile?.name ? `@${userProfile?.name}` : playerId}\`'s ban!**
+            > congratulations i'm so proud of you
          `)
          .setFooter({
-            text: robloxApiErrored
-               ? strip`
-                  💥 The Roblox API errored during these requests.
-                  🔎 This may be because this user may not exist on Roblox or it is currently down.
-               `
-               : null
+            text: [
+               strip`
+                  📋 the ban list is refreshed every 15 seconds,
+                  🔨 so be patient if they're not actually banned yet >.>
+               `,
+               ...robloxApiErrored
+                  ? [ strip`
+                     💥 the roblox api is mean and errored
+                     🔎 ..well probably because this user doesn't exist or roblox is dead rn
+                  ` ]
+                  : []
+            ]
+               .join(`\n\n`)
          })
    ];
 

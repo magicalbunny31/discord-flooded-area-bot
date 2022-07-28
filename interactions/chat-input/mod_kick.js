@@ -5,7 +5,7 @@ import pkg from "../../package.json" assert { type: "json" };
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * view current statistics for flooded area on roblox
+ * kick a player from roblox Flooded Area
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -13,14 +13,19 @@ export default async (interaction, redis) => {
    // options
    const playerId = interaction.options.getInteger(`player-id`);
    const reason = interaction.options.getString(`reason`);
-   const banUntil = interaction.options.getInteger(`ban-until`);
+
+
+   // users and channels
+   const magicalbunny31 = Discord.userMention(`490178047325110282`);
 
 
    // defer the interaction
-   await interaction.deferReply();
+   await interaction.deferReply({
+      ephemeral: true
+   });
 
 
-   // get this banned user's roblox profile
+   // get this user's roblox profile
    // https://users.roblox.com/docs#!/Users/get_v1_users_userId
    const userProfile = await (async () => {
       const response = await fetch(`https://users.roblox.com/v1/users/${playerId}`, {
@@ -45,17 +50,17 @@ export default async (interaction, redis) => {
    if (userProfile?.ok === false)
       return await interaction.editReply({
          content: strip`
-            ❌ **Couldn't ban this user.**
+            ❌ **can't kick this user**
             > ${
                userProfile.status === 404
-                  ? `Id \`${playerId}\` is not a valid Roblox user.` // not found
-                  : `An error occurred trying to query the Roblox API, try again later.`
+                  ? `the id \`${playerId}\` isn't a valid roblox user chief` // not found
+                  : `some scary error occurred with the roblox api! try again later maybe`
             }
          `
       });
 
 
-   // get this banned user's avatar headshot
+   // get this user's avatar headshot
    // https://thumbnails.roblox.com/docs#!/Avatar/get_v1_users_avatar_headshot
    const userAvatarHeadshot = await (async () => {
       const response = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${playerId}&size=720x720&format=Png&isCircular=false`, {
@@ -80,13 +85,13 @@ export default async (interaction, redis) => {
    })();
 
 
-   // this banned user
+   // this user
    const { displayName, name } = userProfile;
    const profileURL = `https://www.roblox.com/users/${playerId}/profile`;
 
 
-   // check if this user is already banned or not
-   const isBanned = await (async () => {
+   // check if this user is already kicked or not
+   const isKicked = await (async () => {
       const response = await fetch(`${process.env.BAN_DATABASE_URL}/${playerId}`, {
          headers: {
             "Accept": `application/json`,
@@ -107,29 +112,29 @@ export default async (interaction, redis) => {
    })();
 
 
-   // this user is already banned
-   if (isBanned)
+   // this user is already kicked
+   if (isKicked)
       return await interaction.editReply({
          content: strip`
-            ❌ **Couldn't ban this user.**
-            > \`@${name}\` is already banned.
+            ❌ **can't kick this user**
+            > \`@${name}\` is already kicked
          `
       });
 
 
    // response isn't okai
-   if (isBanned?.ok === false)
+   if (isKicked?.ok === false)
       return await interaction.editReply({
          content: strip`
-            ❌ **Couldn't ban this user.**
-            > An error occurred trying to view the ban list, try again later.
-            > \`${bannedUser.status}\`
+            ❌ **can't kick this user**
+            > some scary error occurred with the kick list! try again later maybe
+            > give this to ${magicalbunny31}: \`${isKicked.status}\`
          `
       });
 
 
-   // add this user's id to the ban database
-   const bannedUser = await (async () => {
+   // add this user's id to the kick database
+   const kickedUser = await (async () => {
       const response = await fetch(`${process.env.BAN_DATABASE_URL}/${playerId}`, {
          method: `PATCH`,
          headers: {
@@ -142,7 +147,7 @@ export default async (interaction, redis) => {
                Reason: {
                   stringValue: reason
                },
-               Banned: {
+               Kicked: {
                   booleanValue: true
                }
             }
@@ -161,23 +166,14 @@ export default async (interaction, redis) => {
 
 
    // response isn't okai
-   if (bannedUser?.ok === false)
+   if (kickedUser?.ok === false)
       return await interaction.editReply({
          content: strip`
-            ❌ **Couldn't ban this user.**
-            > An error occurred trying to add this user to the ban list, try again later.
-            > \`${bannedUser.status}\`
+            ❌ **can't kick this user**
+            > some scary error occurred with the kick list! try again later maybe
+            > give this to ${magicalbunny31}: \`${kickedUser.status}\`
          `
       });
-
-
-   // send to the ban logs channel
-   const channelId = await redis.GET(`flooded-area:channels:ban-logs`);
-   const channel = await interaction.guild.channels.fetch(channelId);
-
-   await channel.send({
-      content: `${interaction.user} permanently banned ${Discord.hyperlink(`@${name}`, profileURL, `${profileURL} 🔗`)} (\`${playerId}\`) ${Discord.time(Math.floor(interaction.createdTimestamp / 1000), Discord.TimestampStyles.RelativeTime)}.`
-   });
 
 
    // embeds
@@ -190,10 +186,18 @@ export default async (interaction, redis) => {
             url: profileURL
          })
          .setDescription(strip`
-            ✅ **Banned \`@${name}\` from ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`, `https://www.roblox.com/games/3976767347/Flooded-Area 🔗`)} for \`${reason}\`.**
-            > Bans are refreshed at a 30 second interval.
-            > It may take a bit of time before \`@${name}\` is actually banned.
+            🥾 **kicked \`@${name}\`!**
+            > well done on doing your job
+
+            📝 **reason**
+            > ${reason}
          `)
+         .setFooter({
+            text: strip`
+               📋 the kick list is refreshed every 15 seconds,
+               🔨 so be patient if they haven't actually been kicked yet >.>
+            `
+         })
    ];
 
 

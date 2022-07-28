@@ -4,7 +4,7 @@ import fuzzysort from "fuzzysort";
 import pkg from "../../package.json" assert { type: "json" };
 
 /**
- * get info of a player's ban from flooded area on roblox
+ * revoke a player's ban from roblox Flooded Area
  * @param {Discord.AutocompleteInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */

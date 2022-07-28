@@ -63,16 +63,16 @@ export default async (client, redis) => {
          .setDMPermission(false),
 
       new Discord.SlashCommandBuilder()
-         .setName(`flooded-area`)
-         .setDescription(`🌊 Commands for Flooded Area on Roblox.`)
+         .setName(`mod`)
+         .setDescription(`🌊 moderator commands for roblox Flooded Area!!`)
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
                .setName(`ban`)
-               .setDescription(`🔨 Permanently ban a player from Flooded Area on Roblox.`)
+               .setDescription(`🔨 ban a player from roblox Flooded Area`)
                .addIntegerOption(
                   new Discord.SlashCommandIntegerOption()
                      .setName(`player-id`)
-                     .setDescription(`👥 Roblox Player's id to ban.`)
+                     .setDescription(`👥 their player id (or username) to ban`)
                      .setMinValue(0)
                      .setAutocomplete(true)
                      .setRequired(true)
@@ -80,7 +80,7 @@ export default async (client, redis) => {
                .addStringOption(
                   new Discord.SlashCommandStringOption()
                      .setName(`reason`)
-                     .setDescription(`📝 Reason to display to the player why they're banned.`)
+                     .setDescription(`📝 why are they being banned? this'll be shown to the banned user too`)
                      .setMaxLength(50)
                      .setRequired(true)
                )
@@ -94,23 +94,43 @@ export default async (client, redis) => {
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
                .setName(`get-ban-info`)
-               .setDescription(`📋 Get info of a player's ban from Flooded Area on Roblox.`)
+               .setDescription(`📋 get some pawesome info of a player's roblox Flooded Area ban`)
                .addStringOption(
                   new Discord.SlashCommandStringOption()
                      .setName(`player-id`)
-                     .setDescription(`👥 Roblox Player's id's ban to view.`)
+                     .setDescription(`👥 the player's ban to view.`)
                      .setAutocomplete(true)
                      .setRequired(true)
                )
          )
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
+               .setName(`kick`)
+               .setDescription(`🥾 kick a player from roblox Flooded Area`)
+               .addIntegerOption(
+                  new Discord.SlashCommandIntegerOption()
+                     .setName(`player-id`)
+                     .setDescription(`👥 their player id (or username) to kick`)
+                     .setMinValue(0)
+                     .setAutocomplete(true)
+                     .setRequired(true)
+               )
+               .addStringOption(
+                  new Discord.SlashCommandStringOption()
+                     .setName(`reason`)
+                     .setDescription(`📝 why are they being kicked? this'll be shown to the kicked user too`)
+                     .setMaxLength(50)
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
                .setName(`revoke-ban`)
-               .setDescription(`✅ Revoke a player's ban from Flooded Area on Roblox.`)
+               .setDescription(`✅ revoke a player's ban from roblox Flooded Area`)
                .addStringOption(
                   new Discord.SlashCommandStringOption()
                      .setName(`player-id`)
-                     .setDescription(`👥 Roblox Player's id's ban to revoke.`)
+                     .setDescription(`👥 the player's ban to revoke`)
                      .setAutocomplete(true)
                      .setRequired(true)
                )
@@ -276,10 +296,6 @@ export default async (client, redis) => {
 
    // statuses
    setInterval(() => {
-      //? random fox variables
-      const fox = choice([ `fox`, `foxie`, `foxxo` ]);
-      const foxes = `${fox}${/x$/.test(fox) ? `es` : `s`}`;
-
       //? list of statuses
       const activities = {
          [Discord.ActivityType.Playing]: [
