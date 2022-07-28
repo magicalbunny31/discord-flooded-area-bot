@@ -12,14 +12,14 @@ export default async (interaction, redis) => {
 
 
    // this member is banned from making suggestions
-   const suggestionsBannedRoleId = `979489114153963560`;
-   const memberIsSuggestionsBanned = interaction.member.roles.cache.has(suggestionsBannedRoleId);
+   const [ suggestionsBanned, moderationTeam ] = await redis.MGET([ `flooded-area:role:suggestions-banned`, `flooded-area:role:moderation-team` ]);
+   const memberIsSuggestionsBanned = interaction.member.roles.cache.has(suggestionsBanned);
 
    if (memberIsSuggestionsBanned)
       return await interaction.reply({
          content: strip`
             You are currently blacklisted from participating in suggestions.
-            Please contact a member of the ${Discord.roleMention(`989125486590451732`)} for further assistance.
+            Please contact a member of the ${Discord.roleMention(moderationTeam)} for further assistance.
          `,
          allowedMentions: {
             parse: []

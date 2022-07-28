@@ -19,7 +19,7 @@ export default async (interaction, redis) => {
 
 
    // add to the counter
-   const timesUsed = await redis.HINCRBY(`flooded-area:commands:america`, america.field, 1);
+   const timesUsed = await redis.HINCRBY(`flooded-area:command:america`, america.field, 1);
 
 
    // reply to the interaction

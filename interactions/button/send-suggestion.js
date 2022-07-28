@@ -51,7 +51,7 @@ export default async (interaction, redis) => {
 
 
    // get the channel to send this suggestion to
-   const channelId = await redis.HGET(`flooded-area:channels:suggestions`, type);
+   const channelId = await redis.HGET(`flooded-area:channel:suggestions`, type);
    const channel = await tryOrUndefined(interaction.guild.channels.fetch(channelId));
 
 

@@ -17,8 +17,7 @@ export default async (interaction, redis) => {
 
 
    // users and channels
-   const magicalbunny31 = Discord.userMention   (`490178047325110282`);
-   const banLogs        = Discord.channelMention(`985567722878402570`);
+   const [ magicalbunny31, banLogs ] = await redis.MGET([ `flooded-area:user:magicalbunny31`, `flooded-area:channel:ban-logs` ]);
 
 
    // defer the interaction
@@ -130,7 +129,7 @@ export default async (interaction, redis) => {
          content: strip`
             ❌ **can't ban this user**
             > some scary error occurred with the ban list! try again later maybe
-            > give this to ${magicalbunny31}: \`${isBanned.status}\`
+            > give this to ${Discord.userMention(magicalbunny31)}: \`${isBanned.status}\`
          `
       });
 
@@ -173,7 +172,7 @@ export default async (interaction, redis) => {
          content: strip`
             ❌ **can't ban this user**
             > some scary error occurred with the ban list! try again later maybe
-            > give this to ${magicalbunny31}: \`${isBanned.status}\`
+            > give this to ${Discord.userMention(magicalbunny31)}: \`${isBanned.status}\`
          `
       });
 
@@ -189,7 +188,7 @@ export default async (interaction, redis) => {
          })
          .setDescription(strip`
             🔨 **banned \`@${name}\`!**
-            > might want to log this ban in ${banLogs} now
+            > might want to log this ban in ${Discord.channelMention(banLogs)} now
 
             📝 **reason**
             > ${reason}

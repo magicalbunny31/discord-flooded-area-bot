@@ -142,50 +142,82 @@ export default async (client, redis) => {
          .setDescription(`🌊 View current statistics for Flooded Area on Roblox.`),
 
       new Discord.SlashCommandBuilder()
-         .setName(`set-channel`)
-         .setDescription(`📋 Set a channel for a specified submission.`)
-         .addSubcommand(
-            new Discord.SlashCommandSubcommandBuilder()
-               .setName(`ban-logs`)
-               .setDescription(`💬 Set a channel for ban logs to be sent to.`)
-               .addChannelOption(
-                  new Discord.SlashCommandChannelOption()
-                     .setName(`channel`)
-                     .setDescription(`📋 Channel to set where ban logs are sent to.`)
-                     .addChannelTypes(
-                        Discord.ChannelType.GuildText
+         .setName(`set`)
+         .setDescription(`🏷️ Set a channel or role for command usage.`)
+         .addSubcommandGroup(
+            new Discord.SlashCommandSubcommandGroupBuilder()
+               .setName(`channel`)
+               .setDescription(`🏷️ Set a channel for command usage.`)
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`ban-logs`)
+                     .setDescription(`💬 Set the ban logs channel.`)
+                     .addChannelOption(
+                        new Discord.SlashCommandChannelOption()
+                           .setName(`channel`)
+                           .setDescription(`📋 The ban logs channel.`)
+                           .addChannelTypes(
+                              Discord.ChannelType.GuildText
+                           )
+                           .setRequired(true)
                      )
-                     .setRequired(true)
+               )
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`suggestions`)
+                     .setDescription(`💬 Set a channel for suggestion submissions to be sent to.`)
+                     .addStringOption(
+                        new Discord.SlashCommandStringOption()
+                           .setName(`type`)
+                           .setDescription(`📄 Type of suggestion's channel to set.`)
+                           .setChoices({
+                              name: `Game Suggestions`,
+                              value: `game-suggestions`
+                           }, {
+                              name: `Server Suggestions`,
+                              value: `server-suggestions`
+                           }, {
+                              name: `Part Suggestions`,
+                              value: `part-suggestions`
+                           })
+                           .setRequired(true)
+                     )
+                     .addChannelOption(
+                        new Discord.SlashCommandChannelOption()
+                           .setName(`channel`)
+                           .setDescription(`📋 Channel to set where suggestions are sent to.`)
+                           .addChannelTypes(
+                              Discord.ChannelType.GuildText
+                           )
+                           .setRequired(true)
+                     )
                )
          )
-         .addSubcommand(
-            new Discord.SlashCommandSubcommandBuilder()
-               .setName(`suggestions`)
-               .setDescription(`💬 Set a channel for suggestion submissions to be sent to.`)
-               .addStringOption(
-                  new Discord.SlashCommandStringOption()
-                     .setName(`type`)
-                     .setDescription(`📄 Type of suggestion's channel to change.`)
-                     .setChoices({
-                        name: `Game Suggestions`,
-                        value: `game-suggestions`
-                     }, {
-                        name: `Server Suggestions`,
-                        value: `server-suggestions`
-                     }, {
-                        name: `Part Suggestions`,
-                        value: `part-suggestions`
-                     })
-                     .setRequired(true)
-               )
-               .addChannelOption(
-                  new Discord.SlashCommandChannelOption()
-                     .setName(`channel`)
-                     .setDescription(`📋 Channel to set where suggestions are sent to.`)
-                     .addChannelTypes(
-                        Discord.ChannelType.GuildText
+         .addSubcommandGroup(
+            new Discord.SlashCommandSubcommandGroupBuilder()
+               .setName(`role`)
+               .setDescription(`🏷️ Set a role for command usage.`)
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`suggestions-banned`)
+                     .setDescription(`🗯️ Set the Suggestions Banned role.`)
+                     .addChannelOption(
+                        new Discord.SlashCommandRoleOption()
+                           .setName(`role`)
+                           .setDescription(`📋 The Suggestions Banned role.`)
+                           .setRequired(true)
                      )
-                     .setRequired(true)
+               )
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`moderation-team`)
+                     .setDescription(`🗯️ Set the Moderation Team role.`)
+                     .addChannelOption(
+                        new Discord.SlashCommandRoleOption()
+                           .setName(`role`)
+                           .setDescription(`📋 The Moderation Team role.`)
+                           .setRequired(true)
+                     )
                )
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)

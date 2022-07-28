@@ -11,7 +11,7 @@ export default async (interaction, redis) => {
    const [ _selectMenu, id ] = interaction.customId.split(`:`);
    const [ value ] = interaction.values;
 
-   const channelTypes = Object.fromEntries(Object.entries(await redis.HGETALL(`flooded-area:channels:suggestions`)).map(id => id.reverse()));
+   const channelTypes = Object.fromEntries(Object.entries(await redis.HGETALL(`flooded-area:channel:suggestions`)).map(id => id.reverse()));
    const type = channelTypes[interaction.channel.parent.id];
 
 

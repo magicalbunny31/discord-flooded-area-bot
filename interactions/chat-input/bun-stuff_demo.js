@@ -8,7 +8,7 @@ import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
  */
 export default async (interaction, redis) => {
    // only magicalbunny31 🐾 can use this command
-   const magicalbunny31 = `490178047325110282`;
+   const magicalbunny31 = await redis.GET(`flooded-area:user:magicalbunny31`);
 
    if (interaction.user.id !== magicalbunny31)
       return await interaction.reply({

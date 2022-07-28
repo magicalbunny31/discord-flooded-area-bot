@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 
 /**
- * set a channel for where a specific type of suggestion's submissions should be sent to
+ * set a channel for suggestion submissions to be sent to
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -26,11 +26,11 @@ export default async (interaction, redis) => {
 
 
    // set these values in the database
-   await redis.HSET(`flooded-area:channels:suggestions`, type, channel.id);
+   await redis.HSET(`flooded-area:channel:suggestions`, type, channel.id);
 
 
    // edit the deferred interaction
    return await interaction.editReply({
-      content: `Changed \`${formattedType}\`'s suggestion channel to ${channel}.`
+      content: `Set \`${formattedType}\`'s suggestion channel to ${channel}.`
    });
 };

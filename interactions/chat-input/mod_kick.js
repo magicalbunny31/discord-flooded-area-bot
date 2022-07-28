@@ -15,8 +15,8 @@ export default async (interaction, redis) => {
    const reason = interaction.options.getString(`reason`);
 
 
-   // users and channels
-   const magicalbunny31 = Discord.userMention(`490178047325110282`);
+   // users
+   const magicalbunny31 = await redis.GET(`flooded-area:user:magicalbunny31`);
 
 
    // defer the interaction
@@ -128,7 +128,7 @@ export default async (interaction, redis) => {
          content: strip`
             ❌ **can't kick this user**
             > some scary error occurred with the kick list! try again later maybe
-            > give this to ${magicalbunny31}: \`${isKicked.status}\`
+            > give this to ${Discord.userMention(magicalbunny31)}: \`${isKicked.status}\`
          `
       });
 
@@ -171,7 +171,7 @@ export default async (interaction, redis) => {
          content: strip`
             ❌ **can't kick this user**
             > some scary error occurred with the kick list! try again later maybe
-            > give this to ${magicalbunny31}: \`${kickedUser.status}\`
+            > give this to ${Discord.userMention(magicalbunny31)}: \`${kickedUser.status}\`
          `
       });
 
