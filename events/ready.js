@@ -201,7 +201,7 @@ export default async (client, redis) => {
                   new Discord.SlashCommandSubcommandBuilder()
                      .setName(`suggestions-banned`)
                      .setDescription(`🗯️ Set the Suggestions Banned role.`)
-                     .addChannelOption(
+                     .addRoleOption(
                         new Discord.SlashCommandRoleOption()
                            .setName(`role`)
                            .setDescription(`📋 The Suggestions Banned role.`)
@@ -212,7 +212,7 @@ export default async (client, redis) => {
                   new Discord.SlashCommandSubcommandBuilder()
                      .setName(`moderation-team`)
                      .setDescription(`🗯️ Set the Moderation Team role.`)
-                     .addChannelOption(
+                     .addRoleOption(
                         new Discord.SlashCommandRoleOption()
                            .setName(`role`)
                            .setDescription(`📋 The Moderation Team role.`)
