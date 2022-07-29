@@ -22,10 +22,9 @@ export default async (interaction, redis) => {
 
    // embeds
    const isPartSuggestion = type === `part-suggestions`;
+   const cumulativeVotes = +suggestion.upvotes - +suggestion.downvotes;
 
    const colour = (() => {
-      const cumulativeVotes = +suggestion.upvotes - +suggestion.downvotes;
-
       const positiveColours = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
       const neutralColour   =   0xffee00;
       const negativeColours = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
@@ -53,7 +52,7 @@ export default async (interaction, redis) => {
             text: [
                ...[ `approved`, `denied` ].includes(suggestion.status)
                   ? [ `${suggestion.status.toUpperCase()} ${suggestion.status === `approved` ? `✅` : `❎`}` ] : [],
-               ...+suggestion.upvotes - +suggestion.downvotes >= 10
+               ...cumulativeVotes >= 10
                   ? [ `POPULAR! 🎉` ] : [],
                ...suggestion.deleted === `true`
                   ? [ `DELETED 🗑️` ]
