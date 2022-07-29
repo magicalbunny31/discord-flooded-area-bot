@@ -16,12 +16,15 @@ export default async (interaction, redis) => {
    });
 
 
-   // set these values in the database
+   // set this value in the database
    await redis.SET(`flooded-area:role:moderation-team`, role.id);
 
 
    // edit the deferred interaction
    return await interaction.editReply({
-      content: `Set the Moderation Team role to ${role}.`
+      content: `Set the Moderation Team role to ${role}.`,
+      allowedMentions: {
+         parse: []
+      }
    });
 };

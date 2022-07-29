@@ -187,13 +187,13 @@ export default async (interaction, redis) => {
          : {},
       "message-url": suggestionMessage.url,
 
-      "status": `open for discussion`,
-      "locked": JSON.stringify(false),
+      "status":  `open for discussion`,
+      "locked":  JSON.stringify(false),
       "deleted": JSON.stringify(false),
 
-      "upvotes": JSON.stringify(0),
-      "upvoters": JSON.stringify([]),
-      "downvotes": JSON.stringify(0),
+      "upvotes":    JSON.stringify(0),
+      "upvoters":   JSON.stringify([]),
+      "downvotes":  JSON.stringify(0),
       "downvoters": JSON.stringify([]),
 
       "edits": JSON.stringify([])

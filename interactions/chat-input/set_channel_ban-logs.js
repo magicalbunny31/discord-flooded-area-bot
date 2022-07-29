@@ -16,7 +16,7 @@ export default async (interaction, redis) => {
    });
 
 
-   // set these values in the database
+   // set this value in the database
    await redis.SET(`flooded-area:channel:ban-logs`, channel.id);
 
 

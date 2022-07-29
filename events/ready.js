@@ -27,15 +27,30 @@ export default async (client, redis) => {
          )
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
+               .setName(`send-reaction-roles-message`)
+               .setDescription(`📰 send the initial reaction roles message`)
+               .addChannelOption(
+                  new Discord.SlashCommandChannelOption()
+                     .setName(`channel`)
+                     .setDescription(`💬 channel to send the message to`)
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildText
+                     )
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
                .setName(`send-suggestion-message`)
                .setDescription(`📰 send the initial suggestions message`)
                .addChannelOption(
                   new Discord.SlashCommandChannelOption()
                      .setName(`channel`)
-                     .setDescription(`💬 channel to send the message in`)
+                     .setDescription(`💬 channel to send the message to`)
                      .addChannelTypes(
                         Discord.ChannelType.GuildText
                      )
+                     .setRequired(true)
                )
          )
          .addSubcommand(
@@ -199,12 +214,40 @@ export default async (client, redis) => {
                .setDescription(`🏷️ Set a role for command usage.`)
                .addSubcommand(
                   new Discord.SlashCommandSubcommandBuilder()
-                     .setName(`suggestions-banned`)
-                     .setDescription(`🗯️ Set the Suggestions Banned role.`)
+                     .setName(`mentions`)
+                     .setDescription(`🗯️ Set a mention role for the reaction roles.`)
+                     .addStringOption(
+                        new Discord.SlashCommandStringOption()
+                           .setName(`type`)
+                           .setDescription(`📄 Type of mention role to set.`)
+                           .setChoices({
+                              name: `Looking For Group`,
+                              value: `looking-for-group`
+                           }, {
+                              name: `Events`,
+                              value: `events`
+                           }, {
+                              name: `Polls`,
+                              value: `polls`
+                           }, {
+                              name: `Updates/Sneak Peaks`,
+                              value: `updates-sneak-peaks`
+                           }, {
+                              name: `Giveaways`,
+                              value: `giveaways`
+                           }, {
+                              name: `Challenges`,
+                              value: `challenges`
+                           }, {
+                              name: `Doruk's Exceptional Pings`,
+                              value: `doruk's-exceptional-pings`
+                           })
+                           .setRequired(true)
+                     )
                      .addRoleOption(
                         new Discord.SlashCommandRoleOption()
                            .setName(`role`)
-                           .setDescription(`📋 The Suggestions Banned role.`)
+                           .setDescription(`📋 Role to set for this mention role.`)
                            .setRequired(true)
                      )
                )
@@ -216,6 +259,50 @@ export default async (client, redis) => {
                         new Discord.SlashCommandRoleOption()
                            .setName(`role`)
                            .setDescription(`📋 The Moderation Team role.`)
+                           .setRequired(true)
+                     )
+               )
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`pronouns`)
+                     .setDescription(`🗯️ Set a pronoun role for the reaction roles.`)
+                     .addStringOption(
+                        new Discord.SlashCommandStringOption()
+                           .setName(`type`)
+                           .setDescription(`📄 Type of pronoun role to set.`)
+                           .setChoices({
+                              name: `He/Him`,
+                              value: `he-him`
+                           }, {
+                              name: `She/Her`,
+                              value: `she-her`
+                           }, {
+                              name: `They/Them`,
+                              value: `they-them`
+                           }, {
+                              name: `Ask For Pronouns`,
+                              value: `ask-for-pronouns`
+                           }, {
+                              name: `Other Pronouns`,
+                              value: `other-pronouns`
+                           })
+                           .setRequired(true)
+                     )
+                     .addRoleOption(
+                        new Discord.SlashCommandRoleOption()
+                           .setName(`role`)
+                           .setDescription(`📋 Role to set for this pronoun role.`)
+                           .setRequired(true)
+                     )
+               )
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`suggestions-banned`)
+                     .setDescription(`🗯️ Set the Suggestions Banned role.`)
+                     .addRoleOption(
+                        new Discord.SlashCommandRoleOption()
+                           .setName(`role`)
+                           .setDescription(`📋 The Suggestions Banned role.`)
                            .setRequired(true)
                      )
                )

@@ -16,12 +16,15 @@ export default async (interaction, redis) => {
    });
 
 
-   // set these values in the database
+   // set this value in the database
    await redis.SET(`flooded-area:role:suggestions-banned`, role.id);
 
 
    // edit the deferred interaction
    return await interaction.editReply({
-      content: `Set the suggestions banned role to ${role}.`
+      content: `Set the suggestions banned role to ${role}.`,
+      allowedMentions: {
+         parse: []
+      }
    });
 };

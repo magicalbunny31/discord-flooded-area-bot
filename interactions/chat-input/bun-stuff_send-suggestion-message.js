@@ -98,8 +98,7 @@ export default async (interaction, redis) => {
 
 
    // send the message to the channel
-   const guild = await interaction.client.guilds.fetch(`977254354589462618`);
-   const channel = await guild.channels.fetch(`983394106950684704`);
+   const channel = interaction.options.getChannel(`channel`);
 
    await channel.send({
       embeds,
