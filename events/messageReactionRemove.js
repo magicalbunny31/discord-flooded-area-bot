@@ -10,25 +10,6 @@ import Discord from "discord.js";
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (messageReaction, user, redis) => {
-   // only listen for reactions in the suggestion channels
-   const rawChannelIds = await redis.HGETALL(`flooded-area:channels:suggestions`);
-   const channelIds = Object.values(rawChannelIds);
-
-   if (!channelIds.includes(messageReaction.message?.channel.id) || !messageReaction.message)
-      return;
-
-
-   // type of suggestion
-   const channelTypes = Object.fromEntries(Object.entries(rawChannelIds).map(id => id.reverse()));
-   const type = channelTypes[messageReaction.message.channel.id];
-   const suggestion = await redis.HGETALL(`flooded-area:${type}:${messageReaction.message.id}`);
-
-
-   // ignore bots
-   if (user.bot)
-      return;
-
-
    // reaction enums
    const upvote   = `⬆️`;
    const downvote = `⬇️`;
@@ -39,50 +20,115 @@ export default async (messageReaction, user, redis) => {
       return;
 
 
-   // this message
-   const message = await messageReaction.message.fetch();
-   const suggestionAuthorId = suggestion.suggester;
+   // some variables that are guaranteed to exist due to partials
+   // https://discord.com/developers/docs/topics/gateway#message-reaction-add
+   const channelId = messageReaction.message.channel.id;
+   const messageId = messageReaction.message.id;
+
+
+   // flooded area 🌊's vote was removed, react back to the message
+   if (user.id === messageReaction.client.user.id)
+      return await messageReaction.message.react(messageReaction.emoji.name);
+
+
+   // ignore other bot reactions
+   if (user.bot)
+      return;
+
+
+   // only listen for reactions in the suggestion channels
+   const rawChannelIds = await redis.HGETALL(`flooded-area:channel:suggestions`);
+   const channelIds = Object.values(rawChannelIds);
+
+   if (!channelIds.includes(channelId))
+      return;
+
+
+   // what type of suggestion this suggestion is exactly
+   const channelTypes = Object.fromEntries(Object.entries(rawChannelIds).map(id => id.reverse())); // reverse the object's keys with its values
+   const type         = channelTypes[channelId];                                                   // use the channel id to find the object's key (the suggestion type)
+   const suggestion   = await redis.HGETALL(`flooded-area:${type}:${messageId}`);                  // fetch this suggestion from the database
 
 
    // this suggestion's votes
-   const partialUpvotes   = messageReaction.message.reactions.resolve(upvote);
-   const partialDownvotes = messageReaction.message.reactions.resolve(downvote);
+   const isUpvote = messageReaction.emoji.name === upvote;
 
-   if (!partialUpvotes || !partialDownvotes)
-      return; // this value is required to be present to continue
+   const upvotes   = +suggestion.upvotes;
+   const downvotes = +suggestion.downvotes;
 
-   const upvotes   = await partialUpvotes  .fetch();
-   const downvotes = await partialDownvotes.fetch();
+   const upvoters   = JSON.parse(suggestion.upvoters);
+   const downvoters = JSON.parse(suggestion.downvoters);
 
-   const usersWhoHaveUpvoted   = await upvotes  .users.fetch();
-   const usersWhoHaveDownvoted = await downvotes.users.fetch();
+
+   // this user has already voted, flooded area 🌊 is likely removing their vote
+   if (
+      (isUpvote ? downvoters : upvoters)
+         .includes(user.id)
+   )
+      return;
+
+
+   // add this user's vote
+   (isUpvote ? upvoters : downvoters)
+      .splice(
+         (isUpvote ? upvoters : downvoters).findIndex(userId => userId === user.id),
+         1
+      );
+
+
+   // update the database
+   await redis.HSET(`flooded-area:${type}:${messageId}`,
+      isUpvote
+         ? {
+            "upvotes":  JSON.stringify(upvotes),
+            "upvoters": JSON.stringify(upvoters)
+         }
+         : {
+            "downvotes":  JSON.stringify(downvotes),
+            "downvoters": JSON.stringify(downvoters)
+         }
+   );
 
 
    // find a colour based on the votes
-   const numberOfUpvotes   = [ ...usersWhoHaveUpvoted  .values() ].length;
-   const numberOfDownvotes = [ ...usersWhoHaveDownvoted.values() ].length;
+   const cumulativeVotes = upvotes - downvotes;
 
-   const cumulativeVotes = numberOfUpvotes - numberOfDownvotes;
+   const colour = (() => {
+      const positiveColours = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
+      const neutralColour   =   0xffee00;
+      const negativeColours = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
 
-   const positiveColours = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
-   const neutralColour   =   0xffee00;
-   const negativeColours = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
-
-   const newColour =
-      cumulativeVotes === 0
+      return cumulativeVotes === 0
          ? neutralColour
          : cumulativeVotes > 0
             ? positiveColours[         cumulativeVotes ] || positiveColours[8]
             : negativeColours[Math.abs(cumulativeVotes)] || negativeColours[8];
+   })();
 
 
    // update the suggestion's embed
-   const [ embed ] = message.embeds;
+   const message = await messageReaction.message.fetch();
 
-   embed.data.color = newColour;
-   embed.data.footer = {
-      text: cumulativeVotes >= 10 ? `POPULAR! 🎉` : null
-   };
+   const embed = new Discord.EmbedBuilder(message.embeds[0].data)
+      .setColor(
+         [ `approved`, `denied` ].includes(suggestion.status)
+            ? suggestion.status === `approved` ? 0x4de94c : 0xf60000
+            : colour
+      )
+      .setFooter({
+         text: [
+            ...[ `approved`, `denied` ].includes(suggestion.status)
+               ? [ `${suggestion.status.toUpperCase()} ${suggestion.status === `approved` ? `✅` : `❎`}` ] : [],
+            ...cumulativeVotes >= 10
+               ? [ `POPULAR! 🎉` ] : [],
+            ...suggestion.deleted === `true`
+               ? [ `DELETED 🗑️` ]
+               : suggestion.locked === `true`
+                  ? [ `VOTES LOCKED 🔒` ] : []
+         ]
+            .join(`\n`)
+         || null
+      });
 
 
    // update the suggestion message
@@ -91,19 +137,4 @@ export default async (messageReaction, user, redis) => {
          embed
       ]
    });
-
-
-   // update the database
-   const reactionUserHasUpvoted = messageReaction.emoji.id === upvote || messageReaction.emoji.name === upvote;
-   return await redis.HSET(`flooded-area:${type}:${messageReaction.message.id}`,
-      reactionUserHasUpvoted
-         ? {
-            "upvotes": JSON.stringify(numberOfUpvotes - 1),
-            "upvoters": JSON.stringify([ ...usersWhoHaveUpvoted.filter(user => user.id !== messageReaction.client.user.id).values() ])
-         }
-         : {
-            "downvotes": JSON.stringify(numberOfDownvotes - 1),
-            "downvoters": JSON.stringify([ ...usersWhoHaveDownvoted.filter(user => user.id !== messageReaction.client.user.id).values() ])
-         }
-   );
 };

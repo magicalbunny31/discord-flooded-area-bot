@@ -10,25 +10,6 @@ import Discord from "discord.js";
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (messageReaction, user, redis) => {
-   // only listen for reactions in the suggestion channels
-   const rawChannelIds = await redis.HGETALL(`flooded-area:channels:suggestions`);
-   const channelIds = Object.values(rawChannelIds);
-
-   if (!channelIds.includes(messageReaction.message?.channel.id) || !messageReaction.message)
-      return;
-
-
-   // type of suggestion
-   const channelTypes = Object.fromEntries(Object.entries(rawChannelIds).map(id => id.reverse()));
-   const type = channelTypes[messageReaction.message.channel.id];
-   const suggestion = await redis.HGETALL(`flooded-area:${type}:${messageReaction.message.id}`);
-
-
-   // ignore bots
-   if (user.bot)
-      return;
-
-
    // reaction enums
    const upvote   = `⬆️`;
    const downvote = `⬇️`;
@@ -37,6 +18,31 @@ export default async (messageReaction, user, redis) => {
    // ignore reactions that aren't votes
    if (![ upvote, downvote ].includes(messageReaction.emoji.name))
       return;
+
+
+   // some variables that are guaranteed to exist due to partials
+   // https://discord.com/developers/docs/topics/gateway#message-reaction-add
+   const channelId = messageReaction.message.channel.id;
+   const messageId = messageReaction.message.id;
+
+
+   // ignore bot reactions
+   if (user.bot)
+      return;
+
+
+   // only listen for reactions in the suggestion channels
+   const rawChannelIds = await redis.HGETALL(`flooded-area:channel:suggestions`);
+   const channelIds = Object.values(rawChannelIds);
+
+   if (!channelIds.includes(channelId))
+      return;
+
+
+   // what type of suggestion this suggestion is exactly
+   const channelTypes = Object.fromEntries(Object.entries(rawChannelIds).map(id => id.reverse())); // reverse the object's keys with its values
+   const type         = channelTypes[channelId];                                                   // use the channel id to find the object's key (the suggestion type)
+   const suggestion   = await redis.HGETALL(`flooded-area:${type}:${messageId}`);                  // fetch this suggestion from the database
 
 
    // function to remove this reaction
@@ -49,77 +55,96 @@ export default async (messageReaction, user, redis) => {
    };
 
 
-   // this message
-   const message = await messageReaction.message.fetch();
-   const suggestionAuthorId = suggestion.suggester;
-
-
-   // the member that reacted
-   const reactionUserId = user.id;
-   const reactionMember = await messageReaction.message.guild.members.fetch(reactionUserId);
-
-
    // the user who reacted is the suggestion author
-   if (suggestionAuthorId === reactionUserId)
+   if (suggestion.suggester === user.id)
       return await removeReaction();
 
 
-   // this member is banned from making suggestions
-   const suggestionsBannedRoleId = `979489114153963560`;
-   const reactionMemberIsSuggestionsBanned = reactionMember.roles.cache.has(suggestionsBannedRoleId);
+   // this user has already voted
+   const isUpvote          = messageReaction.emoji.name === upvote;
+   const otherVoters       = JSON.parse(isUpvote ? suggestion.downvoters : suggestion.upvoters);
+   const alreadyVotedOther = otherVoters.includes(user.id);
 
-   if (reactionMemberIsSuggestionsBanned)
+   if (alreadyVotedOther)
+      return await removeReaction();
+
+
+   // this user is suggestions banned
+   const suggestionsBanned = await redis.GET(`flooded-area:role:suggestions-banned`);
+
+   const member = await messageReaction.message.guild.members.fetch(user.id);
+   const memberIsSuggestionsBanned = member.roles.cache.has(suggestionsBanned);
+
+   if (memberIsSuggestionsBanned)
       return await removeReaction();
 
 
    // this suggestion's votes
-   const partialUpvotes   = messageReaction.message.reactions.resolve(upvote);
-   const partialDownvotes = messageReaction.message.reactions.resolve(downvote);
+   const upvotes   = +suggestion.upvotes;
+   const downvotes = +suggestion.downvotes;
 
-   if (!partialUpvotes || !partialDownvotes)
-      return; // this value is required to be present to continue
-
-   const upvotes   = await partialUpvotes  .fetch();
-   const downvotes = await partialDownvotes.fetch();
-
-   const usersWhoHaveUpvoted   = await upvotes  .users.fetch();
-   const usersWhoHaveDownvoted = await downvotes.users.fetch();
+   const upvoters   = JSON.parse(suggestion.upvoters);
+   const downvoters = JSON.parse(suggestion.downvoters);
 
 
-   // this user has already voted
-   const reactionUserHasUpvoted = messageReaction.emoji.id === upvote || messageReaction.emoji.name === upvote;
-   const otherVoteMessageReactionUsers = reactionUserHasUpvoted ? usersWhoHaveDownvoted : usersWhoHaveUpvoted;
-   const reactionUserHasVotedOtherVote = otherVoteMessageReactionUsers.has(reactionUserId);
+   // add this user's vote
+   (isUpvote ? upvoters : downvoters)
+      .push(user.id);
 
-   if (reactionUserHasVotedOtherVote)
-      return await removeReaction();
+
+   // update the database
+   await redis.HSET(`flooded-area:${type}:${messageId}`,
+      isUpvote
+         ? {
+            "upvotes":  JSON.stringify(upvotes),
+            "upvoters": JSON.stringify(upvoters)
+         }
+         : {
+            "downvotes":  JSON.stringify(downvotes),
+            "downvoters": JSON.stringify(downvoters)
+         }
+   );
 
 
    // find a colour based on the votes
-   const numberOfUpvotes   = [ ...usersWhoHaveUpvoted  .values() ].length;
-   const numberOfDownvotes = [ ...usersWhoHaveDownvoted.values() ].length;
+   const cumulativeVotes = upvotes - downvotes;
 
-   const cumulativeVotes = numberOfUpvotes - numberOfDownvotes;
+   const colour = (() => {
+      const positiveColours = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
+      const neutralColour   =   0xffee00;
+      const negativeColours = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
 
-   const positiveColours = [ 0xfaee00, 0xedef00, 0xd8ef04, 0xc0ee16, 0xa5ee26, 0x88ec35, 0x6deb41, 0x57e949, 0x4de94c ];
-   const neutralColour   =   0xffee00;
-   const negativeColours = [ 0xffe800, 0xffd800, 0xffc100, 0xffa400, 0xff8400, 0xff6300, 0xfc4100, 0xf81e00, 0xf60000 ];
-
-   const newColour =
-      cumulativeVotes === 0
+      return cumulativeVotes === 0
          ? neutralColour
          : cumulativeVotes > 0
             ? positiveColours[         cumulativeVotes ] || positiveColours[8]
             : negativeColours[Math.abs(cumulativeVotes)] || negativeColours[8];
+   })();
 
 
    // update the suggestion's embed
-   const [ embed ] = message.embeds;
+   const message = await messageReaction.message.fetch();
 
-   embed.data.color = newColour;
-   embed.data.footer = {
-      text: cumulativeVotes >= 10 ? `POPULAR! 🎉` : null
-   };
+   const embed = new Discord.EmbedBuilder(message.embeds[0].data)
+      .setColor(
+         [ `approved`, `denied` ].includes(suggestion.status)
+            ? suggestion.status === `approved` ? 0x4de94c : 0xf60000
+            : colour
+      )
+      .setFooter({
+         text: [
+            ...[ `approved`, `denied` ].includes(suggestion.status)
+               ? [ `${suggestion.status.toUpperCase()} ${suggestion.status === `approved` ? `✅` : `❎`}` ] : [],
+            ...cumulativeVotes >= 10
+               ? [ `POPULAR! 🎉` ] : [],
+            ...suggestion.deleted === `true`
+               ? [ `DELETED 🗑️` ]
+               : suggestion.locked === `true`
+                  ? [ `VOTES LOCKED 🔒` ] : []
+         ]
+            .join(`\n`)
+         || null
+      });
 
 
    // update the suggestion message
@@ -128,18 +153,4 @@ export default async (messageReaction, user, redis) => {
          embed
       ]
    });
-
-
-   // update the database
-   return await redis.HSET(`flooded-area:${type}:${messageReaction.message.id}`,
-      reactionUserHasUpvoted
-         ? {
-            "upvotes": `${numberOfUpvotes - 1}`,
-            "upvoters": JSON.stringify([ ...usersWhoHaveUpvoted.filter(user => user.id !== messageReaction.client.user.id).values() ])
-         }
-         : {
-            "downvotes": `${numberOfDownvotes - 1}`,
-            "downvoters": JSON.stringify([ ...usersWhoHaveDownvoted.filter(user => user.id !== messageReaction.client.user.id).values() ])
-         }
-   );
 };
