@@ -126,7 +126,7 @@ export default async (interaction, redis) => {
                   > ${[
                         ...[ `approved`, `denied` ].includes(suggestion.status)
                            ? [ `\`${suggestion.status === `approved` ? `Approved ✅` : `Denied ❎`}\`` ] : [],
-                        `\`${suggestion.deleted === `true` ? `Deleted 🗑️` : suggestion.locked === `true` ? `Locked 🔒` : `Not locked 🔓`}\``
+                        `\`${suggestion.deleted === `true` ? `Deleted 🗑️` : suggestion.locked === `true` ? `Locked 🔒` : `Open for discussion 💬`}\``
                      ]
                         .join(`, `)
                   }
