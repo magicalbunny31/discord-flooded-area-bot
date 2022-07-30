@@ -58,8 +58,8 @@ export default async (messageReaction, user, redis) => {
    // this suggestion's votes
    const isUpvote = messageReaction.emoji.name === upvote;
 
-   const upvotes   = +suggestion.upvotes;
-   const downvotes = +suggestion.downvotes;
+   let upvotes   = +suggestion.upvotes;
+   let downvotes = +suggestion.downvotes;
 
    const upvoters   = JSON.parse(suggestion.upvoters);
    const downvoters = JSON.parse(suggestion.downvoters);
@@ -74,6 +74,10 @@ export default async (messageReaction, user, redis) => {
 
 
    // add this user's vote
+   isUpvote
+      ? upvotes --
+      : downvotes --;
+
    (isUpvote ? upvoters : downvoters)
       .splice(
          (isUpvote ? upvoters : downvoters).findIndex(userId => userId === user.id),

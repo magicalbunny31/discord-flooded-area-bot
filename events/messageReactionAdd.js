@@ -93,14 +93,18 @@ export default async (messageReaction, user, redis) => {
 
 
    // this suggestion's votes
-   const upvotes   = +suggestion.upvotes;
-   const downvotes = +suggestion.downvotes;
+   let upvotes   = +suggestion.upvotes;
+   let downvotes = +suggestion.downvotes;
 
    const upvoters   = JSON.parse(suggestion.upvoters);
    const downvoters = JSON.parse(suggestion.downvoters);
 
 
    // add this user's vote
+   isUpvote
+      ? upvotes ++
+      : downvotes ++;
+
    (isUpvote ? upvoters : downvoters)
       .push(user.id);
 
