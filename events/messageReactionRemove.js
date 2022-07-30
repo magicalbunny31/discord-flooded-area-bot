@@ -50,6 +50,11 @@ export default async (messageReaction, user, redis) => {
    const suggestion   = await redis.HGETALL(`flooded-area:${type}:${messageId}`);                  // fetch this suggestion from the database
 
 
+   // this vote isn't from a suggestion message
+   if (!suggestion)
+      return;
+
+
    // this suggestion's votes
    const isUpvote = messageReaction.emoji.name === upvote;
 

@@ -45,6 +45,11 @@ export default async (messageReaction, user, redis) => {
    const suggestion   = await redis.HGETALL(`flooded-area:${type}:${messageId}`);                  // fetch this suggestion from the database
 
 
+   // this vote isn't from a suggestion message
+   if (!suggestion)
+      return;
+
+
    // function to remove this reaction
    const removeReaction = async () => {
       try {
@@ -66,6 +71,14 @@ export default async (messageReaction, user, redis) => {
    const alreadyVotedOther = otherVoters.includes(user.id);
 
    if (alreadyVotedOther)
+      return await removeReaction();
+
+
+   // votes are locked, or this suggestion has been approved/denied
+   const votesLocked = suggestion.locked === `true`;
+   const approvedOrDenied = [ `approved`, `denied` ].includes(suggestion.status);
+
+   if (votesLocked || approvedOrDenied)
       return await removeReaction();
 
 
