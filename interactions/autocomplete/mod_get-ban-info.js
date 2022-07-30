@@ -4,7 +4,7 @@ import fuzzysort from "fuzzysort";
 import pkg from "../../package.json" assert { type: "json" };
 
 /**
- * get some pawesome info of a player's roblox Flooded Area ban
+ * get some pawesome info of a player's roblox flooded area ban
  * @param {Discord.AutocompleteInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -30,6 +30,7 @@ export default async (interaction, redis) => {
             if (response.ok)
                return (await response.json())
                   .documents
+                  .filter(document => document.fields?.Banned?.booleanValue || document.fields?.[`Temp-Banned`]?.booleanValue) // only show (temporary) bans
                   .map(document => {
                      // get the id
                      const id = document.name.split(`/`).at(-1);

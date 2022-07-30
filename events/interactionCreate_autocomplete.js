@@ -35,7 +35,7 @@ export default async (interaction, redis) => {
 
 
    } catch (error) {
-      // autocomplete is a bit finicky, so catch whatever error is caught here
+      // autocomplete interactions are a bit finicky, so catch whatever error is caught here
       return await sendBotError(
          interaction,
          {

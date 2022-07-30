@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+
 import pkg from "../../package.json" assert { type: "json" };
 
 import { emojis } from "@magicalbunny31/awesome-utility-stuff";

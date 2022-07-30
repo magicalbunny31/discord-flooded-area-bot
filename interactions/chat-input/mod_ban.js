@@ -148,7 +148,7 @@ export default async (interaction, redis) => {
       });
 
 
-   // add this user's id to the ban database
+   // add this player's id to the ban database
    const bannedUser = await (async () => {
       const response = await fetch(`${process.env.BAN_DATABASE_URL}/${playerId}`, {
          method: `PATCH`,

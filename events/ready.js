@@ -137,7 +137,7 @@ export default async (client, redis) => {
                .addStringOption(
                   new Discord.SlashCommandStringOption()
                      .setName(`player-id`)
-                     .setDescription(`👥 the player's ban to view.`)
+                     .setDescription(`👥 the player's ban to view`)
                      .setAutocomplete(true)
                      .setRequired(true)
                )

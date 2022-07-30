@@ -33,6 +33,7 @@ export default async (interaction, redis) => {
       if (response.ok)
          return (await response.json())
             .documents
+            .filter(document => document.fields?.Banned?.booleanValue || document.fields?.[`Temp-Banned`]?.booleanValue) // only show (temporary) bans
             .map(document => {
                // get the id
                const id = document.name.split(`/`).at(-1);

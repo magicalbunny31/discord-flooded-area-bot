@@ -55,6 +55,16 @@ export default async (interaction, redis) => {
       });
 
 
+   // this user isn't (temporarily) banned
+   if (!(bannedUser.fields?.Banned?.booleanValue || bannedUser.fields?.[`Temp-Banned`]?.booleanValue))
+      return await interaction.editReply({
+         content: strip`
+            ❌ **can't get this ban entry**
+            > this player isn't banned, chief
+         `
+      });
+
+
    // get this banned user's roblox profile
    // https://users.roblox.com/docs#!/Users/get_v1_users_userId
    const userProfile = await (async () => {
@@ -101,8 +111,9 @@ export default async (interaction, redis) => {
    // this banned user
    const robloxApiErrored = !userProfile;
 
-   const reason = bannedUser.fields.Reason?.stringValue || `\`No reason found.\``;
+   const reason = bannedUser.fields.Reason?.stringValue || `**\`no reason found\`**`;
    const createdAtTimestamp = dayjs(bannedUser.createTime).unix();
+   const updatedAtTimestamp = dayjs(bannedUser.updateTime).unix();
 
    const displayName =     userProfile?.displayName || `???`;
    const name        = `@${userProfile?.name        || `???`}`;
@@ -111,7 +122,7 @@ export default async (interaction, redis) => {
       ? `https://www.roblox.com/users/${playerId}/profile`
       : null;
 
-   const moderator = await redis.HGET(`flooded-area:ban-logs:${playerId}`, `moderator`);
+   const { moderator, "last-modified-by": lastModifiedBy } = await redis.HGETALL(`flooded-area:ban-logs:${playerId}`);
 
 
    // embeds
@@ -142,6 +153,11 @@ export default async (interaction, redis) => {
                strip`
                   🗓️ **banned at**
                   > ${Discord.time(createdAtTimestamp)} (${Discord.time(createdAtTimestamp, Discord.TimestampStyles.RelativeTime)})
+                  ${
+                     lastModifiedBy
+                        ? `> last modified at ${Discord.time(updatedAtTimestamp)} by ${Discord.userMention(lastModifiedBy)}`
+                        : ``
+                  }
                `
             ]
                .join(`\n\n`)
@@ -157,8 +173,22 @@ export default async (interaction, redis) => {
    ];
 
 
+   // components
+   const components = [
+      new Discord.ActionRowBuilder()
+         .setComponents([
+            new Discord.ButtonBuilder()
+               .setCustomId(`mod_modify-ban:${playerId}`)
+               .setLabel(`modify ban`)
+               .setEmoji(`📝`)
+               .setStyle(Discord.ButtonStyle.Secondary)
+         ])
+   ];
+
+
    // edit the deferred interaction
    return await interaction.editReply({
-      embeds
+      embeds,
+      components
    });
 };
