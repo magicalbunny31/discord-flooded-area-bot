@@ -90,38 +90,6 @@ export default async (interaction, redis) => {
    const profileURL = `https://www.roblox.com/users/${playerId}/profile`;
 
 
-   // check if this user is already kicked or not
-   const isKicked = await (async () => {
-      const response = await fetch(`${process.env.BAN_DATABASE_URL}/${playerId}`, {
-         headers: {
-            "Accept": `application/json`,
-            "User-Agent": `${pkg.name} (https://github.com/magicalbunny31/discord-flooded-area-bot)`
-         }
-      });
-
-      if (response.ok)
-         return true;
-
-      else
-         return response.status === 404
-            ? false
-            : {
-               ok: false,
-               status: response.status
-            };
-   })();
-
-
-   // this user is already kicked
-   if (isKicked)
-      return await interaction.editReply({
-         content: strip`
-            ❌ **can't kick this user**
-            > \`@${name}\` is already kicked
-         `
-      });
-
-
    // response isn't okai
    if (isKicked?.ok === false)
       return await interaction.editReply({
@@ -135,7 +103,7 @@ export default async (interaction, redis) => {
 
    // add this user's id to the kick database
    const kickedUser = await (async () => {
-      const response = await fetch(`${process.env.BAN_DATABASE_URL}/${playerId}`, {
+      const response = await fetch(`${process.env.BAN_DATABASE_URL}/${playerId}_kick`, {
          method: `PATCH`,
          headers: {
             "Accept": `application/json`,
