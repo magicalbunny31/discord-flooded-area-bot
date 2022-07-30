@@ -1,11 +1,12 @@
 import Discord from "discord.js";
+import dayjs from "dayjs";
 
 import pkg from "../../package.json" assert { type: "json" };
 
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * ban a player from roblox Flooded Area
+ * ban a player from roblox flooded area
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -13,7 +14,7 @@ export default async (interaction, redis) => {
    // options
    const playerId = interaction.options.getInteger(`player-id`);
    const reason = interaction.options.getString(`reason`);
-   const banUntil = interaction.options.getInteger(`ban-until`);
+   const banDuration = interaction.options.getInteger(`ban-duration`);
 
 
    // users and channels
@@ -101,7 +102,10 @@ export default async (interaction, redis) => {
       });
 
       if (response.ok)
-         return true;
+         return {
+            ok: true,
+            bannedAt: dayjs((await response.json()).createTime).unix()
+         };
 
       else
          return response.status === 404
@@ -114,17 +118,27 @@ export default async (interaction, redis) => {
 
 
    // this user is already banned
-   if (isBanned)
+   if (isBanned.ok === true) {
+      const moderator = await redis.HGET(`flooded-area:ban-logs:${playerId}`, `moderator`);
+
       return await interaction.editReply({
          content: strip`
             ❌ **can't ban this user**
-            > \`@${name}\` is already banned
-         `
+            > \`@${name}\` ${
+               moderator
+                  ? `was banned by ${Discord.userMention(moderator)} ${Discord.time(isBanned.bannedAt, Discord.TimestampStyles.RelativeTime)}`
+                  : `is already banned`
+            }
+         `,
+         allowedMentions: {
+            parse: []
+         }
       });
+   };
 
 
    // response isn't okai
-   if (isBanned?.ok === false)
+   if (isBanned.ok === false) // must be explicitly false
       return await interaction.editReply({
          content: strip`
             ❌ **can't ban this user**
@@ -175,6 +189,12 @@ export default async (interaction, redis) => {
             > give this to ${Discord.userMention(magicalbunny31)}: \`${isBanned.status}\`
          `
       });
+
+
+   // set who banned this person in the database
+   await redis.HSET(`flooded-area:ban-logs:${playerId}`, {
+      "moderator": interaction.user.id
+   });
 
 
    // embeds

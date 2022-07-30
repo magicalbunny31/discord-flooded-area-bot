@@ -5,7 +5,7 @@ import pkg from "../../package.json" assert { type: "json" };
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * kick a player from roblox Flooded Area
+ * kick a player from roblox flooded area
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */

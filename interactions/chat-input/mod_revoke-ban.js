@@ -5,7 +5,7 @@ import pkg from "../../package.json" assert { type: "json" };
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * revoke a player's ban from roblox Flooded Area
+ * revoke a player's ban from roblox flooded area
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -108,6 +108,10 @@ export default async (interaction, redis) => {
       : null;
 
 
+   // remove who banned this person from the database
+   await redis.DEL(`flooded-area:ban-logs:${playerId}`);
+
+
    // embeds
    const embeds = [
       new Discord.EmbedBuilder()
@@ -128,10 +132,12 @@ export default async (interaction, redis) => {
                   🔨 so be patient if they're not actually banned yet >.>
                `,
                ...robloxApiErrored
-                  ? [ strip`
-                     💥 the roblox api is mean and errored
-                     🔎 ..well probably because this user doesn't exist or roblox is dead rn
-                  ` ]
+                  ? [
+                     strip`
+                        💥 the roblox api is mean and errored
+                        🔎 ..well probably because this user doesn't exist or roblox is dead rn
+                     `
+                  ]
                   : []
             ]
                .join(`\n\n`)

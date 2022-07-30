@@ -99,17 +99,41 @@ export default async (client, redis) => {
                      .setMaxLength(50)
                      .setRequired(true)
                )
-               .addIntegerOption( // TODO datepicker
+               .addIntegerOption(
                   new Discord.SlashCommandIntegerOption()
-                     .setName(`ban-until`)
-                     .setDescription(`📅 [ OPTION NOT IN USE: VALUE WILL BE IGNORED ]`)
-                     .setMinValue(0)
+                     .setName(`ban-duration`)
+                     .setDescription(`⌚ select an option to make this a temporary ban; don't select for a permanent ban [ WIP!!!!! ]`)
+                     .setChoices({
+                        name: `30 minutes`,
+                        value: 1800
+                     }, {
+                        name: `1 hour`,
+                        value: 3600
+                     }, {
+                        name: `3 hours`,
+                        value: 10800
+                     }, {
+                        name: `6 hours`,
+                        value: 21600
+                     }, {
+                        name: `12 hours`,
+                        value: 43200
+                     }, {
+                        name: `1 day`,
+                        value: 86400
+                     }, {
+                        name: `3 days`,
+                        value: 259200
+                     }, {
+                        name: `1 week`,
+                        value: 604800
+                     })
                )
          )
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
                .setName(`get-ban-info`)
-               .setDescription(`📋 get some pawesome info of a player's roblox Flooded Area ban`)
+               .setDescription(`📃 get some pawesome info of a player's roblox Flooded Area ban`)
                .addStringOption(
                   new Discord.SlashCommandStringOption()
                      .setName(`player-id`)
@@ -149,6 +173,11 @@ export default async (client, redis) => {
                      .setAutocomplete(true)
                      .setRequired(true)
                )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`show-ban-list`)
+               .setDescription(`📋 show the list of banned players from roblox Flooded Area`)
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.BanMembers),
 

@@ -3,21 +3,52 @@ import dayjs from "dayjs";
 
 import pkg from "../../package.json" assert { type: "json" };
 
-import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * get some pawesome info of a player's roblox flooded area ban
- * @param {Discord.ChatInputCommandInteraction} interaction
+ * show a modal to the user for them to submit a suggestion
+ * @param {Discord.SelectMenuInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (interaction, redis) => {
-   // options
-   const playerId = interaction.options.getString(`player-id`);
+   // select menu info
+   const [ _selectMenu, dbId, index ] = interaction.customId.split(`:`);
+   const [ playerId ] = interaction.values;
 
 
-   // defer the interaction
-   await interaction.deferReply({
-      ephemeral: true
+   // "defer" the interaction
+   if (interaction.message.components.length > 1) {
+      // disable all components
+      for (const actionRow of interaction.message.components)
+         for (const component of actionRow.components)
+            component.data.disabled = true;
+
+      // edit the select menu to show a loading state
+      interaction.message.components[0].components[0].data.options = [
+         new Discord.SelectMenuOptionBuilder()
+            .setLabel(`Loading...`)
+            .setValue(`uwu`)
+            .setEmoji(emojis.loading)
+            .setDefault(true)
+      ];
+
+      // edit the page button to show a loading state
+      Object.assign(interaction.message.components[1].components[2].data, {
+         label: null,
+         emoji: Discord.parseEmoji(emojis.loading)
+      });
+
+   } else
+      // edit the back button to show a loading state
+      Object.assign(interaction.message.components[0].components[0].data, {
+         label: null,
+         emoji: Discord.parseEmoji(emojis.loading),
+         disabled: true
+      });
+
+   // update the interaction
+   await interaction.update({
+      components: interaction.message.components
    });
 
 
@@ -41,17 +72,34 @@ export default async (interaction, redis) => {
    })();
 
 
+   // components
+   const components = [
+      new Discord.ActionRowBuilder()
+         .setComponents([
+            new Discord.ButtonBuilder()
+               .setCustomId(`mod_show-ban-list:${dbId}:${index}`)
+               .setEmoji(`🔙`)
+               .setStyle(Discord.ButtonStyle.Primary)
+         ])
+   ];
+
+
    // response isn't okai
    if (bannedUser?.ok === false)
       return await interaction.editReply({
-         content: strip`
-            ❌ **can't get this ban entry**
-            > ${
-               bannedUser.status === 404
-                  ? `the id \`${playerId}\` wasn't found in the ban list chief` // not found
-                  : `some scary error occurred with the ban list! try again later maybe`
-            }
-         `
+         embeds: [
+            new Discord.EmbedBuilder()
+               .setColor(colours.flooded_area)
+               .setDescription(strip`
+                  ❌ **can't get this ban entry**
+                  > ${
+                     bannedUser.status === 404
+                        ? `the id \`${playerId}\` wasn't found in the ban list chief` // not found
+                        : `some scary error occurred with the ban list! try again later maybe`
+                  }
+               `)
+         ],
+         components
       });
 
 
@@ -157,8 +205,9 @@ export default async (interaction, redis) => {
    ];
 
 
-   // edit the deferred interaction
+   // edit the interaction's original reply
    return await interaction.editReply({
-      embeds
+      embeds,
+      components
    });
 };

@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-import { strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * show a modal to the user for them to submit a suggestion
