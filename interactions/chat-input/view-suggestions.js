@@ -181,7 +181,7 @@ export default async (interaction, redis) => {
    if (suggestions.length)
       await redis
          .multi()
-         .LPUSH(`flooded-area:temporary-stuff:${interaction.id}`, suggestions.slice().reverse().map(suggestion => JSON.stringify(suggestion)))
+         .RPUSH(`flooded-area:temporary-stuff:${interaction.id}`, suggestions.map(suggestion => JSON.stringify(suggestion)))
          .EXPIRE(`flooded-area:temporary-stuff:${interaction.id}`, 86400)
          .exec();
 
