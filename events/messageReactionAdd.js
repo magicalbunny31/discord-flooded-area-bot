@@ -75,10 +75,10 @@ export default async (messageReaction, user, redis) => {
 
 
    // votes are locked, or this suggestion has been approved/denied
-   const votesLocked = suggestion.locked === `true`;
+   const locked = suggestion.locked === `true`;
    const approvedOrDenied = [ `approved`, `denied` ].includes(suggestion.status);
 
-   if (votesLocked || approvedOrDenied)
+   if (locked || approvedOrDenied)
       return await removeReaction();
 
 
@@ -150,16 +150,14 @@ export default async (messageReaction, user, redis) => {
       )
       .setFooter({
          text: [
-            ...[ `approved`, `denied` ].includes(suggestion.status)
-               ? [ `${suggestion.status.toUpperCase()} ${suggestion.status === `approved` ? `✅` : `❎`}` ] : [],
             ...cumulativeVotes >= 10
-               ? [ `POPULAR! 🎉` ] : [],
-            ...suggestion.deleted === `true`
-               ? [ `DELETED 🗑️` ]
-               : suggestion.locked === `true`
-                  ? [ `VOTES LOCKED 🔒` ] : []
+               ? [ `🎉` ] : [],
+            ...[ `approved`, `denied` ].includes(suggestion.status)
+               ? [ suggestion.status === `approved` ? `✅` : `❎` ] : [],
+            ...suggestion.locked === `true`
+               ? [ `🔒` ] : []
          ]
-            .join(`\n`)
+            .join(``)
          || null
       });
 
