@@ -55,9 +55,29 @@ export default async (messageReaction, user, redis) => {
       return;
 
 
-   // this suggestion's votes
-   const isUpvote = messageReaction.emoji.name === upvote;
+   // the user who reacted is the suggestion author so this reaction removal was from flooded area 🌊
+   if (suggestion.suggester === user.id)
+      return;
 
+
+   // this user has already voted so this reaction removal was from flooded area 🌊
+   const isUpvote          = messageReaction.emoji.name === upvote;
+   const otherVoters       = JSON.parse(isUpvote ? suggestion.downvoters : suggestion.upvoters);
+   const alreadyVotedOther = otherVoters.includes(user.id);
+
+   if (alreadyVotedOther)
+      return;
+
+
+   // votes are locked, or this suggestion has been approved/denied so this reaction removal was from flooded area 🌊
+   const locked = suggestion.locked === `true`;
+   const approvedOrDenied = [ `approved`, `denied` ].includes(suggestion.status);
+
+   if (locked || approvedOrDenied)
+      return;
+
+
+   // this suggestion's votes
    let upvotes   = +suggestion.upvotes;
    let downvotes = +suggestion.downvotes;
 
