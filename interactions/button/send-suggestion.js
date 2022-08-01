@@ -215,7 +215,7 @@ export default async (interaction, redis) => {
 
 
    // send the message containing settings to the thread
-   await suggestionThread.send({
+   const settingsMessage = await suggestionThread.send({
       embeds: [
          new Discord.EmbedBuilder()
             .setColor(colours.flooded_area)
@@ -269,6 +269,10 @@ export default async (interaction, redis) => {
             ])
       ]
    });
+
+
+   // pin the settings message
+   await settingsMessage.pin();
 
 
    // add the suggestion author to the thread
