@@ -37,12 +37,13 @@ export default async (interaction, redis) => {
 
          // change the suggestion's status
          await redis.HSET(`flooded-area:${type}:${id}`, {
+            "last-updated-timestamp": interaction.createdTimestamp,
             "status": value === `approve-suggestion`
                ? `approved`
                : value === `deny-suggestion`
                   ? `denied`
                   : `open for discussion`,
-            "last-updated-timestamp": interaction.createdTimestamp
+            "status-changer": interaction.user.id
          });
 
          // break out
@@ -62,8 +63,8 @@ export default async (interaction, redis) => {
 
          // change the suggestion's locked status
          await redis.HSET(`flooded-area:${type}:${id}`, {
-            "locked": JSON.stringify(value === `lock-suggestion`),
-            "last-updated-timestamp": interaction.createdTimestamp
+            "last-updated-timestamp": interaction.createdTimestamp,
+            "locked": JSON.stringify(value === `lock-suggestion`)
          });
 
          // break out
@@ -125,7 +126,7 @@ export default async (interaction, redis) => {
                > ${
                   suggestion.status === `open for discussion`
                      ? `Open for discussion since ${Discord.time(Math.floor(+suggestion[`last-updated-timestamp`] / 1000), Discord.TimestampStyles.RelativeTime)}.`
-                     : `${value === `approve-suggestion` ? `Approved` : `Denied`} by ${interaction.user} ${Discord.time(Math.floor(interaction.createdTimestamp / 1000), Discord.TimestampStyles.RelativeTime)}`
+                     : `${value === `approve-suggestion` ? `Approved` : `Denied`} by ${Discord.userMention(suggestion[`status-changer`])} ${Discord.time(Math.floor(interaction.createdTimestamp / 1000), Discord.TimestampStyles.RelativeTime)}.`
                }
 
                **📝 Edits**

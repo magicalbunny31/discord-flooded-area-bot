@@ -121,17 +121,15 @@ await client.login(process.env.TOKEN);
 
 /**
  * SUGGESTIONS~
- * ability to edit suggestions
  * - maybe lock thread too??
  * -- lock thread button??
- * edit name of user#discrim on member update in suggestion embeds through GUILD_MEMBER_UPDATE
  * suggestion approve/deny reason
  * delete some message from suggestion channels to clean it up plox
- * after approve/deny, delete suggestion after time
- * dm user if suggestion deleted/updated/etc
+ * after deny, delete suggestion after time
+ * dm user if suggestion deleted/updated/etc (opt-in)
  * confirmation to delete suggestions
  * auto deny suggestions "open for discussion" suggestions that sustain a 90% downvoted rate for 24hr
- * ping mods? when a suggestion is popular for 24hr
+ * (?) ping mods? when a suggestion is popular for 24hr
  *
  * SUGGESTION SUBMISSIONS~
  * add tutorial
@@ -140,7 +138,7 @@ await client.login(process.env.TOKEN);
  * add "view trending suggestions" button #suggestion-submissions (most upvoted in 24hr)
  *
  * TICKETS~
- * am i even doing this idk but for now no i like ticket bot
+ * am i even doing this? idk. but for now: no, i like ticket bot
  * but i will just recreate it if i get bored
  */
 
@@ -150,6 +148,7 @@ await client.login(process.env.TOKEN);
 
 /**
  * TODO: suggestions
- * use threadUpdate to change locked status and edit settings embed
- * on message delete check if suggestion was deleted
+ * on threadUpdate, change locked status and edit settings embed
+ * on messageDelete, check if suggestion was deleted
+ * on guildMemberUpdate, update suggestion embed's author
  */

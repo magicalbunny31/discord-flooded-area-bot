@@ -39,7 +39,7 @@ export default async (interaction, redis) => {
          // show modal
          return await interaction.showModal(
             new Discord.ModalBuilder()
-               .setCustomId(`suggestions:game-suggestions`)
+               .setCustomId(`suggestions:game-suggestions:true`)
                .setTitle(`Game Suggestions`)
                .setComponents([
                   new Discord.ActionRowBuilder()
@@ -73,7 +73,7 @@ export default async (interaction, redis) => {
          // show modal
          return await interaction.showModal(
             new Discord.ModalBuilder()
-               .setCustomId(`suggestions:server-suggestions`)
+               .setCustomId(`suggestions:server-suggestions:true`)
                .setTitle(`Server Suggestions`)
                .setComponents([
                   new Discord.ActionRowBuilder()
@@ -101,13 +101,13 @@ export default async (interaction, redis) => {
 
 
       /**
-       * suggestions for a new part for flooded are on roblox
+       * suggestions for a new part for flooded area on roblox
        */
       case `part-suggestions`: {
          // show modal
          return await interaction.showModal(
             new Discord.ModalBuilder()
-               .setCustomId(`suggestions:part-suggestions`)
+               .setCustomId(`suggestions:part-suggestions:true`)
                .setTitle(`Part Suggestions`)
                .setComponents([
                   new Discord.ActionRowBuilder()

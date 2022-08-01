@@ -7,7 +7,7 @@ import Discord from "discord.js";
  */
 export default async (interaction, redis) => {
    // button info
-   const [ _button, type, id ] = interaction.customId.split(`:`);
+   const [ _button, type, id, isSending ] = interaction.customId.split(`:`);
 
 
    // get values to fill in in the modal
@@ -25,8 +25,8 @@ export default async (interaction, redis) => {
          // show modal
          return await interaction.showModal(
             new Discord.ModalBuilder()
-               .setCustomId(`suggestions:${type}`)
-               .setTitle(`Game Suggestions`)
+               .setCustomId(`suggestions:${type}:${isSending}`)
+               .setTitle(isSending === `true` ? `Game Suggestions` : `Editing Game Suggestion`)
                .setComponents([
                   new Discord.ActionRowBuilder()
                      .setComponents([
@@ -61,8 +61,8 @@ export default async (interaction, redis) => {
          // show modal
          return await interaction.showModal(
             new Discord.ModalBuilder()
-               .setCustomId(`suggestions:server-suggestions`)
-               .setTitle(`Server Suggestions`)
+               .setCustomId(`suggestions:${type}:${isSending}`)
+               .setTitle(isSending === `true` ? `Server Suggestions` : `Editing Server Suggestion`)
                .setComponents([
                   new Discord.ActionRowBuilder()
                      .setComponents([
@@ -97,8 +97,8 @@ export default async (interaction, redis) => {
          // show modal
          return await interaction.showModal(
             new Discord.ModalBuilder()
-               .setCustomId(`suggestions:part-suggestions`)
-               .setTitle(`Part Suggestions`)
+               .setCustomId(`suggestions:${type}:${isSending}`)
+               .setTitle(isSending === `true` ? `Part Suggestions` : `Editing Part Suggestion`)
                .setComponents([
                   new Discord.ActionRowBuilder()
                      .setComponents([

@@ -228,8 +228,8 @@ export default async (client, redis) => {
                   ? suggestion.status === `approved` ? 0x4de94c : 0xf60000
                   : colour
             )
-            .setAuthor({ // if the suggester isn't in this guild anymore, we'll respect their privacy and use the last known username#discriminator and their default avatar
-               name: suggesterIsInGuild ? suggester.tag : suggestionMessage.embeds[0].data.author?.name || `???`,
+            .setAuthor({ // if the suggester isn't in this guild anymore, we'll respect their privacy and use their default avatar
+               name: suggester.tag, // can't use last known username#discriminator because viewing edits will expose their real username#discriminator
                iconURL: suggesterIsInGuild ? suggester.displayAvatarURL() : suggester.defaultAvatarURL
             })
             .setFooter({
@@ -293,7 +293,7 @@ export default async (client, redis) => {
                ${
                   edits.length
                      ? strip`
-                        > Edited by ${toHuman(editors)}
+                        > Edited by ${toHuman(editors)}.
                         > Last edited by ${Discord.userMention(lastEdit.editor)} ${Discord.time(Math.floor(lastEdit[`last-updated-timestamp`] / 1000), Discord.TimestampStyles.RelativeTime)}
                      `
                      : `> **\`No edits to list.\`**`

@@ -12,12 +12,27 @@ export default async (interaction, redis) => {
    const [ id ] = interaction.values;
 
 
+   // function to try to fetch something or return undefined instead of throwing
+   const tryOrUndefined = async promise => {
+      try {
+         return await promise;
+      } catch {
+         return undefined;
+      };
+   };
+
+
+   // function to check if a user is in this guild
+   const userIsInGuild = async userId => !!await tryOrUndefined(interaction.guild.members.fetch(userId));
+
+
    // get this suggestion
    const suggestion = await redis.HGETALL(`flooded-area:${type}:${id}`);
 
 
    // the suggestion author
    const suggester = await interaction.client.users.fetch(suggestion.suggester);
+   const suggesterIsInGuild = await userIsInGuild(suggestion.suggester);
 
 
    // embeds
@@ -45,7 +60,7 @@ export default async (interaction, redis) => {
          )
          .setAuthor({
             name: suggester.tag,
-            iconURL: suggester.displayAvatarURL()
+            iconURL: suggesterIsInGuild ? suggester.displayAvatarURL() : suggester.defaultAvatarURL
          })
          .setImage(suggestion[`image-url`] || null)
          .setFooter({

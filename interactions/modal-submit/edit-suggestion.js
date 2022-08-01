@@ -2,16 +2,16 @@ import Discord from "discord.js";
 
 import pkg from "../../package.json" assert { type: "json" };
 
-import { colours, emojis } from "@magicalbunny31/awesome-utility-stuff";
+import { colours } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * confirm the user's suggestion before sending
+ * edit a suggestion
  * @param {Discord.ModalSubmitInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (interaction, redis) => {
    // modal info
-   const [ _modal, type, isSending ] = interaction.customId.split(`:`);
+   const [ _modal, type ] = interaction.customId.split(`:`);
 
 
    // "defer" the interaction (http requests timings are unpredictable)
@@ -36,20 +36,10 @@ export default async (interaction, redis) => {
             ...interaction.message.embeds,
             new Discord.EmbedBuilder()
                .setColor(0x4de94c)
-               .setDescription(`**\`Editing suggestion..\`** ${emojis.loading}`)
+               .setDescription(`**\`Editing suggestion...\`** ${emojis.loading}`)
          ],
          components: interaction.message.components
       });
-   };
-
-
-   // function to try to fetch something or return null instead of throwing
-   const tryOrUndefined = async promise => {
-      try {
-         return await promise;
-      } catch {
-         return undefined;
-      };
    };
 
 
@@ -76,23 +66,6 @@ export default async (interaction, redis) => {
          return false;
       };
    };
-
-
-   // get the channel to send this suggestion to
-   const channelId = await redis.HGET(`flooded-area:channel:suggestions`, type);
-   const channel = await tryOrUndefined(interaction.guild.channels.fetch(channelId));
-
-
-   // channel doesn't exist in guild
-   if (!channel)
-      return await interaction.editReply({
-         content: strip`
-            ❌ **Can't fetch the channel to send this suggestion to.**
-            > Consider contacting a member of the ${Discord.roleMention(`989125486590451732`)} or try again later.
-         `,
-         embeds: [],
-         components: []
-      });
 
 
    // depending on the modal, it'll have multiple fields (note: these variables actually have to be null)
@@ -152,7 +125,7 @@ export default async (interaction, redis) => {
          ? isImageURL
             ? [
                new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
+                  .setColor(colour)
                   .setAuthor({
                      name: interaction.user.tag,
                      iconURL: interaction.user.displayAvatarURL()
@@ -162,7 +135,7 @@ export default async (interaction, redis) => {
             ]
             : [
                new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
+                  .setColor(colour)
                   .setAuthor({
                      name: interaction.user.tag,
                      iconURL: interaction.user.displayAvatarURL()
@@ -178,7 +151,7 @@ export default async (interaction, redis) => {
          : isImageURL
             ? [
                new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
+                  .setColor(colour)
                   .setAuthor({
                      name: interaction.user.tag,
                      iconURL: interaction.user.displayAvatarURL()
@@ -196,7 +169,7 @@ export default async (interaction, redis) => {
             ]
             : [
                new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
+                  .setColor(colour)
                   .setAuthor({
                      name: interaction.user.tag,
                      iconURL: interaction.user.displayAvatarURL()
@@ -226,27 +199,19 @@ export default async (interaction, redis) => {
 
 
    // components
-   const isInvalid = !suggestionOrPartName.trim() || (isPartSuggestion && !imageOrPartDescriptionOrNull?.trim()) || !isImageURL;
+   const isInvalid = (!suggestionOrPartName.trim() || (isPartSuggestion && !imageOrPartDescriptionOrNull?.trim()) || !isImageURL) || isDuplicate;
 
    const components = [
       new Discord.ActionRowBuilder()
          .setComponents([
             new Discord.ButtonBuilder()
-               .setCustomId(`edit-preview-suggestion:${type}:${interaction.id}:${isSending}`)
+               .setCustomId(`edit-preview-suggestion:${type}:${interaction.id}:false`)
                .setLabel(`Edit Suggestion`)
                .setEmoji(`📝`)
                .setStyle(Discord.ButtonStyle.Primary),
             new Discord.ButtonBuilder()
-               .setCustomId(
-                  isSending === `true`
-                     ? `send-suggestion:${type}:${interaction.id}:false`
-                     : `confirm-edits:${type}`
-               )
-               .setLabel(
-                  isSending === `true`
-                     ? `Send Suggestion`
-                     : `Confirm Edits`
-               )
+               .setCustomId(`confirm-edits:${type}:${interaction.id}:false`)
+               .setLabel(`Confirm Edits`)
                .setEmoji(`✅`)
                .setStyle(Discord.ButtonStyle.Success)
                .setDisabled(!!isInvalid)
@@ -255,10 +220,10 @@ export default async (interaction, redis) => {
 
 
    // edit the interaction's original reply
-   const suggestionMessage = await interaction.channel.fetchStarterMessage?.();
+   const suggestionMessage = await interaction.channel.fetchStarterMessage();
 
    return await interaction.editReply({
-      content: `${isSending === `true` ? `Sending to ${channel}` : `Editing ${Discord.hyperlink(`suggestion`, suggestionMessage?.url, `${suggestionMessage?.url} 🔗`)}`}...`,
+      content: `Editing ${Discord.hyperlink(`suggestion`, suggestionMessage.url, `${suggestionMessage.url} 🔗`)}...`,
       embeds,
       components
    });

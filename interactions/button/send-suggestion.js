@@ -208,7 +208,7 @@ export default async (interaction, redis) => {
 
 
    // create the thread's name
-   const threadName = createPreviewText(contentOrPartName, 30);
+   const threadName = createPreviewText(Discord.cleanContent(contentOrPartName, interaction.channel), 30);
 
 
    // create the thread for the suggestion message

@@ -229,7 +229,7 @@ export default async (interaction, redis) => {
                      ? await Promise.all(
                         suggestions[0].map(async suggestion =>
                            new Discord.SelectMenuOptionBuilder()
-                              .setLabel(createPreviewText(!isPartSuggestion ? suggestion.content : suggestion.name))
+                              .setLabel(createPreviewText(Discord.cleanContent(!isPartSuggestion ? suggestion.content : suggestion.name, interaction.channel)))
                               .setDescription((await interaction.client.users.fetch(suggestion.suggester)).tag)
                               .setValue(suggestion.id)
                               .setEmoji(`💬`)
