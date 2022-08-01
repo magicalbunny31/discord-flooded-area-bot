@@ -83,6 +83,9 @@ export default async (interaction, redis) => {
    // "defer" the interaction
    await interaction.update({
       content: `Sending to ${channel}... ${emojis.loading}`,
+      embeds: [
+         embed
+      ],
       components: []
    });
 
