@@ -64,22 +64,6 @@ const client = new Discord.Client({
 });
 
 
-// send errors to an error webhook
-process.on("uncaughtException", async (error, origin) => {
-   await sendBotError(
-      `uncaughtException`,
-      {
-         url: process.env.WEBHOOK_ERRORS
-      },
-      error
-   );
-
-   console.error(error);
-
-   process.exit(1);
-});
-
-
 // listen to events
 const events = await readdir(`./events`);
 for (const file of events) {
@@ -95,6 +79,36 @@ for (const file of schedules) {
    const schedule = await import(`./schedules/${file}`);
    scheduleJob(schedule.cron, async () => await schedule.default(client, redis));
 };
+
+
+// send errors to an error webhook
+process.on("uncaughtException", async (error, origin) => {
+   await sendBotError(
+      `uncaughtException`,
+      {
+         url: process.env.WEBHOOK_ERRORS
+      },
+      error
+   );
+
+   console.error(error);
+
+   process.exit(1);
+});
+
+redis.on(`error`, async error => {
+   await sendBotError(
+      `redis`,
+      {
+         url: process.env.WEBHOOK_ERRORS
+      },
+      error
+   );
+
+   console.error(error);
+
+   process.exit(1);
+});
 
 
 // connect to the database
@@ -116,6 +130,8 @@ await client.login(process.env.TOKEN);
  * after approve/deny, delete suggestion after time
  * dm user if suggestion deleted/updated/etc
  * confirmation to delete suggestions
+ * auto deny suggestions "open for discussion" suggestions that sustain a 90% downvoted rate for 24hr
+ * ping mods? when a suggestion is popular for 24hr
  *
  * SUGGESTION SUBMISSIONS~
  * add tutorial
@@ -135,4 +151,5 @@ await client.login(process.env.TOKEN);
 /**
  * TODO: suggestions
  * use threadUpdate to change locked status and edit settings embed
+ * on message delete check if suggestion was deleted
  */
