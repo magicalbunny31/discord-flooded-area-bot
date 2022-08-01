@@ -55,6 +55,11 @@ export default async (client, redis) => {
          )
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
+               .setName(`suggestions-schedule-stats`)
+               .setDescription(`📋 view statistics for the suggestions schedule`)
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
                .setName(`update-suggestion-messages`)
                .setDescription(`📰 update messages in the suggestion channels`)
                .addStringOption(

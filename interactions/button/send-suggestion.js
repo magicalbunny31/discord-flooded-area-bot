@@ -56,11 +56,13 @@ export default async (interaction, redis) => {
 
 
    // channel doesn't exist in guild
+   const moderationTeam = await redis.GET(`flooded-area:role:moderation-team`);
+
    if (!channel)
       return await interaction.editReply({
          content: strip`
             ❌ **Can't fetch the channel to send this suggestion to.**
-            > Consider contacting a member of the ${Discord.roleMention(`989125486590451732`)} or try again later.
+            > Consider contacting a member of the ${Discord.roleMention(moderationTeam)} or try again later.
          `,
          embeds: [],
          components: []
@@ -68,7 +70,7 @@ export default async (interaction, redis) => {
 
 
    // suggestion embed to send
-   const embed = interaction.message.embeds[0];
+   const [ embed ] = interaction.message.embeds;
 
    const contentOrPartName = embed.description || embed.fields[0].value;
 
@@ -81,9 +83,6 @@ export default async (interaction, redis) => {
    // "defer" the interaction
    await interaction.update({
       content: `Sending to ${channel}... ${emojis.loading}`,
-      embeds: [
-         embed
-      ],
       components: []
    });
 
@@ -206,11 +205,7 @@ export default async (interaction, redis) => {
 
 
    // create the thread's name
-   const suggestionOrPartName = !isPartSuggestion
-      ? embed.description
-      : embed.fields[0].value;
-
-   const threadName = createPreviewText(suggestionOrPartName, 30);
+   const threadName = createPreviewText(contentOrPartName, 30);
 
 
    // create the thread for the suggestion message
@@ -223,14 +218,14 @@ export default async (interaction, redis) => {
    await suggestionThread.send({
       embeds: [
          new Discord.EmbedBuilder()
-            .setColor(0x4de94c)
+            .setColor(colours.flooded_area)
             .setTitle(`\\#️⃣ Suggestion Discussions`)
             .setDescription(strip`
-               **🎫 Status**
-               > Open for discussion since ${Discord.time(Math.floor(suggestionThread.createdTimestamp / 1000), Discord.TimestampStyles.RelativeTime)}.
+               **💬 Status**
+               > Open for discussion since ${Discord.time(Math.floor(suggestionMessage.createdTimestamp / 1000), Discord.TimestampStyles.RelativeTime)}.
 
-               **📝 Edits**
-               > No edits to list.
+               **✏️ Editors**
+               > **\`No edits to list.\`**
             `)
       ],
       components: [
@@ -240,32 +235,34 @@ export default async (interaction, redis) => {
                   .setCustomId(`edit-suggestion:${suggestionMessage.id}`)
                   .setLabel(`Edit Suggestion`)
                   .setEmoji(`📝`)
+                  .setStyle(Discord.ButtonStyle.Secondary),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`view-edits:${suggestionMessage.id}`)
+                  .setLabel(`View Edits`)
+                  .setEmoji(`📃`)
                   .setStyle(Discord.ButtonStyle.Secondary)
+                  .setDisabled(true)
             ]),
+
          new Discord.ActionRowBuilder()
             .setComponents([
                new Discord.SelectMenuBuilder()
                   .setCustomId(`suggestion-settings:${suggestionMessage.id}`)
-                  .setPlaceholder(`🔧 Suggestion Settings...`)
+                  .setPlaceholder(`Suggestion Settings...`)
                   .setOptions([
                      new Discord.SelectMenuOptionBuilder()
-                        .setLabel(`Approve Suggestion`)
-                        .setDescription(`Set this suggestion's status as approved.`)
-                        .setValue(`approve-suggestion`)
-                        .setEmoji(`✅`),
-                     new Discord.SelectMenuOptionBuilder()
-                        .setLabel(`Deny Suggestion`)
-                        .setDescription(`Set this suggestion's status as denied.`)
-                        .setValue(`deny-suggestion`)
-                        .setEmoji(`❎`),
+                        .setLabel(`Change Status`)
+                        .setDescription(`Change this suggestion's status and lock this thread.`)
+                        .setValue(`change-status`)
+                        .setEmoji(`🎫`),
                      new Discord.SelectMenuOptionBuilder()
                         .setLabel(`Lock Suggestion`)
-                        .setDescription(`Lock this suggestion's votes.`)
+                        .setDescription(`Lock votes and this thread.`)
                         .setValue(`lock-suggestion`)
                         .setEmoji(`🔒`),
                      new Discord.SelectMenuOptionBuilder()
                         .setLabel(`Delete Suggestion`)
-                        .setDescription(`Removes this suggestion and deletes this thread.`)
+                        .setDescription(`Delete this suggestion and this thread.`)
                         .setValue(`delete-suggestion`)
                         .setEmoji(`🗑️`)
                   ])

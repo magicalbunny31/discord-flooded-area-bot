@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * show a modal to the user for them to submit a suggestion
@@ -48,18 +49,22 @@ export default async (interaction, redis) => {
          })
          .setImage(suggestion[`image-url`] || null)
          .setFooter({
-            text: [
-               ...[ `approved`, `denied` ].includes(suggestion.status)
-                  ? [ `${suggestion.status.toUpperCase()} ${suggestion.status === `approved` ? `✅` : `❎`}` ] : [],
-               ...cumulativeVotes >= 10
-                  ? [ `POPULAR! 🎉` ] : [],
-               ...suggestion.deleted === `true`
-                  ? [ `DELETED 🗑️` ]
-                  : suggestion.locked === `true`
-                     ? [ `VOTES LOCKED 🔒` ] : [],
-               `⬆️ ${suggestion.upvotes} | ${suggestion.downvotes} ⬇️`
-            ]
-               .join(`\n`)
+            text: strip`
+               ${
+                  [
+                     ...cumulativeVotes >= 10
+                        ? [ `🎉` ] : [],
+                     ...[ `approved`, `denied` ].includes(suggestion.status)
+                        ? [ suggestion.status === `approved` ? `✅` : `❎` ] : [],
+                     ...suggestion.locked === `true`
+                        ? [ `🔒` ] : [],
+                     ...suggestion.deleted === `true`
+                        ? [ `🗑️` ] : []
+                  ]
+                     .join(``)
+               }
+               ⬆️ ${suggestion.upvotes} | ${suggestion.downvotes} ⬇️
+            `
          })
    ];
 

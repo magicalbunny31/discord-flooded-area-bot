@@ -1,5 +1,6 @@
 export const cron = {
-   hour: 12
+   hour: 6,
+   minute: 30
 };
 
 
@@ -26,10 +27,47 @@ export default async (client, redis) => {
    };
 
 
+   // function to fetch all messages in a channel using snowflake ids pagination
+   // https://discord.com/developers/docs/reference#snowflake-ids-in-pagination
+   const fetchAllMessages = async channel => {
+      const fetchedMessages = [];
+      let lastMessage;
+
+      while (true) {
+         const messages = (await channel.messages.fetch({ limit: 100, ...fetchedMessages.length ? { before: fetchedMessages.at(-1).id } : {} }))
+            .filter(message => message.author.id === client.user.id && !message.system);
+
+         fetchedMessages.push(...messages.values());
+
+         if (lastMessage?.id === fetchedMessages.at(-1).id)
+            break;
+
+         else
+            lastMessage = fetchedMessages.at(-1);
+
+         await wait(1000);
+      };
+
+      return fetchedMessages;
+   };
+
+
    // loop each suggestion channel
    for (const suggestionChannelField of [
       `game-suggestions`, `server-suggestions`, `part-suggestions`
    ]) {
+
+
+      // statistics
+      const startTimestamp = Date.now();
+
+      let falseSuggestionMessagesFetched = 0;
+
+      let failedToFetchSuggestionMessages = 0;
+      let failedToFetchSettingsMessages   = 0;
+
+      let suggestionEmbedsEdited = 0;
+      let settingsEmbedsEdited   = 0;
 
 
       // get messages in this suggestion channel
@@ -38,6 +76,10 @@ export default async (client, redis) => {
 
       const suggestionChannelId = await redis.HGET(`flooded-area:channel:suggestions`, suggestionChannelField);
       const channel = await tryOrUndefined(guild.channels.fetch(suggestionChannelId));
+
+
+      // function to check if a user is in this guild
+      const userIsInGuild = async userId => !!await tryOrUndefined(guild.members.fetch(userId));
 
 
       // this channel doesn't exist
@@ -55,28 +97,8 @@ export default async (client, redis) => {
 
 
       // array of message ids (of suggestion messages) in this suggestion channel
-      const suggestionMessageIds = await (async () => {
-         const ids = [];
-         let lastId;
-
-         while (true) {
-            const messages = (await channel.messages.fetch({ limit: 100, ...ids.at(-1) ? { before: ids.at(-1) } : {} }))
-               .filter(message => message.author.id === client.user.id && !message.system)
-               .map(message => message.id);
-
-            ids.push(...messages);
-
-            if (lastId === messages.at(-1))
-               break;
-
-            else
-               lastId = messages.at(-1);
-
-            await wait(1000);
-         };
-
-         return ids;
-      })();
+      const suggestionMessageIds = (await fetchAllMessages(channel))
+         .map(message => message.id);
 
 
       // loop each message id
@@ -86,8 +108,11 @@ export default async (client, redis) => {
 
 
          // this isn't a suggestion
-         if (!suggestion)
+         if (!suggestion) {
+            falseSuggestionMessagesFetched ++;
+
             continue;
+         };
 
 
          // this suggestion is deleted
@@ -121,8 +146,11 @@ export default async (client, redis) => {
             };
          })();
 
-         if (!suggestionMessage)
+         if (!suggestionMessage) {
+            failedToFetchSuggestionMessages ++;
+
             continue;
+         };
 
 
          // get this suggestion message's settings message
@@ -131,26 +159,36 @@ export default async (client, redis) => {
                return false;
 
             const thread = suggestionMessage.thread;
-            const messages = await thread.messages.fetch({ after: id });
+            const messages = await fetchAllMessages(thread);
 
             return messages
                .filter(message => message.author.id === client.user.id)
                .find(message => message.embeds[0]?.title === `\\#️⃣ Suggestion Discussions`);
          })();
 
-         if (!settingsMessage)
+         if (!settingsMessage) {
+            failedToFetchSettingsMessages ++;
+
             continue;
+         };
 
 
          // get votes info
-         const upvotes   = await suggestionMessage.reactions.cache.get(upvote)  .users.fetch();
-         const downvotes = await suggestionMessage.reactions.cache.get(downvote).users.fetch();
+         const upvotes   = await tryOrUndefined(suggestionMessage.reactions.cache.get(upvote)  .users.fetch());
+         const downvotes = await tryOrUndefined(suggestionMessage.reactions.cache.get(downvote).users.fetch());
 
-         const numberOfUpvotes   = upvotes  .size - 1;
-         const numberOfDownvotes = downvotes.size - 1;
+         const numberOfUpvotes   = (upvotes  ?.size || 1) - 1;
+         const numberOfDownvotes = (downvotes?.size || 1) - 1;
 
-         const upvoters   = upvotes  .map(user => user.id).filter(id => id !== client.user.id);
-         const downvoters = downvotes.map(user => user.id).filter(id => id !== client.user.id);
+         const upvoters   = upvotes  ?.map(user => user.id).filter(id => id !== client.user.id) || [];
+         const downvoters = downvotes?.map(user => user.id).filter(id => id !== client.user.id) || [];
+
+
+         // this suggestion's votes were removed
+         if (!(upvotes || downvotes)) {
+            await suggestionMessage.react(upvote);
+            await suggestionMessage.react(downvote);
+         };
 
 
          // update the database with these new values
@@ -178,6 +216,11 @@ export default async (client, redis) => {
          })();
 
 
+         // get the suggester
+         const suggester = await client.users.fetch(suggestion.suggester);
+         const suggesterIsInGuild = await userIsInGuild(suggestion.suggester);
+
+
          // the new suggestion embed
          const suggestionEmbed = new Discord.EmbedBuilder(suggestionMessage.embeds[0].data)
             .setColor(
@@ -185,6 +228,10 @@ export default async (client, redis) => {
                   ? suggestion.status === `approved` ? 0x4de94c : 0xf60000
                   : colour
             )
+            .setAuthor({ // if the suggester isn't in this guild anymore, we'll respect their privacy and use the last known username#discriminator and their default avatar
+               name: suggesterIsInGuild ? suggester.tag : suggestionMessage.embeds[0].data.author?.name || `???`,
+               iconURL: suggesterIsInGuild ? suggester.displayAvatarURL() : suggester.defaultAvatarURL
+            })
             .setFooter({
                text: [
                   ...cumulativeVotes >= 10
@@ -200,14 +247,21 @@ export default async (client, redis) => {
 
 
          // update the suggestion message if the embeds are different
-         const suggestionEmbedsEqual = suggestionMessage.embeds[0].equals(suggestionEmbed.data);
+         // this has to be checked manually because of proxy_icon_url
+         const suggestionEmbedsEqual = suggestionMessage.embeds[0].color                 === suggestionEmbed.data.color
+            &&                         suggestionMessage.embeds[0].author?.name          === suggestionEmbed.data.author.name
+            &&                         suggestionMessage.embeds[0].author?.iconURL       === suggestionEmbed.data.author.icon_url
+            &&                        (suggestionMessage.embeds[0].footer?.text || null) === suggestionEmbed.data.footer.text; // suggestionMessage.embeds[0].footer?.text could be undefined
 
-         if (!suggestionEmbedsEqual)
+         if (!suggestionEmbedsEqual) {
+            suggestionEmbedsEdited ++;
+
             await suggestionMessage.edit({
                embeds: [
                   suggestionEmbed
                ]
             });
+         };
 
 
          // the new settings embed
@@ -294,6 +348,8 @@ export default async (client, redis) => {
          const settingsEmbedsEqual = settingsMessage.embeds[0].equals(settingsEmbed.data);
 
          if (!settingsEmbedsEqual) {
+            settingsEmbedsEdited ++;
+
             const threadArchived = suggestionMessage.thread.archived;
 
             if (threadArchived)
@@ -310,5 +366,23 @@ export default async (client, redis) => {
                await suggestionMessage.thread.setArchived(true);
          };
       };
+
+
+      // set statistics in database
+      await redis.HSET(`flooded-area:command:bun-stuff_suggestions-schedule-stats`, {
+         [suggestionChannelField]: JSON.stringify({
+            startTimestamp,
+            endTimestamp: Date.now(),
+
+            suggestionsMessagesFetched: suggestionMessageIds.length,
+            falseSuggestionMessagesFetched,
+
+            failedToFetchSuggestionMessages,
+            failedToFetchSettingsMessages,
+
+            suggestionEmbedsEdited,
+            settingsEmbedsEdited
+         })
+      });
    };
 };
