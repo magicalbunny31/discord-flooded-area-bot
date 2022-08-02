@@ -298,39 +298,6 @@ export default async (client, redis) => {
                )
                .addSubcommand(
                   new Discord.SlashCommandSubcommandBuilder()
-                     .setName(`pronouns`)
-                     .setDescription(`🗯️ Set a pronoun role for the reaction roles.`)
-                     .addStringOption(
-                        new Discord.SlashCommandStringOption()
-                           .setName(`type`)
-                           .setDescription(`📄 Type of pronoun role to set.`)
-                           .setChoices({
-                              name: `He/Him`,
-                              value: `he-him`
-                           }, {
-                              name: `She/Her`,
-                              value: `she-her`
-                           }, {
-                              name: `They/Them`,
-                              value: `they-them`
-                           }, {
-                              name: `Ask For Pronouns`,
-                              value: `ask-for-pronouns`
-                           }, {
-                              name: `Other Pronouns`,
-                              value: `other-pronouns`
-                           })
-                           .setRequired(true)
-                     )
-                     .addRoleOption(
-                        new Discord.SlashCommandRoleOption()
-                           .setName(`role`)
-                           .setDescription(`📋 Role to set for this pronoun role.`)
-                           .setRequired(true)
-                     )
-               )
-               .addSubcommand(
-                  new Discord.SlashCommandSubcommandBuilder()
                      .setName(`suggestions-banned`)
                      .setDescription(`🗯️ Set the Suggestions Banned role.`)
                      .addRoleOption(

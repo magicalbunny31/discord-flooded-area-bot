@@ -10,10 +10,9 @@ export default async (interaction, redis) => {
    // roles
    const roles = interaction.member.roles.cache;
 
-   const [ mentionRoles, pronounRoles ] = await redis
+   const [ mentionRoles ] = await redis
       .multi()
       .HGETALL(`flooded-area:role:mentions`)
-      .HGETALL(`flooded-area:role:pronouns`)
       .exec();
 
 
@@ -63,41 +62,6 @@ export default async (interaction, redis) => {
                ])
                .setMinValues(0)
                .setMaxValues(7)
-         ]),
-      new Discord.ActionRowBuilder()
-         .setComponents([
-            new Discord.SelectMenuBuilder()
-               .setCustomId(`select-roles:pronouns`)
-               .setPlaceholder(`Select pronoun roles...`)
-               .setOptions([
-                  new Discord.SelectMenuOptionBuilder()
-                     .setLabel(`He/Him`)
-                     .setValue(`he-him`)
-                     .setEmoji(emojis.mention)
-                     .setDefault(roles.has(pronounRoles[`he-him`])),
-                  new Discord.SelectMenuOptionBuilder()
-                     .setLabel(`She/Her`)
-                     .setValue(`she-her`)
-                     .setEmoji(emojis.mention)
-                     .setDefault(roles.has(pronounRoles[`she-her`])),
-                  new Discord.SelectMenuOptionBuilder()
-                     .setLabel(`They/Them`)
-                     .setValue(`they-them`)
-                     .setEmoji(emojis.mention)
-                     .setDefault(roles.has(pronounRoles[`they-them`])),
-                  new Discord.SelectMenuOptionBuilder()
-                     .setLabel(`Ask For Pronouns`)
-                     .setValue(`ask-for-pronouns`)
-                     .setEmoji(emojis.mention)
-                     .setDefault(roles.has(pronounRoles[`ask-for-pronouns`])),
-                  new Discord.SelectMenuOptionBuilder()
-                     .setLabel(`Other Pronouns`)
-                     .setValue(`other-pronouns`)
-                     .setEmoji(emojis.mention)
-                     .setDefault(roles.has(pronounRoles[`other-pronouns`]))
-               ])
-               .setMinValues(0)
-               .setMaxValues(5)
          ])
    ];
 

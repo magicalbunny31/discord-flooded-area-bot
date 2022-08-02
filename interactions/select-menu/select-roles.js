@@ -26,14 +26,6 @@ export default async (interaction, redis) => {
          [ `giveaways`,                 rolesStrings.includes(`giveaways`)                 ],
          [ `challenges`,                rolesStrings.includes(`challenges`)                ],
          [ `doruk's-exceptional-pings`, rolesStrings.includes(`doruk's-exceptional-pings`) ]
-      ],
-
-      pronouns: [
-         [ `he-him`,           rolesStrings.includes(`he-him`)           ],
-         [ `she-her`,          rolesStrings.includes(`she-her`)          ],
-         [ `they-them`,        rolesStrings.includes(`they-them`)        ],
-         [ `ask-for-pronouns`, rolesStrings.includes(`ask-for-pronouns`) ],
-         [ `other-pronouns`,   rolesStrings.includes(`other-pronouns`)   ]
       ]
    }[type];
 
