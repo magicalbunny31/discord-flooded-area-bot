@@ -17,7 +17,7 @@ export default async (interaction, redis) => {
 
    // fields
    const reason = interaction.fields.getTextInputValue(`reason`);
-   const banDuration = interaction.fields.getField(`ban-duration`);
+   const banDuration = interaction.fields.getField(`ban-duration`); // select menu
 
 
    // users and channels

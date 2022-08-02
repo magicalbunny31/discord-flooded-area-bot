@@ -121,13 +121,9 @@ await client.login(process.env.TOKEN);
 
 /**
  * SUGGESTIONS~
- * - maybe lock thread too??
- * -- lock thread button??
- * suggestion approve/deny reason
  * delete some message from suggestion channels to clean it up plox
- * after deny, delete suggestion after time
+ * after deny, auto-delete suggestion after 24hr
  * dm user if suggestion deleted/updated/etc (opt-in)
- * confirmation to delete suggestions
  * auto deny suggestions "open for discussion" suggestions that sustain a 90% downvoted rate for 24hr
  * (?) ping mods? when a suggestion is popular for 24hr
  *
@@ -151,4 +147,8 @@ await client.login(process.env.TOKEN);
  * on threadUpdate, change locked status and edit settings embed
  * on messageDelete, check if suggestion was deleted
  * on guildMemberUpdate, update suggestion embed's author
+ * on guildMemberRemove, update suggestion embed's author icon to default avatar
+ * on guildMemberAdd, update suggestion embed's author icon to normal avatar
  */
+
+// TODO schedules/suggestions update if suggestion is locked or not

@@ -255,7 +255,7 @@ export default async (interaction, redis) => {
                   .setOptions([
                      new Discord.SelectMenuOptionBuilder()
                         .setLabel(`Change Status`)
-                        .setDescription(`Change this suggestion's status and lock this thread.`)
+                        .setDescription(`Change this suggestion's status and lock votes.`)
                         .setValue(`change-status`)
                         .setEmoji(`🎫`),
                      new Discord.SelectMenuOptionBuilder()

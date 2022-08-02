@@ -294,7 +294,7 @@ export default async (client, redis) => {
                   edits.length
                      ? strip`
                         > Edited by ${toHuman(editors)}.
-                        > Last edited by ${Discord.userMention(lastEdit.editor)} ${Discord.time(Math.floor(lastEdit[`last-updated-timestamp`] / 1000), Discord.TimestampStyles.RelativeTime)}
+                        > Last edited by ${Discord.userMention(lastEdit.editor)} ${Discord.time(Math.floor(lastEdit[`created-timestamp`] / 1000), Discord.TimestampStyles.RelativeTime)}
                      `
                      : `> **\`No edits to list.\`**`
                }
@@ -326,7 +326,7 @@ export default async (client, redis) => {
                      .setOptions([
                         new Discord.SelectMenuOptionBuilder()
                            .setLabel(`Change Status`)
-                           .setDescription(`Change this suggestion's status and lock this thread.`)
+                           .setDescription(`Change this suggestion's status and lock votes.`)
                            .setValue(`change-status`)
                            .setEmoji(`🎫`),
                         new Discord.SelectMenuOptionBuilder()
