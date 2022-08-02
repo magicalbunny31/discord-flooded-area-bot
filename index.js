@@ -150,5 +150,3 @@ await client.login(process.env.TOKEN);
  * on guildMemberRemove, update suggestion embed's author icon to default avatar
  * on guildMemberAdd, update suggestion embed's author icon to normal avatar
  */
-
-// TODO schedules/suggestions update if suggestion is locked or not

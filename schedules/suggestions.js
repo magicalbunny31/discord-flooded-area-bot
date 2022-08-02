@@ -365,6 +365,16 @@ export default async (client, redis) => {
             if (threadArchived)
                await suggestionMessage.thread.setArchived(true);
          };
+
+
+         // lock this suggestion if it isn't locked
+         const setAsLocked = suggestion.locked === `true`;
+         const threadIsLocked = suggestionMessage.thread.locked && suggestionMessage.thread.archived;
+
+         if (setAsLocked && !threadIsLocked) {
+            await interaction.channel.setLocked(true);
+            await interaction.channel.setArchived(true);
+         };
       };
 
 
