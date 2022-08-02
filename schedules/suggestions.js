@@ -227,6 +227,7 @@ export default async (client, redis) => {
 
          if (setAsLocked && !threadIsLocked) {
             await redis.HSET(`flooded-area:${suggestionChannelField}:${id}`, {
+               "last-updated-timestamp": JSON.stringify(suggestionMessage.editedTimestamp || suggestionMessage.createdTimestamp),
                "locked": JSON.stringify(false)
             });
 
