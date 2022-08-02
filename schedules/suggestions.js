@@ -136,7 +136,8 @@ export default async (client, redis) => {
                   await redis
                      .multi()
                      .HSET(`flooded-area:${suggestionChannelField}:${id}`, {
-                        deleted: JSON.stringify(true)
+                        "last-updated-timestamp": JSON.stringify(Date.now()),
+                        "deleted": JSON.stringify(true)
                      })
                      .HDEL(`flooded-area:${suggestionChannelField}:${id}`, `message-url`)
                      .exec();
@@ -316,7 +317,7 @@ export default async (client, redis) => {
 
 
          // the new settings message's components
-         const components = [
+         const settingsComponents = [
             new Discord.ActionRowBuilder()
                .setComponents([
                   new Discord.ButtonBuilder()
@@ -373,7 +374,7 @@ export default async (client, redis) => {
                embeds: [
                   settingsEmbed
                ],
-               components
+               components: settingsComponents
             });
 
             if (threadArchived)

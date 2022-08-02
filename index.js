@@ -121,7 +121,7 @@ await client.login(process.env.TOKEN);
 
 /**
  * SUGGESTIONS~
- * delete some message from suggestion channels to clean it up plox
+ * delete some messages from suggestion channels to clean it up plox
  * after deny, auto-delete suggestion after 24hr
  * dm user if suggestion deleted/updated/etc (opt-in)
  * auto deny suggestions "open for discussion" suggestions that sustain a 90% downvoted rate for 24hr
@@ -140,13 +140,3 @@ await client.login(process.env.TOKEN);
 
 // TODO revamp /flooded-area statistics (make it subcommand) to show historical data
 // TODO new command: set up auto-responses
-
-
-/**
- * TODO: suggestions
- * on threadUpdate, change locked status and edit settings embed
- * on messageDelete, check if suggestion was deleted
- * on guildMemberUpdate, update suggestion embed's author
- * on guildMemberRemove, update suggestion embed's author icon to default avatar
- * on guildMemberAdd, update suggestion embed's author icon to normal avatar
- */
