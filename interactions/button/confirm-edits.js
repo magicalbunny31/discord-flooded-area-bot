@@ -66,25 +66,51 @@ export default async (interaction, redis) => {
    // add this edit to the database
    const edits = JSON.parse(suggestion.edits);
 
-   edits.push({
-      "created-timestamp": newSuggestionMessage.editedTimestamp,
-      "editor": interaction.user.id,
-      ...!isPartSuggestion
-         ? {
-            "content": newEmbed.data.description
-         }
-         : {
-            "name": newEmbed.data.fields[0].value,
-            "description": newEmbed.data.fields[1].value
-         },
-      ...hasImage
-         ? {
-            "image-url": newEmbed.data.image.url
-         }
-         : {},
-      "upvotes": +suggestion.upvotes,
-      "downvotes": +suggestion.downvotes
-   });
+   edits.push(...[
+      // if this suggestion hasn't been edited before, push the original suggestion too
+      ...!edits.length
+         ? [{
+            "created-timestamp": +suggestion[`created-timestamp`],
+            "editor": suggestion.suggester,
+            ...!isPartSuggestion
+               ? {
+                  "content": suggestion.content
+               }
+               : {
+                  "name": suggestion.name,
+                  "description": suggestion.description
+               },
+            ...suggestion[`image-url`]
+               ? {
+                  "image-url": suggestion[`image-url`]
+               }
+               : {},
+            "upvotes": +suggestion.upvotes,
+            "downvotes": +suggestion.downvotes
+         }]
+         : [],
+
+      // the suggestion  being edited
+      {
+         "created-timestamp": newSuggestionMessage.editedTimestamp,
+         "editor": interaction.user.id,
+         ...!isPartSuggestion
+            ? {
+               "content": newEmbed.data.description
+            }
+            : {
+               "name": newEmbed.data.fields[0].value,
+               "description": newEmbed.data.fields[1].value
+            },
+         ...hasImage
+            ? {
+               "image-url": newEmbed.data.image.url
+            }
+            : {},
+         "upvotes": +suggestion.upvotes,
+         "downvotes": +suggestion.downvotes
+      }
+   ]);
 
    await redis.HSET(`flooded-area:${type}:${newSuggestionMessage.id}`, {
       ...!isPartSuggestion
