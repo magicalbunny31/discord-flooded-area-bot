@@ -1,4 +1,4 @@
-export const name = `messageReactionAdd`;
+export const name = Discord.Events.MessageReactionAdd;
 export const once = false;
 
 

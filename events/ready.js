@@ -1,4 +1,4 @@
-export const name = `ready`;
+export const name = Discord.Events.ClientReady;
 export const once = true;
 
 

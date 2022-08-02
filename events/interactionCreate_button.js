@@ -1,4 +1,4 @@
-export const name = `interactionCreate`;
+export const name = Discord.Events.InteractionCreate;
 export const once = false;
 
 

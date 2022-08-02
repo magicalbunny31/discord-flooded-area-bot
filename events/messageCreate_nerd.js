@@ -1,4 +1,4 @@
-export const name = `messageCreate`;
+export const name = Discord.Events.MessageCreate;
 export const once = false;
 
 

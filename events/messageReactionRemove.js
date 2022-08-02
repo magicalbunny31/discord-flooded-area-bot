@@ -1,4 +1,4 @@
-export const name = `messageReactionRemove`;
+export const name = Discord.Events.MessageReactionRemove;
 export const once = false;
 
 
