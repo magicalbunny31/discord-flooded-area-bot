@@ -221,6 +221,19 @@ export default async (client, redis) => {
          const suggesterIsInGuild = await userIsInGuild(suggestion.suggester);
 
 
+         // the suggestion is set as locked but the thread isn't, so unlock the suggestion
+         const setAsLocked = suggestion.locked === `true`;
+         const threadIsLocked = suggestionMessage.thread.locked;
+
+         if (setAsLocked && !threadIsLocked) {
+            await redis.HSET(`flooded-area:${suggestionChannelField}:${id}`, {
+               "locked": JSON.stringify(false)
+            });
+
+            await suggestionMessage.thread.setLocked(false);
+         };
+
+
          // the new suggestion embed
          const suggestionEmbed = new Discord.EmbedBuilder(suggestionMessage.embeds[0].data)
             .setColor(
@@ -238,7 +251,7 @@ export default async (client, redis) => {
                      ? [ `🎉` ] : [],
                   ...[ `approved`, `denied` ].includes(suggestion.status)
                      ? [ suggestion.status === `approved` ? `✅` : `❎` ] : [],
-                  ...suggestion.locked === `true`
+                  ...((setAsLocked && !threadIsLocked) ? false : suggestion.locked === `true`)
                      ? [ `🔒` ] : []
                ]
                   .join(``)
@@ -364,16 +377,6 @@ export default async (client, redis) => {
 
             if (threadArchived)
                await suggestionMessage.thread.setArchived(true);
-         };
-
-
-         // lock this suggestion if it isn't locked
-         const setAsLocked = suggestion.locked === `true`;
-         const threadIsLocked = suggestionMessage.thread.locked && suggestionMessage.thread.archived;
-
-         if (setAsLocked && !threadIsLocked) {
-            await interaction.channel.setLocked(true);
-            await interaction.channel.setArchived(true);
          };
       };
 
