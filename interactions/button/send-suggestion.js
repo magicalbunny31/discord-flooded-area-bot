@@ -213,7 +213,7 @@ export default async (interaction, redis) => {
 
    // create the thread for the suggestion message
    const suggestionThread = await suggestionMessage.startThread({
-      name: threadName
+      name: `💬 ${threadName}`
    });
 
 

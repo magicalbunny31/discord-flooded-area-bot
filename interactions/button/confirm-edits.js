@@ -160,7 +160,7 @@ export default async (interaction, redis) => {
 
    // edit the thread's name
    await newSuggestionMessage.thread.edit({
-      name: threadName
+      name: `💬 ${threadName}`
    });
 
 
