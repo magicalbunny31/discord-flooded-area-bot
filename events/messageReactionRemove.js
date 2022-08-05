@@ -51,7 +51,7 @@ export default async (messageReaction, user, redis) => {
 
 
    // this vote isn't from a suggestion message
-   if (!suggestion)
+   if (!Object.keys(suggestion).length)
       return;
 
 
