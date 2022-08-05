@@ -108,7 +108,7 @@ export default async (client, redis) => {
 
 
          // this isn't a suggestion
-         if (!suggestion) {
+         if (!Object.keys(suggestion).length) {
             falseSuggestionMessagesFetched ++;
 
             continue;
