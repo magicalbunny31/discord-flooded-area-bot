@@ -96,6 +96,21 @@ export default async (interaction, redis) => {
       await redis.HDEL(`flooded-area:${type}:${suggestionMessage.id}`, [ `status-changer`, `status-reason` ]);
 
 
+   // follow-up with some info on what to do next
+   if ([ `approved`, `denied` ].includes(status))
+      await interaction.followUp({
+         content: strip`
+            **${status === `approved` ? `✅ Approved` : `❎ Denied`} this suggestion!**
+            ${
+               // status === `approved`
+                  /*?*/ `> Consider deleting this suggestion to reduce clutter in ${interaction.channel.parent}.` // TODO auto-deleting suggestions
+                  // : `> This suggestion will be auto-deleted ${Discord.time(Math.floor((interaction.createdTimestamp + 8.64e+7) / 1000), Discord.TimestampStyles.RelativeTime)}.`
+            }
+         `,
+         ephemeral: true
+      });
+
+
    // find a colour based on the votes
    const cumulativeVotes = +suggestion.upvotes - +suggestion.downvotes;
 
