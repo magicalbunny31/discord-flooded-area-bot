@@ -45,9 +45,8 @@ import { scheduleJob } from "node-schedule";
 import Discord from "discord.js";
 const client = new Discord.Client({
    partials: [
-      Discord.Partials.User,
-      Discord.Partials.Channel,
       Discord.Partials.Message,
+      Discord.Partials.User,
       Discord.Partials.Reaction
    ],
 
