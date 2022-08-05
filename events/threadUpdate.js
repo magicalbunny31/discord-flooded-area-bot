@@ -5,11 +5,16 @@ export const once = false;
 import Discord from "discord.js";
 
 /**
- * @param {Discord.ThreadChannel} oldThread
- * @param {Discord.ThreadChannel} newThread
+ * @param {Discord.ThreadChannel} oT
+ * @param {Discord.ThreadChannel} nT
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
-export default async (oldThread, newThread, redis) => {
+export default async (oT, nT, redis) => {
+   // fetch these channels from their partial structures
+   const oldThread = await oT.client.channels.fetch(oT.id);
+   const newThread = await nT.client.channels.fetch(nT.id);
+
+
    // the parent channel of this thread isn't a suggestion channel
    const rawChannelIds = await redis.HGETALL(`flooded-area:channel:suggestions`);
    const channelIds = Object.values(rawChannelIds);
