@@ -27,7 +27,7 @@ export default async (interaction, redis) => {
 
 
    // get this edit
-   const edits = JSON.parse(await redis.LINDEX(`flooded-area:temporary-stuff:${dbId}`, index));
+   const edits = JSON.parse(await redis.LINDEX(`flooded-area:temporary-stuff:${dbId}`, +index));
    const edit = edits[i];
    const length = await redis.LLEN(`flooded-area:temporary-stuff:${dbId}`);
 

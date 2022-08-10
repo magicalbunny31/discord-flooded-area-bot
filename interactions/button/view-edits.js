@@ -179,7 +179,7 @@ export default async (interaction, redis) => {
       new Discord.ActionRowBuilder()
          .setComponents([
             new Discord.SelectMenuBuilder()
-               .setCustomId(`view-edits:${id}:${dbId || interaction.id}:${index}`)
+               .setCustomId(`view-edits:${id}:${dbId || interaction.id}:${+index || 0}`)
                .setPlaceholder(`Select an edit to view more on...`)
                .setOptions(
                   await Promise.all(
