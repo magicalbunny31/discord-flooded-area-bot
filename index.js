@@ -89,7 +89,7 @@ process.on("uncaughtException", async (error, origin) => {
       {
          url: process.env.WEBHOOK_ERRORS
       },
-      error
+      error.stack
    );
 
    console.error(error);
