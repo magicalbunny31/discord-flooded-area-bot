@@ -24,7 +24,8 @@ import { createClient } from "redis";
 const redis = createClient({
    socket: {
       host: process.env.REDIS_HOST,
-      port: +process.env.REDIS_PORT
+      port: +process.env.REDIS_PORT,
+      connectTimeout: 300
    },
    password: process.env.REDIS_AUTH
 });
