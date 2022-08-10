@@ -24,8 +24,7 @@ import { createClient } from "redis";
 const redis = createClient({
    socket: {
       host: process.env.REDIS_HOST,
-      port: +process.env.REDIS_PORT,
-      connectTimeout: 300
+      port: +process.env.REDIS_PORT
    },
    password: process.env.REDIS_AUTH
 });
@@ -97,7 +96,7 @@ process.on("uncaughtException", async (error, origin) => {
    process.exit(1);
 });
 
-redis.on(`error`, async error => { console.log(error.errno, error.code, error.syscall)
+redis.on(`error`, async error => {
    await sendBotError(
       `redis`,
       {
