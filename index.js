@@ -104,13 +104,14 @@ process.on("uncaughtException", async (error, origin) => {
 });
 
 redis.on(`error`, async error => {
-   await sendBotError(
-      `redis`,
-      {
-         url: process.env.WEBHOOK_ERRORS
-      },
-      error
-   );
+   if (error.name !== `ECONNREFUSED`)
+      await sendBotError(
+         `redis`,
+         {
+            url: process.env.WEBHOOK_ERRORS
+         },
+         error
+      );
 
    console.error(error);
 
