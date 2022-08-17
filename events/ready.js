@@ -10,13 +10,8 @@ import { choice } from "@magicalbunny31/awesome-utility-stuff";
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
 export default async (client, redis) => {
-   // create commands in the Flooded Area Community discord server
-   const commandsGuild = `977254354589462618`;
-   client.application.commands.set([
-      new Discord.SlashCommandBuilder()
-         .setName(`america`)
-         .setDescription(`🇺🇸 america`),
-
+   // global commands
+   await client.application.commands.set([
       new Discord.SlashCommandBuilder()
          .setName(`bun-stuff`)
          .setDescription(`🤖 bunny's dev commands`)
@@ -81,6 +76,29 @@ export default async (client, redis) => {
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.Administrator)
          .setDMPermission(false),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`flooded-area-statistics`)
+         .setDescription(`🌊 View current statistics for Flooded Area on Roblox.`),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`video-to-mp4`)
+         .setDescription(`📽️ Convert a video file to the MP4 file format.`)
+         .addAttachmentOption(
+            new Discord.SlashCommandAttachmentOption()
+               .setName(`video`)
+               .setDescription(`📼 The video file to convert.`)
+               .setRequired(true)
+         )
+   ]);
+
+
+   // create commands in the Flooded Area Community discord server
+   const commandsGuild = `977254354589462618`;
+   await client.application.commands.set([
+      new Discord.SlashCommandBuilder()
+         .setName(`america`)
+         .setDescription(`🇺🇸 america`),
 
       new Discord.SlashCommandBuilder()
          .setName(`mod`)
@@ -185,10 +203,6 @@ export default async (client, redis) => {
                .setDescription(`📋 show the list of banned players from roblox Flooded Area`)
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.BanMembers),
-
-      new Discord.SlashCommandBuilder()
-         .setName(`flooded-area-statistics`)
-         .setDescription(`🌊 View current statistics for Flooded Area on Roblox.`),
 
       new Discord.SlashCommandBuilder()
          .setName(`set`)
@@ -310,16 +324,6 @@ export default async (client, redis) => {
          )
          .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)
          .setDMPermission(false),
-
-      new Discord.SlashCommandBuilder()
-         .setName(`video-to-mp4`)
-         .setDescription(`📽️ Convert a video file to the MP4 file format.`)
-         .addAttachmentOption(
-            new Discord.SlashCommandAttachmentOption()
-               .setName(`video`)
-               .setDescription(`📼 The video file to convert.`)
-               .setRequired(true)
-         ),
 
       new Discord.SlashCommandBuilder()
          .setName(`view-suggestions`)
