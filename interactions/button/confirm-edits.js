@@ -11,6 +11,16 @@ export default async (interaction, redis) => {
    const [ _button, type ] = interaction.customId.split(`:`);
 
 
+   // function to try to fetch something or return undefined instead of throwing
+   const tryOrUndefined = async promise => {
+      try {
+         return await promise;
+      } catch {
+         return undefined;
+      };
+   };
+
+
    // suggestion embed fields to edit (note: these variables actually have to be null)
    const [ embed ] = interaction.message.embeds;
 
@@ -24,9 +34,20 @@ export default async (interaction, redis) => {
    const hasImage = !!embed.image?.url;
 
 
-   // "defer" the interaction
-   const suggestionMessage = await interaction.channel.fetchStarterMessage();
+   // cannot fetch the original suggestion message
+   const suggestionMessage = await tryOrUndefined(interaction.channel.fetchStarterMessage());
 
+   if (!suggestionMessage)
+      return await interaction.reply({
+         content: strip`
+            🗯️ Failed to fetch this suggestion, try again later.
+            📋 Make sure to copy your suggestion so you won't lose your changes.
+         `,
+         ephemeral: true
+      });
+
+
+   // "defer" the interaction
    await interaction.update({
       content: `Editing ${Discord.hyperlink(`suggestion`, suggestionMessage.url, `${suggestionMessage.url} 🔗`)}... ${emojis.loading}`,
       components: []
