@@ -221,7 +221,7 @@ export default async (interaction, redis) => {
 
          **✏️ Editors**
          > Edited by ${toHuman(editors)}.
-         > Last edited by ${Discord.userMention(lastEdit.editor)} ${Discord.time(Math.floor(lastEdit[`created-timestamp`] / 1000), Discord.TimestampStyles.RelativeTime)}
+         > Last edited by ${Discord.userMention(lastEdit.editor)} ${Discord.time(Math.floor(lastEdit[`created-timestamp`] / 1000), Discord.TimestampStyles.RelativeTime)}.
       `);
 
 
