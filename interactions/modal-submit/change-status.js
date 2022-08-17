@@ -13,7 +13,7 @@ export default async (interaction, redis) => {
 
    // fields
    const status = interaction.fields.getTextInputValue(`status`); // select menu
-   const reason = interaction.fields.getTextInputValue(`reason`);
+   const reason = interaction.fields.getTextInputValue(`reason`).trim();
 
 
    // TODO temp while status is text input
