@@ -12,9 +12,19 @@ export default async (interaction, redis) => {
    const [ value ] = interaction.values;
 
 
+   // cannot get the suggestion category id
+   const suggestionCategoryId = interaction.channel.parent?.id;
+
+   if (!suggestionCategoryId)
+      return await interaction.reply({
+         content: `🗯️ Failed to fetch this suggestion, try again later.`,
+         ephemeral: true
+      });
+
+
    // what type of suggestion this suggestion is exactly
    const channelTypes = Object.fromEntries(Object.entries(await redis.HGETALL(`flooded-area:channel:suggestions`)).map(id => id.reverse()));
-   const type = channelTypes[interaction.channel.parent.id];
+   const type = channelTypes[suggestionCategoryId];
 
 
    // values
