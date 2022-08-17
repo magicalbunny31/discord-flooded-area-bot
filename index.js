@@ -19,6 +19,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
+// ffmpeg
+import pathToFfmpeg from "ffmpeg-static";
+import FFmpeg from "fluent-ffmpeg";
+FFmpeg.setFfmpegPath(pathToFfmpeg);
+
+
 // database
 import { createClient } from "redis";
 const redis = createClient({
@@ -126,7 +132,7 @@ await client.login(process.env.TOKEN);
  * after deny, auto-delete suggestion after 24hr
  * dm user if suggestion deleted/updated/etc (opt-in)
  * auto deny suggestions "open for discussion" suggestions that sustain a 90% downvoted rate for 24hr
- * (?) ping mods? when a suggestion is popular for 24hr
+ * make polls as a suggestion format
  *
  * SUGGESTION SUBMISSIONS~
  * add tutorial
@@ -137,6 +143,8 @@ await client.login(process.env.TOKEN);
  * TICKETS~
  * am i even doing this? idk. but for now: no, i like ticket bot
  * but i will just recreate it if i get bored
+ *
+ * /convert-to-video
  */
 
 // TODO revamp /flooded-area statistics (make it subcommand) to show historical data

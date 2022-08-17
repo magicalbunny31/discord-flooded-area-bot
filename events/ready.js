@@ -312,6 +312,16 @@ export default async (client, redis) => {
          .setDMPermission(false),
 
       new Discord.SlashCommandBuilder()
+         .setName(`video-to-mp4`)
+         .setDescription(`📽️ Convert a video file to the MP4 file format.`)
+         .addAttachmentOption(
+            new Discord.SlashCommandAttachmentOption()
+               .setName(`video`)
+               .setDescription(`📼 The video file to convert.`)
+               .setRequired(true)
+         ),
+
+      new Discord.SlashCommandBuilder()
          .setName(`view-suggestions`)
          .setDescription(`📰 Bulk-view suggestions.`)
          .addStringOption(
