@@ -242,6 +242,9 @@ export default async (client, redis) => {
                            }, {
                               name: `Part Suggestions`,
                               value: `part-suggestions`
+                           }, {
+                              name: `News Board Suggestions`,
+                              value: `news-board-suggestions`
                            })
                            .setRequired(true)
                      )

@@ -13,9 +13,10 @@ export default async (interaction, redis) => {
 
    // formatted type, just like how it appears in the command's choices
    const formattedType = {
-      "game-suggestions":   `Game Suggestions`,
-      "server-suggestions": `Server Suggestions`,
-      "part-suggestions":   `Part Suggestions`
+      "game-suggestions":       `Game Suggestions`,
+      "server-suggestions":     `Server Suggestions`,
+      "part-suggestions":       `Part Suggestions`,
+      "news-board-suggestions": `News Board Suggestions`
    }[type];
 
 

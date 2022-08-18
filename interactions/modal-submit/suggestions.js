@@ -96,11 +96,12 @@ export default async (interaction, redis) => {
 
 
    // depending on the modal, it'll have multiple fields (note: these variables actually have to be null)
-   const suggestionOrPartName         = interaction.components[0] .components[0].value;         // suggestions for game/server  /  name        for part
+   const suggestionOrPartName         = interaction.components[0] .components[0].value;         // suggestions for game/server  /  name        for part  /  news board
    const imageOrPartDescriptionOrNull = interaction.components[1]?.components[0].value || null; // image       for game/server  /  description for part
    const partImageOrNull              = interaction.components[2]?.components[0].value || null; //                                 image       for part
 
    const isPartSuggestion = interaction.fields.fields.has(`name`);
+   const isNewsBoardSuggestion = interaction.fields.fields.has(`text`);
    const hasImage = !!(!isPartSuggestion ? imageOrPartDescriptionOrNull : partImageOrNull);
    const isImageURL = hasImage
       ? !isPartSuggestion
@@ -148,72 +149,82 @@ export default async (interaction, redis) => {
       : suggestionOrPartName.trim() === suggestion[0] && (imageOrPartDescriptionOrNull?.trim() || null) === suggestion[1] && (partImageOrNull?.trim() || null) === suggestion[2];
 
    const embeds = [
-      ...!isPartSuggestion
-         ? isImageURL
-            ? [
-               new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
-                  .setAuthor({
-                     name: interaction.user.tag,
-                     iconURL: interaction.user.displayAvatarURL()
-                  })
-                  .setDescription(suggestionOrPartName.trim() || `**\`You must enter a suggestion.\`**`)
-                  .setImage(imageOrPartDescriptionOrNull)
-            ]
-            : [
-               new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
-                  .setAuthor({
-                     name: interaction.user.tag,
-                     iconURL: interaction.user.displayAvatarURL()
-                  })
-                  .setDescription(suggestionOrPartName.trim() || `**\`You must enter a suggestion.\`**`)
-                  .setFields([
-                     {
-                        name: `IMAGE`,
-                        value: `**\`You must enter a valid image URL.\`**`
-                     }
-                  ])
-            ]
-         : isImageURL
-            ? [
-               new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
-                  .setAuthor({
-                     name: interaction.user.tag,
-                     iconURL: interaction.user.displayAvatarURL()
-                  })
-                  .setFields(
-                     [{
-                        name: `PART NAME`,
-                        value: suggestionOrPartName.trim() || `**\`You must enter a name.\`**`
-                     }, {
-                        name: `PART DESCRIPTION`,
-                        value: imageOrPartDescriptionOrNull.trim() || `**\`You must enter a description.\`**`
-                     }]
-                  )
-                  .setImage(partImageOrNull)
-            ]
-            : [
-               new Discord.EmbedBuilder()
-                  .setColor(isSending === `true` ? 0xffee00 : colour)
-                  .setAuthor({
-                     name: interaction.user.tag,
-                     iconURL: interaction.user.displayAvatarURL()
-                  })
-                  .setFields([
-                     {
-                        name: `PART NAME`,
-                        value: suggestionOrPartName.trim() || `**\`You must enter a name.\`**`
-                     }, {
-                        name: `PART DESCRIPTION`,
-                        value: imageOrPartDescriptionOrNull.trim() || `**\`You must enter a description.\`**`
-                     }, {
-                        name: `IMAGE`,
-                        value: `**\`You must enter a valid image URL.\`**`
-                     }
-                  ])
-            ],
+      ...isNewsBoardSuggestion
+         ? [
+            new Discord.EmbedBuilder()
+               .setColor(isSending === `true` ? 0xffee00 : colour)
+               .setAuthor({
+                  name: interaction.user.tag,
+                  iconURL: interaction.user.displayAvatarURL()
+               })
+               .setDescription(suggestionOrPartName.trim() || `**\`You must enter a suggestion.\`**`)
+         ]
+         : !isPartSuggestion
+            ? isImageURL
+               ? [
+                  new Discord.EmbedBuilder()
+                     .setColor(isSending === `true` ? 0xffee00 : colour)
+                     .setAuthor({
+                        name: interaction.user.tag,
+                        iconURL: interaction.user.displayAvatarURL()
+                     })
+                     .setDescription(suggestionOrPartName.trim() || `**\`You must enter a suggestion.\`**`)
+                     .setImage(imageOrPartDescriptionOrNull)
+               ]
+               : [
+                  new Discord.EmbedBuilder()
+                     .setColor(isSending === `true` ? 0xffee00 : colour)
+                     .setAuthor({
+                        name: interaction.user.tag,
+                        iconURL: interaction.user.displayAvatarURL()
+                     })
+                     .setDescription(suggestionOrPartName.trim() || `**\`You must enter a suggestion.\`**`)
+                     .setFields([
+                        {
+                           name: `IMAGE`,
+                           value: `**\`You must enter a valid image URL.\`**`
+                        }
+                     ])
+               ]
+            : isImageURL
+               ? [
+                  new Discord.EmbedBuilder()
+                     .setColor(isSending === `true` ? 0xffee00 : colour)
+                     .setAuthor({
+                        name: interaction.user.tag,
+                        iconURL: interaction.user.displayAvatarURL()
+                     })
+                     .setFields(
+                        [{
+                           name: `PART NAME`,
+                           value: suggestionOrPartName.trim() || `**\`You must enter a name.\`**`
+                        }, {
+                           name: `PART DESCRIPTION`,
+                           value: imageOrPartDescriptionOrNull.trim() || `**\`You must enter a description.\`**`
+                        }]
+                     )
+                     .setImage(partImageOrNull)
+               ]
+               : [
+                  new Discord.EmbedBuilder()
+                     .setColor(isSending === `true` ? 0xffee00 : colour)
+                     .setAuthor({
+                        name: interaction.user.tag,
+                        iconURL: interaction.user.displayAvatarURL()
+                     })
+                     .setFields([
+                        {
+                           name: `PART NAME`,
+                           value: suggestionOrPartName.trim() || `**\`You must enter a name.\`**`
+                        }, {
+                           name: `PART DESCRIPTION`,
+                           value: imageOrPartDescriptionOrNull.trim() || `**\`You must enter a description.\`**`
+                        }, {
+                           name: `IMAGE`,
+                           value: `**\`You must enter a valid image URL.\`**`
+                        }
+                     ])
+               ],
 
       ...isDuplicate
          ? [
@@ -226,7 +237,7 @@ export default async (interaction, redis) => {
 
 
    // components
-   const isInvalid = !suggestionOrPartName.trim() || (isPartSuggestion && !imageOrPartDescriptionOrNull?.trim()) || !isImageURL;
+   const isInvalid = !suggestionOrPartName.trim() || (isPartSuggestion && !imageOrPartDescriptionOrNull?.trim()) || !isImageURL || (isSending === `false` && isDuplicate);
 
    const components = [
       new Discord.ActionRowBuilder()

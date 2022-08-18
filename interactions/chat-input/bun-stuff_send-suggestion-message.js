@@ -59,18 +59,23 @@ export default async (interaction, redis) => {
                   new Discord.SelectMenuOptionBuilder()
                      .setLabel(`Game Suggestions`)
                      .setValue(`game-suggestions`)
-                     .setDescription(`Suggestions for Flooded Area on Roblox.`)
-                     .setEmoji(`<:Flood:983391790348509194>`),
+                     .setDescription(`Suggest a new feature for Flooded Area on Roblox.`)
+                     .setEmoji(`🎮`),
                   new Discord.SelectMenuOptionBuilder()
                      .setLabel(`Server Suggestions`)
                      .setValue(`server-suggestions`)
-                     .setDescription(`Suggestions for this Discord server.`)
-                     .setEmoji(`<:Discord:983413839573962752>`),
+                     .setDescription(`Suggest an idea for this Discord server.`)
+                     .setEmoji(`📂`),
                   new Discord.SelectMenuOptionBuilder()
                      .setLabel(`Part Suggestions`)
                      .setValue(`part-suggestions`)
                      .setDescription(`Suggest a new part for Flooded Area on Roblox.`)
-                     .setEmoji(`<:Part:983414870970077214>`)
+                     .setEmoji(`🧱`),
+                  new Discord.SelectMenuOptionBuilder()
+                     .setLabel(`News Board Suggestions`)
+                     .setValue(`news-board-suggestions`)
+                     .setDescription(`Suggest text for the news board in Flooded Area on Roblox.`)
+                     .setEmoji(`📰`)
                ])
          ]),
       new Discord.ActionRowBuilder()

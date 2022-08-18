@@ -19,7 +19,7 @@ export default async (interaction, redis) => {
 
 
       /**
-       * suggestions for flooded area on roblox
+       * suggest a new feature for flooded area on roblox
        */
       case `game-suggestions`: {
          // show modal
@@ -55,7 +55,7 @@ export default async (interaction, redis) => {
 
 
       /**
-       * suggestions for the flooded are community discord server
+       * suggest an idea for this discord server
        */
       case `server-suggestions`: {
          // show modal
@@ -69,7 +69,7 @@ export default async (interaction, redis) => {
                         new Discord.TextInputBuilder()
                            .setCustomId(`suggestion`)
                            .setLabel(`YOUR SUGGESTION`)
-                           .setPlaceholder(`💬 What is your suggestion for the server?`)
+                           .setPlaceholder(`📂 What is your suggestion for the server?`)
                            .setValue(suggestionOrPartName)
                            .setRequired(true)
                            .setStyle(Discord.TextInputStyle.Paragraph)
@@ -91,7 +91,7 @@ export default async (interaction, redis) => {
 
 
       /**
-       * suggestions for a new part for flooded are on roblox
+       * suggest a new part for flooded area on roblox
        */
       case `part-suggestions`: {
          // show modal
@@ -117,7 +117,7 @@ export default async (interaction, redis) => {
                            .setCustomId(`description`)
                            .setMaxLength(1024)
                            .setLabel(`PART DESCRIPTION`)
-                           .setPlaceholder(`📰 Describe what this part does.`)
+                           .setPlaceholder(`🧱 Describe what this part does.`)
                            .setValue(imageOrPartDescriptionOrNull)
                            .setRequired(true)
                            .setStyle(Discord.TextInputStyle.Paragraph)
@@ -132,6 +132,32 @@ export default async (interaction, redis) => {
                            .setValue(partImageOrNull)
                            .setRequired(false)
                            .setStyle(Discord.TextInputStyle.Short)
+                     ])
+               ])
+         );
+      };
+
+
+      /**
+       * suggestions for a new part for flooded are on roblox
+       */
+      case `news-board-suggestions`: {
+         // show modal
+         return await interaction.showModal(
+            new Discord.ModalBuilder()
+               .setCustomId(`suggestions:${type}:${isSending}`)
+               .setTitle(isSending === `true` ? `News Board Suggestions` : `Editing News Board Suggestion`)
+               .setComponents([
+                  new Discord.ActionRowBuilder()
+                     .setComponents([
+                        new Discord.TextInputBuilder()
+                           .setCustomId(`text`)
+                           .setMaxLength(256)
+                           .setLabel(`TEXT`)
+                           .setPlaceholder(`📰 What text should be displayed on the news board?`)
+                           .setValue(suggestionOrPartName)
+                           .setRequired(true)
+                           .setStyle(Discord.TextInputStyle.Paragraph)
                      ])
                ])
          );
