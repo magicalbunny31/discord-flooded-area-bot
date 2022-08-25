@@ -89,7 +89,19 @@ export default async (client, redis) => {
                .setName(`video`)
                .setDescription(`📼 The video file to convert.`)
                .setRequired(true)
+         ),
+
+      new Discord.SlashCommandBuilder()
+         .setName(`who-joined-at`)
+         .setDescription(`👥 who joined at what??`)
+         .addIntegerOption(
+            new Discord.SlashCommandIntegerOption()
+               .setName(`position`)
+               .setDescription(`🔢 at what position do we search for`)
+               .setMinValue(1)
+               .setRequired(true)
          )
+         .setDMPermission(false)
    ]);
 
 
@@ -463,7 +475,7 @@ export default async (client, redis) => {
             name: activityName
          }]
       });
-   }, 1.8e+6); //? 30 minutes
+   }, 1.8e+6); // 30 minutes
 
 
    // log to console once everything is done
