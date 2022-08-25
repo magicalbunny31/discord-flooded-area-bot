@@ -1,8 +1,8 @@
 import Discord from "discord.js";
-import { emojis, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
+import { strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * who joined at what??
+ * search for the member who joined at a position in the server
  * @param {Discord.ChatInputCommandInteraction} interaction
  * @param {ReturnType<typeof import("redis").createClient>} redis
  */
@@ -54,10 +54,19 @@ export default async (interaction, redis) => {
    };
 
 
-   // "defer" the interaction
-   await interaction.reply({
-      content: `${emojis.foxbox}${emojis.foxsleep}${emojis.foxsnug}`
-   });
+   // position exceeds member count
+   if (position > interaction.guild.memberCount)
+      return await interaction.reply({
+         content: strip`
+            ❌ **nobody is the \`${position.toLocaleString()}${getOrdinalSuffix(position)} member\`**
+            > there are currently \`${interaction.guild.memberCount.toLocaleString()} members\` in this server
+         `,
+         ephemeral: true
+      });
+
+
+   // defer the interaction
+   await interaction.deferReply();
 
 
    // fetch all members and sort them by their join date
@@ -75,15 +84,10 @@ export default async (interaction, redis) => {
 
    // edit the deferred interaction
    return await interaction.editReply({
-      content: member
-         ? strip`
-            ${member} is the **\`${position}${getOrdinalSuffix(position)} member\`** of \`${interaction.guild.memberCount} members\`
-            > they joined at ${Discord.time(Math.floor(member.joinedTimestamp / 1000))}
-         `
-         : strip`
-            nobody is the **\`${position}${getOrdinalSuffix(position)} member\`**
-            > there are currently \`${interaction.guild.memberCount} members\` in this server
-         `,
+      content: strip`
+         🔢 **${member} is the \`${position.toLocaleString()}${getOrdinalSuffix(position)} member\` of \`${interaction.guild.memberCount.toLocaleString()} members\`**
+         > they joined at ${Discord.time(Math.floor(member.joinedTimestamp / 1000))}
+      `,
       allowedMentions: {
          parse: []
       }

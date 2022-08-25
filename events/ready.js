@@ -94,12 +94,28 @@ export default async (client, redis) => {
       new Discord.SlashCommandBuilder()
          .setName(`who-joined-at`)
          .setDescription(`👥 who joined at what??`)
-         .addIntegerOption(
-            new Discord.SlashCommandIntegerOption()
-               .setName(`position`)
-               .setDescription(`🔢 at what position do we search for`)
-               .setMinValue(1)
-               .setRequired(true)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`by-member`)
+               .setDescription(`👤 search for a member's join position in the server`)
+               .addUserOption(
+                  new Discord.SlashCommandUserOption()
+                     .setName(`member`)
+                     .setDescription(`🔎 the member's position to search for`)
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`by-position`)
+               .setDescription(`🔢 search for the member who joined at a position in the server`)
+               .addIntegerOption(
+                  new Discord.SlashCommandIntegerOption()
+                     .setName(`position`)
+                     .setDescription(`🔎 the position's member to search for`)
+                     .setMinValue(1)
+                     .setRequired(true)
+               )
          )
          .setDMPermission(false)
    ]);
