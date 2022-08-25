@@ -66,7 +66,11 @@ export default async (interaction, redis) => {
 
 
    // get the member at the specified position
-   const member = members[position - 1];
+   const member = members
+      .filter((v, i, s) =>
+         i === s.findIndex(member => member.id === v.id)
+      )
+      .at(position - 1);
 
 
    // edit the deferred interaction
