@@ -80,7 +80,7 @@ export default async (interaction, redis) => {
       .filter((v, i, s) =>
          i === s.findIndex(member => member.id === v.id)
       )
-      .findIndex(member => member.id === user.id);
+      .findIndex(member => member.id === user.id) + 1;
 
 
    // edit the deferred interaction
