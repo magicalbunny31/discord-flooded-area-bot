@@ -129,6 +129,10 @@ export default async (client, redis) => {
          .setDescription(`🇺🇸 america`),
 
       new Discord.SlashCommandBuilder()
+         .setName(`events`)
+         .setDescription(`📣 if you have the @Events Host role, you can mention members with the @Events role in this channel`),
+
+      new Discord.SlashCommandBuilder()
          .setName(`set`)
          .setDescription(`🏷️ Set a channel or role for command usage.`)
          .addSubcommandGroup(
@@ -187,6 +191,17 @@ export default async (client, redis) => {
             new Discord.SlashCommandSubcommandGroupBuilder()
                .setName(`role`)
                .setDescription(`🏷️ Set a role for command usage.`)
+               .addSubcommand(
+                  new Discord.SlashCommandSubcommandBuilder()
+                     .setName(`event-host`)
+                     .setDescription(`📛 set the @Event Host role`)
+                     .addRoleOption(
+                        new Discord.SlashCommandRoleOption()
+                           .setName(`role`)
+                           .setDescription(`📋 the @Event Host role`)
+                           .setRequired(true)
+                     )
+               )
                .addSubcommand(
                   new Discord.SlashCommandSubcommandBuilder()
                      .setName(`mentions`)
