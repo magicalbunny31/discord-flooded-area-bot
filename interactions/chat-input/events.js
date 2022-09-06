@@ -19,8 +19,23 @@ export default async (interaction, redis) => {
       });
 
 
+   // defer the interaction
+   await interaction.deferReply({
+      ephemeral: true
+   });
+
+
    // mention the @events role
-   return await interaction.reply({
-      content: Discord.roleMention(events)
+   await interaction.channel.send({
+      content: `${interaction.user}: ${Discord.roleMention(events)}`
+   });
+
+
+   // edit the deferred interaction
+   return await interaction.editReply({
+      content: `✅ **mentioned ${Discord.roleMention(events)}!**`,
+      allowedMentions: {
+         parse: []
+      }
    });
 };
