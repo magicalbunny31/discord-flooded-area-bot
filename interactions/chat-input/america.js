@@ -30,11 +30,18 @@ export default async (interaction, firestore) => {
    // add to the counter
    const database = firestore.collection(`command`).doc(`america`);
 
-   await database.update({
+   const { writeTime: { seconds: setAtTime } } = await database.update({
       [america.field]: FieldValue.increment(1)
    });
 
-   const timesUsed = (await database.get()).data()[america.field];
+
+   // get the value of the counter
+   const fetchedData = await database.get();
+
+   const fetchedAtTime = fetchedData.updateTime.seconds;
+   const timesUsed = setAtTime === fetchedAtTime
+      ? fetchedData.data()[america.field]
+      : fetchedData.data()[america.field] - 1; //? it probably incremented twice, remove one for this result
 
 
    // reply to the interaction
