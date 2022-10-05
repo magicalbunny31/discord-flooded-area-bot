@@ -3,12 +3,23 @@ export const once = false;
 
 
 import Discord from "discord.js";
+import { emojis } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
+   // function to try to fetch something or return undefined instead of throwing
+   const tryOrUndefined = async promise => {
+      try {
+         return await promise;
+      } catch {
+         return undefined;
+      };
+   };
+
+
    // this file is for SelectMenuInteractions
    if (!interaction.isSelectMenu())
       return;
@@ -19,7 +30,15 @@ export default async (interaction, firestore) => {
 
 
    // get this select menu's file
-   const file = await import(`../interactions/select-menu/${selectMenu}.js`);
+   const file = await tryOrUndefined(import(`../interactions/select-menu/${selectMenu}.js`));
+
+
+   // this file doesn't exist
+   if (!file)
+      return await interaction.reply({
+         content: `${emojis.rip} **\`this select menu doesn't work - sorry!\`**`,
+         ephemeral: true
+      });
 
 
    // run the select menu
