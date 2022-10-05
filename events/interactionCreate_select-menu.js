@@ -6,9 +6,9 @@ import Discord from "discord.js";
 
 /**
  * @param {Discord.Interaction} interaction
- * @param {ReturnType<typeof import("redis").createClient>} redis
+ * @param {import("@google-cloud/firestore").Firestore} firestore
  */
-export default async (interaction, redis) => {
+export default async (interaction, firestore) => {
    // this file is for SelectMenuInteractions
    if (!interaction.isSelectMenu())
       return;
@@ -23,5 +23,5 @@ export default async (interaction, redis) => {
 
 
    // run the select menu
-   return await file.default(interaction, redis);
+   return await file.default(interaction, firestore);
 };

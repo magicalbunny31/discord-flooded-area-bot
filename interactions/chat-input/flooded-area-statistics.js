@@ -1,3 +1,8 @@
+export const data = new Discord.SlashCommandBuilder()
+   .setName(`flooded-area-statistics`)
+   .setDescription(`🌊 View current statistics for Flooded Area on Roblox.`);
+
+
 import Discord from "discord.js";
 import dayjs from "dayjs";
 
@@ -6,11 +11,10 @@ import pkg from "../../package.json" assert { type: "json" };
 import { strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * view current statistics for flooded area on roblox
  * @param {Discord.ChatInputCommandInteraction} interaction
- * @param {ReturnType<typeof import("redis").createClient>} redis
+ * @param {import("@google-cloud/firestore").Firestore} firestore
  */
-export default async (interaction, redis) => {
+export default async (interaction, firestore) => {
    // defer the interaction
    await interaction.deferReply({
       ephemeral: true
@@ -79,7 +83,7 @@ export default async (interaction, redis) => {
    // error!
    if (!(icon || votes || data))
       return await interaction.editReply({
-         content: `An error occurred trying to fetch statistics for **Flooded Area**: try again later.`
+         content: `an error occurred trying to fetch statistics! try again later~ ${emojis.rip}`
       });
 
 
@@ -93,19 +97,19 @@ export default async (interaction, redis) => {
             url: `https://www.roblox.com/games/3976767347/Flooded-Area`
          })
          .setDescription(strip`
-            👤 **Current players**
+            👤 **current players**
             > \`${data.playing.toLocaleString()}\` in-game
 
-            ⭐ **Favourites**
+            ⭐ **favourites**
             > \`${data.favoritedCount.toLocaleString()}\` favourites
 
-            👥 **Total Visits**
+            👥 **total visits**
             > \`${data.visits.toLocaleString()}\` total visits
 
-            📈 **Votes**
+            📈 **votes**
             > 👍 \`${votes.upVotes.toLocaleString()}\` - \`${votes.downVotes.toLocaleString()}\` 👎
 
-            ⌚ **Game Last Updated**
+            ⌚ **game last updated**
             > ${Discord.time(dayjs(data.updated).unix())} (${Discord.time(dayjs(data.updated).unix(), Discord.TimestampStyles.RelativeTime)})
          `)
          .setTimestamp(interaction.createdTimestamp)

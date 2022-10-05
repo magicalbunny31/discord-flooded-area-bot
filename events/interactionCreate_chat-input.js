@@ -6,28 +6,18 @@ import Discord from "discord.js";
 
 /**
  * @param {Discord.Interaction} interaction
- * @param {ReturnType<typeof import("redis").createClient>} redis
+ * @param {import("@google-cloud/firestore").Firestore} firestore
  */
-export default async (interaction, redis) => {
+export default async (interaction, firestore) => {
    // this file is for ChatInputCommandInteractions
    if (!interaction.isChatInputCommand())
       return;
 
 
-   // get this command's name
-   const commandName = [
-      interaction.commandName,
-      interaction.options.getSubcommandGroup(false),
-      interaction.options.getSubcommand(false)
-   ]
-      .filter(Boolean)
-      .join(`_`);
-
-
    // get this command's file
-   const file = await import(`../interactions/chat-input/${commandName}.js`);
+   const file = await import(`../interactions/chat-input/${interaction.commandName}.js`);
 
 
    // run the command
-   return await file.default(interaction, redis);
+   return await file.default(interaction, firestore);
 };

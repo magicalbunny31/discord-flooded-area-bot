@@ -1,12 +1,20 @@
+export const data = new Discord.SlashCommandBuilder()
+   .setName(`america`)
+   .setDescription(`🇺🇸 america`);
+
+export const guildOnly = true;
+
+
 import Discord from "discord.js";
+import { FieldValue } from "@google-cloud/firestore";
+
 import { autoArray, choice } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * america
  * @param {Discord.ChatInputCommandInteraction} interaction
- * @param {ReturnType<typeof import("redis").createClient>} redis
+ * @param {import("@google-cloud/firestore").Firestore} firestore
  */
-export default async (interaction, redis) => {
+export default async (interaction, firestore) => {
    // america
    const america = choice([
       ...autoArray(96889, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
@@ -20,7 +28,13 @@ export default async (interaction, redis) => {
 
 
    // add to the counter
-   const timesUsed = await redis.HINCRBY(`flooded-area:command:america`, america.field, 1);
+   const database = firestore.collection(`command`).doc(`america`);
+
+   await database.update({
+      [america.field]: FieldValue.increment(1)
+   });
+
+   const timesUsed = (await database.get()).data()[america.field];
 
 
    // reply to the interaction

@@ -1,5 +1,5 @@
 # discord-flooded-area-bot 🌊
-**[Flooded Area Community](https://discord.gg/Btng2qqjgA "https://discord.gg/Btng2qqjgA 🔗")**'s Discord bot!
+**[Flooded Area Community](https://discord.gg/Btng2qqjgA "https://discord.gg/Btng2qqjgA 🔗")**'s discord bot!
 
 ## how to run this locally 💻
 1. ensure you have [node.js](https://nodejs.org) >18.0.0 installed~

@@ -1,9 +1,12 @@
-# » vscode 💻
+# 💻 vscode
 .vscode/
 *.code-workspace
 
-# » .env 📜
+# 📜 .env
 .env
 
-# » dependencies 📦
+# 📦 dependencies
 node_modules/
+
+# 🔑 Google Cloud Platform key
+GCP-KEY_*.json
