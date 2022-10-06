@@ -10,12 +10,8 @@ import Discord from "discord.js";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (messageReaction, user, firestore) => {
-   // reaction enums
-   const upvote = `⬆️`;
-
-
-   // ignore reactions that aren't votes
-   if (![ upvote ].includes(messageReaction.emoji.name))
+   // ignore reactions that aren't downvotes or custom emojis
+   if ([ `⬇️`, `❌`, `⛔`, `🚫` ].includes(messageReaction.emoji.name) || messageReaction.emoji.id)
       return;
 
 
@@ -49,6 +45,6 @@ export default async (messageReaction, user, firestore) => {
    if (popularTagIndex > 0)
       messageReaction.message.channel.appliedTags.splice(popularTagIndex, 1);
 
-   if (messageReaction.users.cache.size <= 10)
+   if ((await messageReaction.users.fetch()).size <= 10)
       await messageReaction.message.channel.setAppliedTags([ ...messageReaction.message.channel.appliedTags ]);
 };

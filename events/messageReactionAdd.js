@@ -20,12 +20,8 @@ export default async (messageReaction, user, firestore) => {
    };
 
 
-   // reaction enums
-   const upvote = `⬆️`;
-
-
-   // ignore reactions that aren't votes
-   if (![ upvote ].includes(messageReaction.emoji.name))
+   // ignore reactions that aren't downvotes or custom emojis
+   if ([ `⬇️`, `❌`, `⛔`, `🚫` ].includes(messageReaction.emoji.name) || messageReaction.emoji.id)
       return;
 
 
@@ -52,6 +48,17 @@ export default async (messageReaction, user, firestore) => {
       return;
 
 
+   // remove reactions from suggestions banned people
+   const guild = await tryOrUndefined(messageReaction.client.guilds.fetch(process.env.GUILD_AREA_COMMUNITY));
+   const member = await tryOrUndefined(guild?.members.fetch(user.id));
+
+   const database = firestore.collection(`role`).doc(`suggestions-banned`);
+   const { "role": suggestionsBannedId } = (await database.get()).data() || {};
+
+   if (member?.roles.cache.has(suggestionsBannedId))
+      await tryOrUndefined(messageReaction.users.remove(user.id));
+
+
    // remove the thread's starter message's author's reaction
    const starterMessage = await tryOrUndefined(messageReaction.message.channel.fetchStarterMessage());
    if (starterMessage?.author.id === user.id)
@@ -61,6 +68,6 @@ export default async (messageReaction, user, firestore) => {
    // this suggestion has 10+ votes and doesn't already have the popular tag
    const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
 
-   if (messageReaction.users.cache.size + 1 >= 10 && !messageReaction.message.channel.appliedTags.includes(popularTag))
+   if ((await messageReaction.users.fetch()).size + 1 >= 10 && !messageReaction.message.channel.appliedTags.includes(popularTag))
       await messageReaction.message.channel.setAppliedTags([ ...messageReaction.message.channel.appliedTags, popularTag ]);
 };
