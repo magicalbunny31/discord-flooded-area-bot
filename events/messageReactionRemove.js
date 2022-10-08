@@ -21,7 +21,9 @@ export default async (messageReaction, user, firestore) => {
 
 
    // ignore reactions that aren't downvotes or custom emojis
-   if ([ `⬇️`, `❌`, `⛔`, `🚫`, `⏬`, `⤵️`, `👇`, `👎`, `📉`, `🔽`, `🤬` ].includes(messageReaction.emoji.name) || messageReaction.emoji.id)
+   const bannedEmojis = [ `⬇️`, `❌`, `⛔`, `🚫`, `⏬`, `⤵️`, `👇`, `👎`, `📉`, `🔽`, `🤬` ];
+
+   if (bannedEmojis.includes(messageReaction.emoji.name) || messageReaction.emoji.id)
       return;
 
 
@@ -55,13 +57,19 @@ export default async (messageReaction, user, firestore) => {
       return;
 
 
-   // this suggestion has under 10 votes but has the popular tag
+   // this suggestion's highest reaction emoji has under 10 votes but the forum post has the popular tag
+   const highestMessageReactionCount = messageReaction.message.reactions.cache
+      .filter(messageReaction => !bannedEmojis.includes(messageReaction.emoji.name))
+      .sort((a, b) => a.count - b.count)
+      .at(-1)
+      .count;
+
    const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
    const popularTagIndex = messageReaction.message.channel.appliedTags.findIndex(id => id === popularTag);
 
    if (popularTagIndex > 0)
       messageReaction.message.channel.appliedTags.splice(popularTagIndex, 1);
 
-   if ((await messageReaction.users.fetch()).size <= 10)
+   if (highestMessageReactionCount < 10)
       await messageReaction.message.channel.setAppliedTags([ ...messageReaction.message.channel.appliedTags ]);
 };
