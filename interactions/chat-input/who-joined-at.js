@@ -49,7 +49,7 @@ export default async (interaction, firestore) => {
       let lastMember;
 
       while (true) {
-         const members = (await guild.members.list({ limit: 1000, ...fetchedMembers.length ? { before: fetchedMembers.at(-1).id } : {} }));
+         const members = (await guild.members.list({ limit: 1000, ...fetchedMembers.length ? { after: fetchedMembers.at(-1).id } : {} }));
 
          fetchedMembers.push(...members.values());
 
@@ -57,7 +57,7 @@ export default async (interaction, firestore) => {
             break;
 
          else
-         lastMember = fetchedMembers.at(-1);
+            lastMember = fetchedMembers.at(-1);
 
          await wait(1000);
       };
