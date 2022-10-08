@@ -27,27 +27,21 @@ export default async (interaction, firestore) => {
    ]);
 
 
-   // add to the counter
+   // get the value of the counter
    const database = firestore.collection(`command`).doc(`america`);
+   const { [america.field]: timesUsed } = (await database.get()).data();
 
-   const { writeTime: { seconds: setAtTime } } = await database.update({
+
+   // add to the counter
+   await database.update({
       [america.field]: FieldValue.increment(1)
    });
-
-
-   // get the value of the counter
-   const fetchedData = await database.get();
-
-   const fetchedAtTime = fetchedData.updateTime.seconds;
-   const timesUsed = setAtTime === fetchedAtTime
-      ? fetchedData.data()[america.field]
-      : fetchedData.data()[america.field] - 1; //? it probably incremented twice, remove one for this result
 
 
    // reply to the interaction
    return await interaction.reply({
       content: america.content !== `acirema`
-         ? `${america.content} (${america.emoji} \`${timesUsed.toLocaleString()}\`)`
-         : `(\`${timesUsed.toLocaleString()}\` ${america.emoji}) ${america.content}`
+         ? `${america.content} (${america.emoji} \`${(timesUsed + 1).toLocaleString()}\`)`
+         : `(\`${(timesUsed + 1).toLocaleString()}\` ${america.emoji}) ${america.content}`
    });
 };
