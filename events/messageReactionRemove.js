@@ -10,6 +10,16 @@ import Discord from "discord.js";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (messageReaction, user, firestore) => {
+   // function to try to fetch something or return undefined instead of throwing
+   const tryOrUndefined = async promise => {
+      try {
+         return await promise;
+      } catch {
+         return undefined;
+      };
+   };
+
+
    // ignore reactions that aren't downvotes or custom emojis
    if ([ `⬇️`, `❌`, `⛔`, `🚫` ].includes(messageReaction.emoji.name) || messageReaction.emoji.id)
       return;
@@ -35,6 +45,13 @@ export default async (messageReaction, user, firestore) => {
 
    // exclude bug report "suggestions"
    if (channelId === rawChannelIds[`bug-reports`])
+      return;
+
+
+   // the post was made by a bot, don't edit its tags
+   const starterMessage = await tryOrUndefined(messageReaction.message.channel.fetchStarterMessage());
+
+   if (starterMessage?.author.bot)
       return;
 
 

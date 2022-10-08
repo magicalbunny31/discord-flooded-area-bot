@@ -65,6 +65,11 @@ export default async (messageReaction, user, firestore) => {
       await tryOrUndefined(messageReaction.users.remove(user.id));
 
 
+   // the post was made by a bot, don't edit its tags
+   if (starterMessage?.author.bot)
+      return;
+
+
    // this suggestion has 10+ votes and doesn't already have the popular tag
    const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
 
