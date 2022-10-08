@@ -38,7 +38,7 @@ export default async (interaction, firestore) => {
 
 
    // get suggestions
-   let suggestions = (await import(`../../assets/${type}.json`, { assert: { type: `json` }}))
+   let suggestions = (await import(`../../assets/${type}.json`, { assert: { type: `json` } }))
       .default
       .filter(suggestion => suggestion.upvoters.length - suggestion.downvoters.length >= 10 && !suggestion.deleted)
 
