@@ -62,7 +62,7 @@ export default async (messageReaction, user, firestore) => {
       .filter(messageReaction => !bannedEmojis.includes(messageReaction.emoji.name))
       .sort((a, b) => a.count - b.count)
       .at(-1)
-      .count;
+      ?.count;
 
    const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
    const popularTagIndex = messageReaction.message.channel.appliedTags.findIndex(id => id === popularTag);
