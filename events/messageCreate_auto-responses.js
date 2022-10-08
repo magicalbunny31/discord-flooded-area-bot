@@ -32,7 +32,7 @@ export default async (message, firestore) => {
    // loop through each auto-response
    for (const autoResponse of autoResponses) {
       // this message's content contains doesn't contain any of the phrases
-      if (!autoResponse[`message-content-contains`].some(phrase => message.content.includes(phrase)))
+      if (!autoResponse[`message-content-contains`].some(phrase => message.content.toLowerCase().includes(phrase.toLowerCase())))
          continue;
 
 
