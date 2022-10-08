@@ -21,7 +21,7 @@ export default async (messageReaction, user, firestore) => {
 
 
    // ignore reactions that aren't downvotes or custom emojis
-   if ([ `⬇️`, `❌`, `⛔`, `🚫` ].includes(messageReaction.emoji.name) || messageReaction.emoji.id)
+   if ([ `⬇️`, `❌`, `⛔`, `🚫`, `⏬`, `⤵️`, `👇`, `👎`, `📉`, `🔽`, `🤬` ].includes(messageReaction.emoji.name) || messageReaction.emoji.id)
       return;
 
 
