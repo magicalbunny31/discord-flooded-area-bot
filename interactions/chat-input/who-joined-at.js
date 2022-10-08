@@ -28,7 +28,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 
 import Discord from "discord.js";
-import { emoji, emojis, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emoji, emojis, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ChatInputCommandInteraction} interaction
@@ -130,19 +130,30 @@ export default async (interaction, firestore) => {
          .at(position - 1);
 
 
+   // embeds
+   const embeds = [
+      new Discord.EmbedBuilder()
+         .setColor(colours.flooded_area)
+         .setAuthor({
+            name:    (member ? member : positionOrMember)?.user.tag                || null,
+            iconURL: (member ? member : positionOrMember)?.user.displayAvatarURL() || null
+         })
+         .setDescription(
+            member || positionOrMember
+            ? strip`
+               👤 **\`${(position ? position : positionOrMember).toLocaleString()}${getOrdinalSuffix(position ? position : positionOrMember)} member\` of \`${interaction.guild.memberCount.toLocaleString()} members\`**
+               > they joined at ${Discord.time(Math.floor((member ? member : positionOrMember).joinedTimestamp / 1000))}
+            `
+            : strip`
+               ❌ **an error occurred getting the \`${position.toLocaleString()}${getOrdinalSuffix(position)} member\`**
+               > try a different position, or see if this'll work later ${emojis.happ}
+            `
+         )
+   ];
+
+
    // edit the deferred interaction
    return await interaction.editReply({
-      content: member || positionOrMember
-         ? strip`
-            👤 **${member ? member : positionOrMember} (@${(member ? member : positionOrMember).user.tag.replace(emoji, e => `\\${e}`)}) is the \`${(position ? position : positionOrMember).toLocaleString()}${getOrdinalSuffix(position ? position : positionOrMember)} member\` of \`${interaction.guild.memberCount.toLocaleString()} members\`**
-            > they joined at ${Discord.time(Math.floor((member ? member : positionOrMember).joinedTimestamp / 1000))}
-         `
-         : strip`
-            ❌ **an error occurred getting the \`${position.toLocaleString()}${getOrdinalSuffix(position)} member\`**
-            > try a different position, or see if this'll work later ${emojis.happ}
-         `,
-      allowedMentions: {
-         parse: []
-      }
+      embeds
    });
 };
