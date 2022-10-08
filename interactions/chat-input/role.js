@@ -160,8 +160,8 @@ export const data = new Discord.SlashCommandBuilder()
                         name: `💬 other pronouns`,
                         value: `other`
                      }, {
-                        name: `💬 any pronouns`,
-                        value: `any`
+                        name: `💬 ask for pronouns`,
+                        value: `ask-for-pronouns`
                      })
                      .setRequired(true)
                )
@@ -185,10 +185,10 @@ export const data = new Discord.SlashCommandBuilder()
                         value: `they-them`
                      }, {
                         name: `💬 other pronouns`,
-                        value: `other`
+                        value: `other-pronouns`
                      }, {
-                        name: `💬 any pronouns`,
-                        value: `any`
+                        name: `💬 ask for pronouns`,
+                        value: `ask-for-pronouns`
                      })
                      .setRequired(true)
                )
