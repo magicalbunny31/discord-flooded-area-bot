@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * show the reaction roles
@@ -11,11 +10,6 @@ export default async (interaction, firestore) => {
    await interaction.deferReply({
       ephemeral: true
    });
-
-
-   // database stuff
-   const database = firestore.collection(`role`).doc(`moderation-team`);
-   const { role: moderationTeam } = (await database.get()).data();
 
 
    // files
@@ -40,12 +34,6 @@ export default async (interaction, firestore) => {
 
    // edit the deferred interaction
    return await interaction.editReply({
-      content: strip`
-         pronoun roles are simply here to make it easier for everyone to refer to one another!
-         misusing the roles will result in punishment
-         please be mature about this ${emojis.happ}
-         ~ ${Discord.roleMention(moderationTeam)}
-      `,
       files,
       components
    });

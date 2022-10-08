@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { colours, emojis } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * show the reaction roles
@@ -7,10 +7,21 @@ import { colours, emojis } from "@magicalbunny31/awesome-utility-stuff";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
+   // defer the interaction
+   await interaction.deferReply({
+      ephemeral: true
+   });
+
+
+   // database stuff
+   let database = firestore.collection(`role`).doc(`moderation-team`);
+   const { role: moderationTeam } = (await database.get()).data();
+
+
    // roles
    const roles = interaction.member.roles.cache;
 
-   const database = firestore.collection(`role`);
+   database = firestore.collection(`role`);
    const mentionRoles = (await database.doc(`mention-roles`).get()).data();
    const pronounRoles = (await database.doc(`pronoun-roles`).get()).data();
 
@@ -110,16 +121,14 @@ export default async (interaction, firestore) => {
    ];
 
 
-   // reply to the interaction
-   // this is using a li'l trick to just show components owo
-   return await interaction.reply({
-      embeds: [
-         new Discord.EmbedBuilder()
-            .setColor(colours.flooded_area)
-            .setDescription(`boop`)
-      ],
-      components,
-      flags: Discord.MessageFlags.SuppressEmbeds,
-      ephemeral: true
+   // edit the deferred interaction
+   return await interaction.editReply({
+      content: strip`
+         pronoun roles are simply here to make it easier for everyone to refer to one another!
+         misusing the roles will result in punishment
+         please be mature about this ${emojis.happ}
+         ~ ${Discord.roleMention(moderationTeam)}
+      `,
+      components
    });
 };
