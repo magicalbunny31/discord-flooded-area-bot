@@ -206,11 +206,11 @@ export default async (interaction, firestore) => {
       new Discord.EmbedBuilder()
          .setColor(colours.flooded_area)
          .setAuthor({
-            name: partName,
+            name: parts.find(part => part.value === partName).name,
             iconURL: null // TODO
          })
          .setDescription(strip`
-            🧱 **part id (for endless)**
+            🧱 **part id (for endless; case sensitive)**
             > \`${parts.find(part => part.value === partName).value}\`
          `)
          .setFooter({
