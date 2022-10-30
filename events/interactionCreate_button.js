@@ -29,6 +29,11 @@ export default async (interaction, firestore) => {
    const [ button ] = interaction.customId.split(`:`);
 
 
+   // the start of this button is probably an id
+   if (+button)
+      return;
+
+
    // get this button's file
    const file = await tryOrUndefined(import(`../interactions/button/${button}.js`));
 

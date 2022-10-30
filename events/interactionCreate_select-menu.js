@@ -29,6 +29,11 @@ export default async (interaction, firestore) => {
    const [ selectMenu ] = interaction.customId.split(`:`);
 
 
+   // the start of this select menu is probably an id
+   if (+selectMenu)
+      return;
+
+
    // get this select menu's file
    const file = await tryOrUndefined(import(`../interactions/select-menu/${selectMenu}.js`));
 
