@@ -73,11 +73,13 @@ export default async (messageReaction, user, firestore) => {
 
 
    // this suggestion's highest reaction emoji has 10+ reactions and doesn't already have the popular tag
-   const highestMessageReactionCount = messageReaction.message.reactions.cache
+   const message = await messageReaction.message.fetch();
+   const highestMessageReactionCount = message.reactions.cache
       .filter(messageReaction => !bannedEmojis.includes(messageReaction.emoji.name))
       .sort((a, b) => a.count - b.count)
       .at(-1)
-      .count;
+      ?.count
+      || 0;
 
    const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
 
