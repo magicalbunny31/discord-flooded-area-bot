@@ -25,6 +25,9 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 dayjs.extend(utc);
 
+import duration from "dayjs/plugin/duration.js";
+dayjs.extend(duration);
+
 
 // database
 import { Firestore } from "@google-cloud/firestore";
