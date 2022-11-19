@@ -56,10 +56,9 @@ export const data = new Discord.SlashCommandBuilder()
                   new Discord.SlashCommandChannelOption()
                      .setName(`channel`)
                      .setDescription(`#️⃣ the channel associated with this suggestion channel`)
-                     // TODO ChannelType 15 isn't supported yet ???????/
-                     // .addChannelTypes(
-                     //    Discord.ChannelType.GuildForum
-                     // )
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildForum
+                     )
                      .setRequired(true)
                )
          )
