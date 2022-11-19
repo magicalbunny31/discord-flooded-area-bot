@@ -112,8 +112,8 @@ export default async (interaction, firestore) => {
             return await interaction.editReply({
                content: strip`
                   ❌ **couldn't remove \`${setChannelType}\`'s ${type ? `channel type \`${type}\`` : `channel`}**
-                  > \`${setChannelType}\` doesn't have a channel currently set, use </channel ${setChannelType} set:${interaction.client.user.id}> to set a channel
-               ` // TODO use the builder when available
+                  > \`${setChannelType}\` doesn't have a channel currently set, use ${Discord.chatInputApplicationCommandMention(`channel`, setChannelType, `set`, interaction.client.application.id)} to set a channel
+               `
             });
 
          // remove the channel from the database

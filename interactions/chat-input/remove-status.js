@@ -35,8 +35,8 @@ export default async (interaction, firestore) => {
       return await interaction.reply({
          content: strip`
             ${emojis.rip} **this post isn't approved nor denied**
-            > use </approve:${interaction.client.user.id}> or </deny:${interaction.client.user.id}> (or use the context menu) to change this post's status~
-         `, // TODO use builder when available
+            > use ${Discord.chatInputApplicationCommandMention(`approve`, interaction.client.application.id)} or ${Discord.chatInputApplicationCommandMention(`deny`, interaction.client.application.id)} (or use the context menu) to change this post's status~
+         `,
          ephemeral: true
       });
 

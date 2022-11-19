@@ -35,8 +35,8 @@ export default async (interaction, firestore) => {
       return await interaction.reply({
          content: strip`
             ${emojis.rip} **this post is already ${interaction.channel.appliedTags.includes(approvedTag) ? `approved` : `denied`}**
-            > use </remove-status:${interaction.client.user.id}> (or use the context menu) to remove this post's status~
-         `, // TODO use builder when available
+            > use ${Discord.chatInputApplicationCommandMention(`remove-status`, interaction.client.application.id)} (or use the context menu) to remove this post's status~
+         `,
          ephemeral: true
       });
 
