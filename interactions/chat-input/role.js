@@ -86,6 +86,9 @@ export const data = new Discord.SlashCommandBuilder()
                      }, {
                         name: `🗣️ doruk's exceptional pings`,
                         value: `doruk's-exceptional-pings`
+                     }, {
+                        name: `📢 /votekick pings`,
+                        value: `votekick-pings`
                      })
                      .setRequired(true)
                )
@@ -119,6 +122,9 @@ export const data = new Discord.SlashCommandBuilder()
                      }, {
                         name: `🗣️ doruk's exceptional pings`,
                         value: `doruk's-exceptional-pings`
+                     }, {
+                        name: `📢 /votekick pings`,
+                        value: `votekick-pings`
                      })
                      .setRequired(true)
                )
