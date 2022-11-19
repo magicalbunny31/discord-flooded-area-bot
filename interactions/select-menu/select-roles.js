@@ -25,7 +25,8 @@ export default async (interaction, firestore) => {
          [ `updates-sneak-peaks`,       rolesStrings.includes(`updates-sneak-peaks`)       ],
          [ `giveaways`,                 rolesStrings.includes(`giveaways`)                 ],
          [ `challenges`,                rolesStrings.includes(`challenges`)                ],
-         [ `doruk's-exceptional-pings`, rolesStrings.includes(`doruk's-exceptional-pings`) ]
+         [ `doruk's-exceptional-pings`, rolesStrings.includes(`doruk's-exceptional-pings`) ],
+         [ `votekick-pings`,            rolesStrings.includes(`votekick-pings`)            ]
       ],
 
       "pronoun-roles": [

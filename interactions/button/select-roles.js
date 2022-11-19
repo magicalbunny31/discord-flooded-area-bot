@@ -29,11 +29,11 @@ export default async (interaction, firestore) => {
    // components
    const components = [
       new Discord.ActionRowBuilder()
-         .setComponents([
+         .setComponents(
             new Discord.SelectMenuBuilder()
                .setCustomId(`select-roles:mention-roles`)
                .setPlaceholder(`select mention roles..`)
-               .setOptions([
+               .setOptions(
                   new Discord.SelectMenuOptionBuilder()
                      .setLabel(`looking for group`)
                      .setValue(`looking-for-group`)
@@ -68,18 +68,23 @@ export default async (interaction, firestore) => {
                      .setLabel(`doruk's exceptional pings`)
                      .setValue(`doruk's-exceptional-pings`)
                      .setEmoji(emojis.mention)
-                     .setDefault(roles.has(mentionRoles[`doruk's-exceptional-pings`]))
-               ])
+                     .setDefault(roles.has(mentionRoles[`doruk's-exceptional-pings`])),
+                  new Discord.SelectMenuOptionBuilder()
+                     .setLabel(`/votekick pings`)
+                     .setValue(`votekick-pings`)
+                     .setEmoji(emojis.mention)
+                     .setDefault(roles.has(mentionRoles[`votekick-pings`]))
+               )
                .setMinValues(0)
-               .setMaxValues(7)
-         ]),
+               .setMaxValues(8)
+         ),
 
       new Discord.ActionRowBuilder()
-         .setComponents([
+         .setComponents(
             new Discord.SelectMenuBuilder()
                .setCustomId(`select-roles:pronoun-roles`)
                .setPlaceholder(`select pronoun roles..`)
-               .setOptions([
+               .setOptions(
                   new Discord.SelectMenuOptionBuilder()
                      .setLabel(`he/him`)
                      .setValue(`he-him`)
@@ -105,19 +110,19 @@ export default async (interaction, firestore) => {
                      .setValue(`ask-for-pronouns`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(pronounRoles[`ask-for-pronouns`]))
-               ])
+               )
                .setMinValues(0)
                .setMaxValues(5)
-         ]),
+         ),
 
       new Discord.ActionRowBuilder()
-         .setComponents([
+         .setComponents(
             new Discord.ButtonBuilder()
             .setCustomId(`what-are-pronouns`)
                .setLabel(`what are pronouns?`)
                .setEmoji(`❓`)
                .setStyle(Discord.ButtonStyle.Secondary)
-         ])
+         )
    ];
 
 
