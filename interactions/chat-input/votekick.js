@@ -224,6 +224,12 @@ export default async (interaction, firestore) => {
          return;
 
 
+      // add this to the database
+      await firestore.collection(`leaderboard-statistics`).doc(`votekick`).update({
+         [user.id]: FieldValue.increment(1)
+      });
+
+
       // time out the user depending on how many required votes there were
       const timedOutFor = requiredVotes * 60 * 1000 * 2;
 

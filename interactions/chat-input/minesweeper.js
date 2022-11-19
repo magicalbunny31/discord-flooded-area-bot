@@ -7,7 +7,7 @@ import Discord from "discord.js";
 import dayjs from "dayjs";
 import { FieldValue } from "@google-cloud/firestore";
 
-import { colours, autoArray, createCollectorExpirationTime, number, set, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, colours, autoArray, createCollectorExpirationTime, number, set, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ChatInputCommandInteraction} interaction
@@ -253,7 +253,7 @@ export default async (interaction, firestore) => {
       if (!complete)
          return;
 
-      const database = firestore.collection(`game`).doc(`minesweeper`);
+      const database = firestore.collection(`leaderboard-statistics`).doc(`minesweeper`);
       await database.update({
          [interaction.user.id]: FieldValue.arrayUnion({
             time: timeElapsed

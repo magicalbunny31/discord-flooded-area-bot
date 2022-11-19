@@ -38,6 +38,14 @@ export default async (interaction, firestore) => {
       ]);
 
 
+   // add this to the database
+   await firestore.collection(`leaderboard-statistics`).doc(`america`).update({
+      [interaction.user.id]: {
+         [america.field]: FieldValue.increment(1)
+      }
+   });
+
+
    // get the value of the counter
    const database = firestore.collection(`command`).doc(`america`);
    const { [america.field]: timesUsed } = (await database.get()).data();

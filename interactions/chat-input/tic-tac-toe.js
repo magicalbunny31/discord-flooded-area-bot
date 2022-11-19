@@ -8,8 +8,12 @@ export const data = new Discord.SlashCommandBuilder()
          .setRequired(true)
    );
 
+export const guildOnly = true;
+
 
 import Discord from "discord.js";
+import { FieldValue } from "@google-cloud/firestore";
+
 import { colours, emojis, choice, createCollectorExpirationTime, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
@@ -271,6 +275,18 @@ export default async (interaction, firestore) => {
             .setDisabled(true);
 
 
+         // function to update the database
+         const updateDatabase = async (userId, against, outcome) => {
+            const database = firestore.collection(`leaderboard-statistics`).doc(`tic-tac-toe`);
+            await database.update({
+               [userId]: FieldValue.arrayUnion({
+                  against,
+                  outcome
+               })
+            });
+         };
+
+
          // check if there's a winner
          const winner = checkWinner();
 
@@ -287,6 +303,10 @@ export default async (interaction, firestore) => {
             // stop the InteractionCollector
             menu.stop(`game ended`);
 
+            // update the database
+            await updateDatabase(playerNoughts.id, playerCrosses.id, winner.id === playerNoughts ? `win` : `lose`);
+            await updateDatabase(playerCrosses.id, playerNoughts.id, winner.id === playerNoughts ? `win` : `lose`);
+
          } else if (winner === `draw`) { // it's a draw
             // update the embeds
             embeds[0]
@@ -295,6 +315,10 @@ export default async (interaction, firestore) => {
 
             // stop the InteractionCollector
             menu.stop(`game ended`);
+
+            // update the database
+            await updateDatabase(playerNoughts.id, playerCrosses.id, `draw`);
+            await updateDatabase(playerCrosses.id, playerNoughts.id, `draw`);
 
          } else { // the game is still going!
             // change turns
