@@ -59,7 +59,7 @@ export default async (interaction, firestore) => {
 
    // votekick is on cooldown
    const database = firestore.collection(`command`).doc(`votekick`);
-   const { "cooldown-expires-at": cooldownExpiresAt, "votekick-in-progress-at": votekickInProgressAt } = (await database.get()).data() || {};
+   const { "cooldown-expires-at": cooldownExpiresAt, "votekick-in-progress-at": votekickInProgressAt, "current-votekick-message": currentVotekickMessage } = (await database.get()).data() || {};
 
    if (dayjs().unix() < cooldownExpiresAt.seconds)
       return await interaction.reply({
@@ -77,6 +77,16 @@ export default async (interaction, firestore) => {
    if (votekickInProgressAt && votekickProbablyStillInProgress)
       return await interaction.reply({
          content: `a ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)} is still in progress in the server!`,
+         components: [
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.ButtonBuilder()
+                     .setLabel(`view current /votekick`)
+                     .setEmoji(`📨`)
+                     .setStyle(Discord.ButtonStyle.Link)
+                     .setURL(currentVotekickMessage)
+               )
+         ],
          ephemeral: true
       });
 
@@ -89,12 +99,6 @@ export default async (interaction, firestore) => {
    ]);
 
    const voters = autoArray(requiredVotes, () => `> 👥 ${emojis.loading}`);
-
-
-   // set the votekick in progress
-   await database.update({
-      "votekick-in-progress-at": new Timestamp(dayjs().unix(), 0)
-   });
 
 
    // get the /votekick pings roles
@@ -116,7 +120,7 @@ export default async (interaction, firestore) => {
    // reply to the interaction
    const voteEndsAt = dayjs().add(2, `minutes`).unix();
 
-   await interaction.reply({
+   const message = await interaction.reply({
       content: strip`
          📢 **${Discord.roleMention(votekickPings)}**
          📣 **a votekick on ${user} has been started by ${interaction.user} for the reason of \`${reason}\`**
@@ -128,6 +132,13 @@ export default async (interaction, firestore) => {
          users: [ user.id ],
          roles: [ votekickPings ]
       }
+   });
+
+
+   // set the votekick in progress
+   await database.update({
+      "votekick-in-progress-at": new Timestamp(dayjs().unix(), 0),
+      "current-votekick-message": message.url
    });
 
 
@@ -185,7 +196,8 @@ export default async (interaction, firestore) => {
       // set the cooldown and votekick progress
       await database.update({
          "cooldown-expires-at": new Timestamp(dayjs().add(`30`, `seconds`).unix(), 0),
-         "votekick-in-progress-at": FieldValue.delete()
+         "votekick-in-progress-at": FieldValue.delete(),
+         "current-votekick-message": FieldValue.delete()
       });
 
 
@@ -239,7 +251,7 @@ export default async (interaction, firestore) => {
       // edit the interaction's original reply
       return await interaction.editReply({
          content: strip`
-            📣 **${user} has been ~~timed out~~ kicked with ${requiredVotes} votes**
+            📣 **${user} has been ~~kicked~~ *timed out* for \`${dayjs.duration({ milliseconds: timedOutFor }).format(`m [minutes]`)}\` with ${requiredVotes} votes**
             ⌚ **30 second cooldown on more ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)}s**
             ${voters.join(`\n`)}
          `,
