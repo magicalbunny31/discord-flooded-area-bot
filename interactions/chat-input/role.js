@@ -3,6 +3,32 @@ export const data = new Discord.SlashCommandBuilder()
    .setDescription(`🔑 set some roles in the database for commands to work`)
    .addSubcommandGroup(
       new Discord.SlashCommandSubcommandGroupBuilder()
+         .setName(`bunny-was-here`)
+         .setDescription(`🐇 manage the bunny was here role`)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`remove`)
+               .setDescription(`🚫 remove the bunny was here role`)
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`set`)
+               .setDescription(`➕ set the bunny was here role`)
+               .addRoleOption(
+                  new Discord.SlashCommandRoleOption()
+                     .setName(`role`)
+                     .setDescription(`🐇 the bunny was here role`)
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`view`)
+               .setDescription(`🔎 view the bunny was here role`)
+         )
+   )
+   .addSubcommandGroup(
+      new Discord.SlashCommandSubcommandGroupBuilder()
          .setName(`event-host`)
          .setDescription(`🎉 manage the event host role`)
          .addSubcommand(
@@ -138,7 +164,7 @@ export const data = new Discord.SlashCommandBuilder()
    .addSubcommandGroup(
       new Discord.SlashCommandSubcommandGroupBuilder()
          .setName(`pronoun-roles`)
-         .setDescription(`🗯️ manage the pronoun roles`)
+         .setDescription(`💭 manage the pronoun roles`)
          .addSubcommand(
             new Discord.SlashCommandSubcommandBuilder()
                .setName(`remove`)
@@ -274,8 +300,8 @@ export default async (interaction, firestore) => {
             return await interaction.editReply({
                content: strip`
                   ❌ **couldn't remove \`${setRoleType}\`'s ${type ? `role type \`${type}\`` : `role`}**
-                  > \`${setRoleType}\` doesn't have a role currently set, use </role ${setRoleType} set:${interaction.client.user.id}> to set a role
-               ` // TODO use the builder when available
+                  > \`${setRoleType}\` doesn't have a role currently set, use ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`role`, setRoleType, `set`, interaction.client.application.id)} to set a role
+               `
             });
 
          // remove the role from the database
