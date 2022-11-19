@@ -3,7 +3,7 @@ import { partition } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * set reaction roles
- * @param {Discord.SelectMenuInteraction} interaction
+ * @param {Discord.AnySelectMenuInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
