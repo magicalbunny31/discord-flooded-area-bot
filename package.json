@@ -19,9 +19,12 @@
       "@google-cloud/firestore": "^6.3.0",
       "@magicalbunny31/awesome-utility-stuff": "github:magicalbunny31/awesome-utility-stuff",
       "dayjs": "^1.11.3",
-      "discord.js": "^14.0.1",
+      "discord.js": "^14.7.0-dev.1668859429-ff85481.0",
       "dotenv": "^16.0.1",
       "fuzzysort": "^2.0.1",
       "redis": "^4.2.0"
+   },
+   "overrides": {
+      "@discordjs/builders": "1.4.0-dev.1668859431-ff85481.0"
    }
 }

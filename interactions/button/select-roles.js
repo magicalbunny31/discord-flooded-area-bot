@@ -30,46 +30,46 @@ export default async (interaction, firestore) => {
    const components = [
       new Discord.ActionRowBuilder()
          .setComponents(
-            new Discord.SelectMenuBuilder()
+            new Discord.StringSelectMenuBuilder()
                .setCustomId(`select-roles:mention-roles`)
                .setPlaceholder(`select mention roles..`)
                .setOptions(
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`looking for group`)
                      .setValue(`looking-for-group`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`looking-for-group`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`events`)
                      .setValue(`events`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`events`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`polls`)
                      .setValue(`polls`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`polls`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`updates/sneak peaks`)
                      .setValue(`updates-sneak-peaks`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`updates-sneak-peaks`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`giveaways`)
                      .setValue(`giveaways`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`giveaways`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`challenges`)
                      .setValue(`challenges`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`challenges`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`doruk's exceptional pings`)
                      .setValue(`doruk's-exceptional-pings`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`doruk's-exceptional-pings`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`/votekick pings`)
                      .setValue(`votekick-pings`)
                      .setEmoji(emojis.mention)
@@ -81,31 +81,31 @@ export default async (interaction, firestore) => {
 
       new Discord.ActionRowBuilder()
          .setComponents(
-            new Discord.SelectMenuBuilder()
+            new Discord.StringSelectMenuBuilder()
                .setCustomId(`select-roles:pronoun-roles`)
                .setPlaceholder(`select pronoun roles..`)
                .setOptions(
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`he/him`)
                      .setValue(`he-him`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(pronounRoles[`he-him`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`she/her`)
                      .setValue(`she-her`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(pronounRoles[`she-her`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`they/them`)
                      .setValue(`they-them`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(pronounRoles[`they-them`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`other pronouns`)
                      .setValue(`other-pronouns`)
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(pronounRoles[`other-pronouns`])),
-                  new Discord.SelectMenuOptionBuilder()
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`ask for pronouns`)
                      .setValue(`ask-for-pronouns`)
                      .setEmoji(emojis.mention)
