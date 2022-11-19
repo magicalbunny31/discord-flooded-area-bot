@@ -20,8 +20,8 @@ export default async (interaction, firestore) => {
    };
 
 
-   // this file is for SelectMenuInteractions
-   if (!interaction.isSelectMenu())
+   // this file is for AnySelectMenuInteractions
+   if (!interaction.isAnySelectMenu())
       return;
 
 
