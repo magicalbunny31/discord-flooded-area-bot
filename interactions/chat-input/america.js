@@ -16,7 +16,7 @@ import { autoArray, choice } from "@magicalbunny31/awesome-utility-stuff";
  */
 export default async (interaction, firestore) => {
    // america
-   const america = choice([
+   let america = choice([
       ...autoArray(96889, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
       ...autoArray(1000,  () => ({ field: `amerwica`, content: `amerwica~ nyaa~`,                 emoji: `🇺🇸🐱` })),
       ...autoArray(1000,  () => ({ field: `acirema`,  content: `acirema`,                         emoji: `🇺🇸` })),
@@ -25,6 +25,17 @@ export default async (interaction, firestore) => {
       ...autoArray(10,    () => ({ field: `rarer`,    content: `even more rarer america™️™️`,       emoji: `🇺🇸` })),
       {                            field: `british`,  content: `bri'ish`,                         emoji: `🇬🇧` }
    ]);
+
+
+   // this person is a closet furry (they have the role @bunny was here)
+   const { role } = (await firestore.collection(`role`).doc(`bunny-was-here`).get()).data();
+   const hasRole = interaction.member.roles.cache.has(role);
+
+   if (hasRole)
+      america = choice([
+         america,
+         { field: `amerwica`, content: `amerwica~ nyaa~`, emoji: `🇺🇸🐱` }
+      ]);
 
 
    // get the value of the counter
