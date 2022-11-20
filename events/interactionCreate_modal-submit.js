@@ -30,6 +30,8 @@ export default async (interaction, firestore) => {
 
    } catch (error) {
       // an error occurred
+      console.error(error);
+
       return await sendBotError(
          interaction,
          {
