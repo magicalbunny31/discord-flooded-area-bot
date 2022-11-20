@@ -3,6 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
+import { sendBotError } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction

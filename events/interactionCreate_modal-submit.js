@@ -3,7 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { emojis } from "@magicalbunny31/awesome-utility-stuff";
+import { sendBotError } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
