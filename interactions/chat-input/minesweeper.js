@@ -177,8 +177,10 @@ export default async (interaction, firestore) => {
                   // this grid isn't in the radius of the current gridPosition
                   if (
                      !(
-                        [ gridPosition[0] - 1, gridPosition[0], gridPosition[0] + 1 ].includes(rowIndex) &&
-                        [ gridPosition[1] - 1, gridPosition[1], gridPosition[1] + 1 ].includes(gridIndex)
+                        (rowIndex === gridPosition[0] - 1 && gridIndex === gridPosition[1])     || // above    grid
+                        (rowIndex === gridPosition[0]     && gridIndex === gridPosition[1] - 1) || // left of  grid
+                        (rowIndex === gridPosition[0]     && gridIndex === gridPosition[1] + 1) || // right of grid
+                        (rowIndex === gridPosition[0] + 1 && gridIndex === gridPosition[1])        // below    grid
                      )
                   )
                      continue;
