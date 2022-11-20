@@ -40,9 +40,7 @@ export default async (interaction, firestore) => {
 
    // add this to the database
    await firestore.collection(`leaderboard-statistics`).doc(`america`).update({
-      [interaction.user.id]: {
-         [america.field]: FieldValue.increment(1)
-      }
+      [`${interaction.user.id}.${america.field}`]: FieldValue.increment(1)
    });
 
 
