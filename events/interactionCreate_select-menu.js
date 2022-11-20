@@ -46,6 +46,19 @@ export default async (interaction, firestore) => {
       });
 
 
-   // run the select menu
-   return await file.default(interaction, firestore);
+   try {
+      // run the select menu for this file
+      return await file.default(interaction, firestore);
+
+
+   } catch (error) {
+      // an error occurred
+      return await sendBotError(
+         interaction,
+         {
+            url: process.env.WEBHOOK_ERRORS
+         },
+         error
+      );
+   };
 };

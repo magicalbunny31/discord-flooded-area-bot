@@ -23,6 +23,19 @@ export default async (interaction, firestore) => {
    const file = await import(`../interactions/modal-submit/${modal}.js`);
 
 
-   // run the modal
-   return await file.default(interaction, firestore);
+   try {
+      // run the modal for this file
+      return await file.default(interaction, firestore);
+
+
+   } catch (error) {
+      // an error occurred
+      return await sendBotError(
+         interaction,
+         {
+            url: process.env.WEBHOOK_ERRORS
+         },
+         error
+      );
+   };
 };
