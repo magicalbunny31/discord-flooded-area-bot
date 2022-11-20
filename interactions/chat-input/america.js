@@ -15,6 +15,10 @@ import { autoArray, choice } from "@magicalbunny31/awesome-utility-stuff";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
+   // defer the interaction
+   await interaction.deferReply();
+
+
    // america
    let america = choice([
       ...autoArray(96889, () => ({ field: `america`,  content: `america`,                         emoji: `🇺🇸` })),
@@ -55,8 +59,8 @@ export default async (interaction, firestore) => {
    });
 
 
-   // reply to the interaction
-   return await interaction.reply({
+   // edit the interaction's original reply
+   return await interaction.editReply({
       content: america.content !== `acirema`
          ? `${america.content} (${america.emoji} \`${(timesUsed + 1).toLocaleString()}\`)`
          : `(\`${(timesUsed + 1).toLocaleString()}\` ${america.emoji}) ${america.content}`
