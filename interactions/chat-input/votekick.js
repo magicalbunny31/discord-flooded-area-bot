@@ -253,7 +253,7 @@ export default async (interaction, firestore) => {
       // edit the interaction's original reply
       return await interaction.editReply({
          content: strip`
-            📣 **${user} has been ~~kicked~~ *timed out* for \`${dayjs.duration({ milliseconds: timedOutFor }).format(`m [minutes]`)}\` with ${requiredVotes} votes**
+            📣 **${user} has been ~~kicked~~ *timed out* for \`${timedOutFor / (60 * 1000)} minutes\` with ${requiredVotes} votes**
             ⌚ **30 second cooldown on more ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)}s**
             ${voters.join(`\n`)}
          `,
