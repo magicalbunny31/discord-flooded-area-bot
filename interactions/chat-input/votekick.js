@@ -120,7 +120,7 @@ export default async (interaction, firestore) => {
    // reply to the interaction
    const voteEndsAt = dayjs().add(2, `minutes`).unix();
 
-   const message = await interaction.reply({
+   await interaction.reply({
       content: strip`
          📢 **${Discord.roleMention(votekickPings)}**
          📣 **a votekick on ${user} has been started by ${interaction.user} for the reason of \`${reason}\`**
@@ -133,6 +133,8 @@ export default async (interaction, firestore) => {
          roles: [ votekickPings ]
       }
    });
+
+   const message = await interaction.fetchReply();
 
 
    // set the votekick in progress
