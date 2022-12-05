@@ -245,7 +245,7 @@ export default async (interaction, firestore) => {
 
 
       // time out the user depending on how many required votes there were
-      const timedOutFor = requiredVotes * 60 * 1000 * 2;
+      const timedOutFor = requiredVotes * 60 * 1000;
 
       await member.timeout(timedOutFor, `/votekick by ${interaction.user.tag}`);
 
