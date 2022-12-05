@@ -147,7 +147,7 @@ export default async (interaction, firestore) => {
    // create an InteractionCollector
    const vote = interaction.channel.createMessageComponentCollector({
       filter: i => i.customId.startsWith(interaction.id),
-      time: 60000
+      time: 120000
    });
 
 
