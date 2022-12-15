@@ -1,7 +1,6 @@
 import Discord from "discord.js";
 
 /**
- * show the reaction roles
  * @param {Discord.ButtonInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */

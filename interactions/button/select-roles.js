@@ -2,7 +2,6 @@ import Discord from "discord.js";
 import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * show the reaction roles
  * @param {Discord.ButtonInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
