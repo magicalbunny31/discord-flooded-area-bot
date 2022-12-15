@@ -28,7 +28,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 
 import Discord from "discord.js";
-import { colours, emoji, emojis, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ChatInputCommandInteraction} interaction
