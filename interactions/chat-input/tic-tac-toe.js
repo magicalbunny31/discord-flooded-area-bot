@@ -277,8 +277,8 @@ export default async (interaction, firestore) => {
          const updateDatabase = async (userId, against, outcome) => {
             const database = firestore.collection(`leaderboard-statistics`).doc(`tic-tac-toe`);
 
-            const { [userId]: games } = (await database.get()).data();
-            games.push({
+            const games = (await database.get()).data()[userId] || [];
+            (games || []).push({
                against,
                outcome
             });
@@ -306,8 +306,8 @@ export default async (interaction, firestore) => {
             menu.stop(`game ended`);
 
             // update the database
-            await updateDatabase(playerNoughts.id, playerCrosses.id, winner.id === playerNoughts ? `win` : `lose`);
-            await updateDatabase(playerCrosses.id, playerNoughts.id, winner.id === playerNoughts ? `win` : `lose`);
+            await updateDatabase(playerNoughts.id, playerCrosses.id, winner.id === playerNoughts.id ? `win` : `lose`);
+            await updateDatabase(playerCrosses.id, playerNoughts.id, winner.id === playerNoughts.id ? `win` : `lose`);
 
          } else if (winner === `draw`) { // it's a draw
             // update the embeds
