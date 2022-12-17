@@ -246,7 +246,7 @@ export default async (interaction, firestore) => {
       // add this score to the database
       const database = firestore.collection(`leaderboard-statistics`).doc(`whack-a-flood`);
 
-      const { [interaction.user.id]: scores } = (await database.get()).data();
+      const { [interaction.user.id]: scores = [] } = (await database.get()).data();
       scores.push({
          score
       });
