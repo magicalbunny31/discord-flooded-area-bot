@@ -5,7 +5,6 @@ export const data = new Discord.SlashCommandBuilder()
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { FieldValue } from "@google-cloud/firestore";
 
 import { emojis, autoArray, createCollectorExpirationTime, number, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
@@ -246,10 +245,14 @@ export default async (interaction, firestore) => {
    whack.on(`end`, async (collected, reason) => {
       // add this score to the database
       const database = firestore.collection(`leaderboard-statistics`).doc(`whack-a-flood`);
+
+      const { [interaction.user.id]: scores } = (await database.get()).data();
+      scores.push({
+         score
+      });
+
       await database.update({
-         [interaction.user.id]: FieldValue.arrayUnion({
-            score
-         })
+         [interaction.user.id]: scores
       });
 
       // edit the interaction's original reply

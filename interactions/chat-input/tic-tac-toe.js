@@ -12,8 +12,6 @@ export const guildOnly = true;
 
 
 import Discord from "discord.js";
-import { FieldValue } from "@google-cloud/firestore";
-
 import { colours, emojis, choice, createCollectorExpirationTime, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
@@ -278,11 +276,15 @@ export default async (interaction, firestore) => {
          // function to update the database
          const updateDatabase = async (userId, against, outcome) => {
             const database = firestore.collection(`leaderboard-statistics`).doc(`tic-tac-toe`);
+
+            const { [userId]: games } = (await database.get()).data();
+            games.push({
+               against,
+               outcome
+            });
+
             await database.update({
-               [userId]: FieldValue.arrayUnion({
-                  against,
-                  outcome
-               })
+               [userId]: games
             });
          };
 

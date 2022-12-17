@@ -5,7 +5,6 @@ export const data = new Discord.SlashCommandBuilder()
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { FieldValue } from "@google-cloud/firestore";
 
 import { emojis, colours, autoArray, createCollectorExpirationTime, number, set, strip } from "@magicalbunny31/awesome-utility-stuff";
 
@@ -256,10 +255,14 @@ export default async (interaction, firestore) => {
          return;
 
       const database = firestore.collection(`leaderboard-statistics`).doc(`minesweeper`);
+
+      const { [interaction.user.id]: times } = (await database.get()).data();
+      times.push({
+         time: timeElapsed
+      });
+
       await database.update({
-         [interaction.user.id]: FieldValue.arrayUnion({
-            time: timeElapsed
-         })
+         [interaction.user.id]: times
       });
    });
 };
