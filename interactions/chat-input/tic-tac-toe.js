@@ -277,7 +277,7 @@ export default async (interaction, firestore) => {
          const updateDatabase = async (userId, against, outcome) => {
             const database = firestore.collection(`leaderboard-statistics`).doc(`tic-tac-toe`);
 
-            const games = (await database.get()).data()[userId] || [];
+            const { [userId]: games = [] } = (await database.get()).data();
             (games || []).push({
                against,
                outcome
