@@ -176,19 +176,29 @@ export default async (interaction, firestore) => {
                   // this grid isn't in the radius of the current gridPosition
                   if (
                      !(
-                        (rowIndex === gridPosition[0] - 1 && gridIndex === gridPosition[1])     || // above    grid
-                        (rowIndex === gridPosition[0]     && gridIndex === gridPosition[1] - 1) || // left of  grid
-                        (rowIndex === gridPosition[0]     && gridIndex === gridPosition[1] + 1) || // right of grid
-                        (rowIndex === gridPosition[0] + 1 && gridIndex === gridPosition[1])        // below    grid
+                        (rowIndex === gridPosition[0] - 1 && gridIndex === gridPosition[1] - 1) || // ↖️
+                        (rowIndex === gridPosition[0] - 1 && gridIndex === gridPosition[1])     || // ⬆️
+                        (rowIndex === gridPosition[0] - 1 && gridIndex === gridPosition[1] + 1) || // ↗️
+
+                        (rowIndex === gridPosition[0]     && gridIndex === gridPosition[1] - 1) || // ⬅️
+                        (rowIndex === gridPosition[0]     && gridIndex === gridPosition[1] + 1) || // ➡️
+
+                        (rowIndex === gridPosition[0] + 1 && gridIndex === gridPosition[1] - 1) || // ↙️
+                        (rowIndex === gridPosition[0] + 1 && gridIndex === gridPosition[1])     || // ⬇️
+                        (rowIndex === gridPosition[0] + 1 && gridIndex === gridPosition[1] + 1)    // ↘️
                      )
                   )
                      continue;
 
-                  // this grid isn't blank
-                  if (grid.isBomb || grid.bombsAround)
+                  // this grid is a bomb
+                  if (grid.isBomb)
                      continue;
 
-                  // this grid is already revealed
+                  // this grid has bombs around it but is next to a blank square that was revealed: reveal it but *don't* search around it
+                  if (grid.bombsAround)
+                     board[rowIndex][gridIndex].revealed = true;
+
+                  // this grid is already (or has just been) revealed
                   if (grid.revealed)
                      continue;
 
