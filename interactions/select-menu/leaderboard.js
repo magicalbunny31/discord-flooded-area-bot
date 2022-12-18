@@ -2,7 +2,6 @@ import Discord from "discord.js";
 import { colours, emojis, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * set reaction roles
  * @param {Discord.AnySelectMenuInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
