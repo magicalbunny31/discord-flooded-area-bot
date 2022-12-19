@@ -1,6 +1,6 @@
 export const data = new Discord.SlashCommandBuilder()
    .setName(`currency`)
-   .setDescription(`💰 literally go to the bank and open the currency menu`);
+   .setDescription(`💰 do things with coins`);
 
 export const guildOnly = true;
 
