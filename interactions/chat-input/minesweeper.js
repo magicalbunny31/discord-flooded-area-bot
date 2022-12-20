@@ -67,7 +67,11 @@ export default async (interaction, firestore) => {
          .setDescription(strip`
             🚩 since there isn't a way for you to put down flags,
             ⏹️ just clear out all the squares that **aren't** 💣s, that works too~
-         `)
+         `),
+
+      new Discord.EmbedBuilder()
+         .setColor(colours.yellow)
+         .setDescription(`⌚ the timer starts when you clear your first square - choose wisely!`)
    ];
 
 
@@ -75,7 +79,7 @@ export default async (interaction, firestore) => {
    const components = board.map((row, rowIndex) =>
       new Discord.ActionRowBuilder()
          .setComponents(
-            row.map((grid, gridIndex) =>
+            row.map((_grid, gridIndex) =>
                new Discord.ButtonBuilder()
                   .setCustomId(`${interaction.id}:${rowIndex}:${gridIndex}`)
                   .setLabel(`\u200b`)
@@ -102,6 +106,7 @@ export default async (interaction, firestore) => {
    // function to re-create components
    let thisGrid;
    let complete = false;
+   let startTime;
 
    const recreateComponents = () => board.map((row, rowIndex) =>
       new Discord.ActionRowBuilder()
@@ -215,6 +220,10 @@ export default async (interaction, firestore) => {
          return game.stop(buttonInteraction);
 
 
+      // this was the first square, start the timer
+      startTime ||= buttonInteraction.createdTimestamp;
+
+
       // all the remaining grids are bombs
       const remainingGridsBombs = board.every(row =>
          row.every(grid =>
@@ -230,6 +239,12 @@ export default async (interaction, firestore) => {
 
       // update the interaction
       return await buttonInteraction.update({
+         embeds: [
+            embeds[0],
+            new Discord.EmbedBuilder()
+               .setColor(colours.yellow)
+               .setDescription(`⌚ started ${Discord.time(Math.floor(startTime / 1000), Discord.TimestampStyles.RelativeTime)}`)
+         ],
          components: recreateComponents()
       });
    });
@@ -238,7 +253,6 @@ export default async (interaction, firestore) => {
    // game has ended
    game.on(`end`, async (collected, buttonInteraction) => {
       // time elapsed for this game
-      const startTime = interaction.createdTimestamp;
       const endTime   = Date.now();
       const timeElapsed = endTime - startTime;
 
