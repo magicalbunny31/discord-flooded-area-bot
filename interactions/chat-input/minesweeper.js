@@ -14,50 +14,69 @@ import { emojis, colours, autoArray, createCollectorExpirationTime, number, set,
  */
 export default async (interaction, firestore) => {
    // create a minesweeper board
-   const numberOfBombs = number(3, 6);
-   const bombLocations = (() => {
-      const getBombLocations = () => {
-         const array = autoArray(numberOfBombs, () => number(0, 24));
-         if (set(array).length !== array.length)
-            return getBombLocations();
-         else
-            return array;
+   const createBoard = (row, grid) => {
+      // get locations for the bombs
+      const numberOfBombs = number(3, 6);
+      const bombLocations = (() => {
+         const getBombLocations = () => {
+            const array = autoArray(numberOfBombs, () => number(0, 24));
+            if (set(array).length !== array.length)
+               return getBombLocations();
+            else
+               return array;
+         };
+         return getBombLocations();
+      })();
+
+
+      // create the board and place bombs on it
+      const board = autoArray(5, (_, i) =>
+         autoArray(5, (_, x) =>
+            ({
+               get emoji() {
+                  return this.isBomb
+                     ? `💣`
+                     : { 1: `1⃣`, 2: `2⃣`, 3: `3⃣`, 4: `4⃣`, 5: `5⃣`, 6: `6⃣` }[this.bombsAround];
+               },
+               isBomb:      bombLocations.includes(i * 5 + x),
+               bombsAround: 0,
+               revealed:    false
+            })
+         )
+      );
+
+
+      // place the numbers to indicate where the bombs are
+      for (const [ rowIndex, row ] of board.entries()) {
+         for (const [ gridIndex, grid ] of row.entries()) {
+            // above row
+            if (board[rowIndex - 1]?.[gridIndex - 1]?.isBomb) grid.bombsAround ++;
+            if (board[rowIndex - 1]?.[gridIndex    ]?.isBomb) grid.bombsAround ++;
+            if (board[rowIndex - 1]?.[gridIndex + 1]?.isBomb) grid.bombsAround ++;
+
+            // same row
+            if (board[rowIndex]?.[gridIndex - 1]?.isBomb) grid.bombsAround ++;
+            if (board[rowIndex]?.[gridIndex + 1]?.isBomb) grid.bombsAround ++;
+
+            // below row
+            if (board[rowIndex + 1]?.[gridIndex - 1]?.isBomb) grid.bombsAround ++;
+            if (board[rowIndex + 1]?.[gridIndex    ]?.isBomb) grid.bombsAround ++;
+            if (board[rowIndex + 1]?.[gridIndex + 1]?.isBomb) grid.bombsAround ++;
+         };
       };
-      return getBombLocations();
-   })();
 
-   const board = autoArray(5, (_, i) =>
-      autoArray(5, (_, x) =>
-         ({
-            get emoji() {
-               return this.isBomb
-                  ? `💣`
-                  : { 1: `1⃣`, 2: `2⃣`, 3: `3⃣`, 4: `4⃣`, 5: `5⃣`, 6: `6⃣` }[this.bombsAround];
-            },
-            isBomb:      bombLocations.includes(i * 5 + x),
-            bombsAround: 0,
-            revealed:    false
-         })
-      )
-   );
 
-   for (const [ rowIndex, row ] of board.entries()) {
-      for (const [ gridIndex, grid ] of row.entries()) {
-         // above row
-         if (board[rowIndex - 1]?.[gridIndex - 1]?.isBomb) grid.bombsAround ++;
-         if (board[rowIndex - 1]?.[gridIndex    ]?.isBomb) grid.bombsAround ++;
-         if (board[rowIndex - 1]?.[gridIndex + 1]?.isBomb) grid.bombsAround ++;
+      // parameters were specified, this means to generate a new board *without* a bomb in this row-grid
+      if (row !== undefined && grid !== undefined)
+         if (board[row][grid].isBomb)
+            return createBoard(row, grid);
 
-         // same row
-         if (board[rowIndex]?.[gridIndex - 1]?.isBomb) grid.bombsAround ++;
-         if (board[rowIndex]?.[gridIndex + 1]?.isBomb) grid.bombsAround ++;
 
-         // below row
-         if (board[rowIndex + 1]?.[gridIndex - 1]?.isBomb) grid.bombsAround ++;
-         if (board[rowIndex + 1]?.[gridIndex    ]?.isBomb) grid.bombsAround ++;
-         if (board[rowIndex + 1]?.[gridIndex + 1]?.isBomb) grid.bombsAround ++;
-      };
+      // return the board
+      return board;
    };
+
+   let board = createBoard();
 
 
    // embeds
@@ -215,12 +234,17 @@ export default async (interaction, firestore) => {
       };
 
 
-      // bomb!! end the game
-      if (thisGrid.isBomb)
+      // this is a bomb, however this is also the first square: create a new board
+      if (!startTime && thisGrid.isBomb) {
+         board = createBoard(rowIndex, gridIndex);
+         thisGrid = board[rowIndex][gridIndex];
+         thisGrid.revealed = true;
+
+      } else if (thisGrid.isBomb) // bomb!! end the game
          return game.stop(buttonInteraction);
 
 
-      // this was the first square, start the timer
+      // this is the first square, start the timer
       startTime ||= buttonInteraction.createdTimestamp;
 
 
