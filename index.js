@@ -28,6 +28,9 @@ dayjs.extend(utc);
 import duration from "dayjs/plugin/duration.js";
 dayjs.extend(duration);
 
+import relativeTime from "dayjs/plugin/relativeTime.js";
+dayjs.extend(relativeTime);
+
 
 // database
 import { Firestore } from "@google-cloud/firestore";
