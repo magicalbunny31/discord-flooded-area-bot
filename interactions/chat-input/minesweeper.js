@@ -304,7 +304,7 @@ export default async (interaction, firestore) => {
 
       const database = firestore.collection(`leaderboard-statistics`).doc(`minesweeper`);
 
-      const { [interaction.user.id]: times } = (await database.get()).data();
+      const { [interaction.user.id]: times = [] } = (await database.get()).data();
       times.push({
          time: timeElapsed
       });
