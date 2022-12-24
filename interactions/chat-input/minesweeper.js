@@ -188,6 +188,16 @@ export default async (interaction, firestore) => {
       thisGrid.revealed = true;
 
 
+      // this is a bomb, however this is also the first square: create a new board
+      if (!startTime && thisGrid.isBomb) {
+         board = createBoard(rowIndex, gridIndex);
+         thisGrid = board[rowIndex][gridIndex];
+         thisGrid.revealed = true;
+
+      } else if (thisGrid.isBomb) // bomb!! end the game
+         return game.stop(buttonInteraction);
+
+
       // blank grid, reveal adjacent grids too
       if (!thisGrid.isBomb && !thisGrid.bombsAround) {
          const gridPositionsToSearch = [[ +rowIndex, +gridIndex ]];
@@ -232,16 +242,6 @@ export default async (interaction, firestore) => {
             };
          };
       };
-
-
-      // this is a bomb, however this is also the first square: create a new board
-      if (!startTime && thisGrid.isBomb) {
-         board = createBoard(rowIndex, gridIndex);
-         thisGrid = board[rowIndex][gridIndex];
-         thisGrid.revealed = true;
-
-      } else if (thisGrid.isBomb) // bomb!! end the game
-         return game.stop(buttonInteraction);
 
 
       // this is the first square, start the timer
