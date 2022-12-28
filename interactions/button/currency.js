@@ -116,7 +116,7 @@ export default async (interaction, firestore) => {
       // buy an item
       case `buy-item`: {
          // flooded area community guild
-         const guild = await interaction.client.guilds.fetch(process.env.GUILD_AREA_COMMUNITY);
+         const guild = await interaction.client.guilds.fetch(process.env.GUILD_FLOODED_AREA);
          const member = await guild.members.fetch(interaction.user);
 
 

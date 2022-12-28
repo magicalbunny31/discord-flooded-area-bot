@@ -360,7 +360,7 @@ export default async (interaction, firestore) => {
          // find the item to buy
          const itemToBuy = shopItems.find(item => item.name === value);
 
-         const hasRoleAlready = (await (await interaction.client.guilds.fetch(process.env.GUILD_AREA_COMMUNITY)).members.fetch(interaction.user)).roles.cache.has(itemToBuy?.role);
+         const hasRoleAlready = (await (await interaction.client.guilds.fetch(process.env.GUILD_FLOODED_AREA)).members.fetch(interaction.user)).roles.cache.has(itemToBuy?.role);
          const cannotAffordItem = itemToBuy?.price > coins;
 
          const cannotBuyItem = hasRoleAlready || cannotAffordItem;

@@ -51,7 +51,7 @@ export default async (messageReaction, user, firestore) => {
 
 
    // remove reactions from suggestions banned people
-   const guild = await tryOrUndefined(messageReaction.client.guilds.fetch(process.env.GUILD_AREA_COMMUNITY));
+   const guild = await tryOrUndefined(messageReaction.client.guilds.fetch(process.env.GUILD_FLOODED_AREA));
    const member = await tryOrUndefined(guild?.members.fetch(user.id));
 
    const database = firestore.collection(`role`).doc(`suggestions-banned`);

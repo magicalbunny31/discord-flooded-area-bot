@@ -29,7 +29,7 @@ export default async (client, firestore) => {
       );
 
    await client.application.commands.set(globalCommands);
-   await client.application.commands.set(guildCommands, process.env.GUILD_AREA_COMMUNITY);
+   await client.application.commands.set(guildCommands, process.env.GUILD_FLOODED_AREA);
 
 
    // statuses

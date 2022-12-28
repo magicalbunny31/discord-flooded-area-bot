@@ -18,7 +18,7 @@ export default async (message, firestore) => {
 
 
    // ignore messages not from flooded area community
-   if (message.guild?.id !== process.env.GUILD_AREA_COMMUNITY)
+   if (message.guild?.id !== process.env.GUILD_FLOODED_AREA)
       return;
 
 
