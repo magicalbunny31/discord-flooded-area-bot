@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import dayjs from "dayjs";
 import { FieldValue, Timestamp } from "@google-cloud/firestore";
 
-import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ModalSubmitInteraction} interaction
@@ -10,7 +10,7 @@ import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
  */
 export default async (interaction, firestore) => {
    // modal submit info
-   const [ _modal, button ] = interaction.customId.split(`:`);
+   const [ _modal ] = interaction.customId.split(`:`);
 
 
    // fields
