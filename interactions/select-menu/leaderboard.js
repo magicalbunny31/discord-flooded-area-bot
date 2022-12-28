@@ -120,6 +120,28 @@ export default async (interaction, firestore) => {
          break;
       };
 
+      case `/boop haiii`: {
+         components.splice(1, 4,
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.StringSelectMenuBuilder()
+                     .setCustomId(`leaderboard:/boop haiii:menu`)
+                     .setPlaceholder(`select a subcategory..`)
+                     .setOptions(
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`view a specific user's statistics..`)
+                           .setEmoji(`🔎`)
+                           .setValue(`statistics`),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`boop haiii`)
+                           .setEmoji(`🦊`)
+                           .setValue(`boop haiii`)
+                     )
+               )
+         );
+         break;
+      };
+
       case `/minesweeper`: {
          components.splice(1, 4,
             new Discord.ActionRowBuilder()
@@ -262,6 +284,13 @@ export default async (interaction, firestore) => {
                         🇺🇸 "super rare america™️": \`${statistics?.rare || 0}\`
                         🇺🇸 "even more rarer america™️™️": \`${statistics?.rarer || 0}\`
                         🇺🇸 "bri'ish": \`${statistics?.british || 0}\`
+                     `);
+
+               case `/boop haiii`:
+                  return new Discord.EmbedBuilder()
+                     .setColor(colours.flooded_area)
+                     .setDescription(strip`
+                        🦊 boop haiii: \`${statistics || 0}\`
                      `);
 
                case `/minesweeper`:
@@ -447,6 +476,16 @@ export default async (interaction, firestore) => {
                         )
                         .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
                };
+
+
+            case `/boop haiii`:
+               return Object.entries(data)
+                  .map(([ userId, userData ]) =>
+                     ({
+                        [userId]: userData
+                     })
+                  )
+                  .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
 
 
             case `/minesweeper`:

@@ -76,6 +76,16 @@ export default async (interaction, firestore) => {
             };
 
 
+         case `/boop haiii`:
+            return Object.entries(data)
+               .map(([ userId, userData ]) =>
+                  ({
+                     [userId]: userData
+                  })
+               )
+               .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+
+
          case `/minesweeper`:
             switch (value) {
                case `games`:
