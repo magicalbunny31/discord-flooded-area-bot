@@ -68,5 +68,5 @@ export default async (client, firestore) => {
 
 
    // log to console once everything is done
-   console.log(`Flooded Area 🌊 is ready~`);
+   console.log(`Area Communities Bot 🌊 is ready~`);
 };
