@@ -44,13 +44,15 @@ export default async (interaction, firestore) => {
 
 
    // embeds
+   const imageName = partId.split(` `).join(`_`);
+
    const embeds = [
       new Discord.EmbedBuilder()
          .setColor(colours.flooded_area)
          .setAuthor({
             name: part.name
          })
-         .setThumbnail(`attachment://${partId}.png`)
+         .setThumbnail(`attachment://${imageName}.png`)
          .setDescription(`*${part[`flavour-text`]}*`)
          .addFields({
             name: `❓ what is it?`,
@@ -85,12 +87,12 @@ export default async (interaction, firestore) => {
    return await interaction.editReply({
       embeds,
 
-      files: (await fs.readdir(`./assets/parts`)).find(file => file === `${partId}.png`)
+      files: (await fs.readdir(`./assets/parts`)).find(file => file === `${imageName}.png`)
          ? [
             new Discord.AttachmentBuilder()
-               .setFile(`./assets/parts/${partId}.png`)
-               .setName(`${partId}.png`)
-               .setDescription(partId)
+               .setFile(`./assets/parts/${imageName}.png`)
+               .setName(`${imageName}.png`)
+               .setDescription(imageName)
          ]
          : []
    });
