@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import { FieldValue } from "@google-cloud/firestore";
 
-import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, noop, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ButtonInteraction} interaction
@@ -615,6 +615,22 @@ export default async (interaction, firestore) => {
             await firestore.collection(`currency`).doc(giveItemTo).update(receivingPayload);
          } catch {
             await firestore.collection(`currency`).doc(giveItemTo).set(receivingPayload);
+         };
+
+
+         // message the member about this
+         try {
+            const user = await interaction.client.users.fetch(giveItemTo);
+            await user.send({
+               content: strip`
+                  ${emojis.bun_paw_wave} **${interaction.user} gave you 1 \`${itemToGive}\`!**
+                  > you can view your items with ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`currency`, interaction.client.application.id)}~
+               `
+            });
+
+         } catch {
+            // uh uh uh uh uh uh that didn't work uhh
+            noop;
          };
 
 
