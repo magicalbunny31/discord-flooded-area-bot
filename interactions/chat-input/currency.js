@@ -14,9 +14,7 @@ import { colours, emojis } from "@magicalbunny31/awesome-utility-stuff";
  */
 export default async (interaction, firestore) => {
    // defer the interaction
-   await interaction.deferReply({
-      ephemeral: true
-   });
+   await interaction.deferReply();
 
 
    // get this user's currency stuffs in the database

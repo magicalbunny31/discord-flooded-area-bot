@@ -26,9 +26,7 @@ export default async (interaction, firestore) => {
 
 
    // defer the interaction
-   await interaction.deferReply({
-      ephemeral: true
-   });
+   await interaction.deferReply();
 
 
    // get notes

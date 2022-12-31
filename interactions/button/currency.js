@@ -26,23 +26,32 @@ export default async (interaction, firestore) => {
 
 
    // "defer" the interaction
-   const disabledComponents = components.map(actionRow =>
-      actionRow.components.map(component => !component.disabled)
-   );
 
-   for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
-      for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
-         if (disabledComponent)
-            components[actionRowIndex].components[componentIndex].data.disabled = true;
+   // update the message if this is the same command user as the select menu booper (or if the message is ephemeral)
+   if (interaction.user.id === interaction.message.interaction?.user.id || !interaction.message.interaction) {
+      const disabledComponents = components.map(actionRow =>
+         actionRow.components.map(component => !component.disabled)
+      );
 
-   await interaction.update({
-      components
-   });
+      for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
+         for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
+            if (disabledComponent)
+               components[actionRowIndex].components[componentIndex].data.disabled = true;
 
-   for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
-      for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
-         if (disabledComponent)
-            components[actionRowIndex].components[componentIndex].data.disabled = false;
+      await interaction.update({
+         components
+      });
+
+      for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
+         for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
+            if (disabledComponent)
+               components[actionRowIndex].components[componentIndex].data.disabled = false;
+
+   } else
+      // this isn't the same person who used the command: create a new reply to the interaction
+      await interaction.deferReply({
+         ephemeral: true
+      });
 
 
    // restore the "deferred" option's emoji
