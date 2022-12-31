@@ -155,6 +155,33 @@ export default async (interaction, firestore) => {
          break;
       };
 
+      case `/currency`: {
+         const { "shop-items": shopItems } = (await firestore.collection(`command`).doc(`currency`).get()).data();
+         components.splice(1, 4,
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.StringSelectMenuBuilder()
+                     .setCustomId(`leaderboard:/currency:menu`)
+                     .setPlaceholder(`select a subcategory..`)
+                     .setOptions(
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`view a specific user's statistics..`)
+                           .setEmoji(`🔎`)
+                           .setValue(`statistics`),
+                        ...shopItems
+                           .filter(shopItem => !shopItem.role)
+                           .map(shopItem =>
+                              new Discord.StringSelectMenuOptionBuilder()
+                                 .setLabel(`most "${shopItem.name}"s`)
+                                 .setEmoji(shopItem.emoji)
+                                 .setValue(shopItem.name)
+                           )
+                     )
+               )
+         );
+         break;
+      };
+
       case `/minesweeper`: {
          components.splice(1, 4,
             new Discord.ActionRowBuilder()
@@ -278,7 +305,7 @@ export default async (interaction, firestore) => {
       // get these statistics
       const database = firestore.collection(`leaderboard-statistics`).doc(category.slice(1));
       const data = (await database.get()).data();
-      const statistics = data[value.id];
+      const statistics = data?.[value.id];
 
 
       // embeds
@@ -305,6 +332,19 @@ export default async (interaction, firestore) => {
                      .setDescription(strip`
                         🦊 boop haiii: \`${statistics || 0}\`
                      `);
+
+               case `/currency`: {
+                  const { "shop-items": shopItems } = (await firestore.collection(`command`).doc(`currency`).get()).data();
+                  const { items } = (await firestore.collection(`currency`).doc(value.id).get()).data();
+                  return new Discord.EmbedBuilder()
+                     .setColor(colours.flooded_area)
+                     .setDescription(
+                        shopItems
+                           .filter(shopItem => !shopItem.role)
+                           .map(shopItem => `${shopItem.emoji} ${shopItem.name}: \`${items.filter(item => item.name === shopItem.name).length}\``)
+                           .join(`\n`)
+                     );
+               };
 
                case `/minesweeper`:
                   return new Discord.EmbedBuilder()
@@ -466,7 +506,7 @@ export default async (interaction, firestore) => {
 
 
       // the array of formatted data
-      let formattedData = (() => {
+      let formattedData = await (async () => {
          switch (category) {
             case `/america`:
                switch (value) {
@@ -499,6 +539,26 @@ export default async (interaction, firestore) => {
                      })
                   )
                   .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+
+
+            case `/currency`: {
+               const data = await firestore.collection(`currency`).listDocuments();
+               return (
+                  await Promise.all(
+                     data
+                        .map(async document => {
+                           const { items } = (await document.get()).data();
+                           return items && items.filter(item => item.name === value).length
+                              ? ({
+                                 [document.id]: items.filter(item => item.name === value).length
+                              })
+                              : null;
+                        })
+                  )
+               )
+                  .filter(Boolean)
+                  .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+            };
 
 
             case `/minesweeper`:

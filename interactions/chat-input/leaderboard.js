@@ -36,6 +36,10 @@ export default async (interaction, firestore) => {
                      .setEmoji(emojis.flooded_area)
                      .setValue(`/boop haiii`),
                   new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`/currency`)
+                     .setEmoji(emojis.flooded_area)
+                     .setValue(`/currency`),
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`/minesweeper`)
                      .setEmoji(emojis.flooded_area)
                      .setValue(`/minesweeper`),

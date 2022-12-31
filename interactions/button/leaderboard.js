@@ -69,7 +69,7 @@ export default async (interaction, firestore) => {
 
 
    // the array of formatted data
-   let formattedData = (() => {
+   let formattedData = await (async () => {
       switch (category) {
          case `/america`:
             switch (value) {
@@ -104,6 +104,26 @@ export default async (interaction, firestore) => {
                .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
 
 
+         case `/currency`: {
+            const data = await firestore.collection(`currency`).listDocuments();
+            return await (
+               await Promise.all(
+                  data
+                     .map(async document => {
+                        const { items } = (await document.get()).data();
+                        return items && items.filter(item => item.name === value).length
+                           ? ({
+                              [document.id]: items.filter(item => item.name === value).length
+                           })
+                           : null;
+                     })
+               )
+            )
+               .filter(Boolean)
+               .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+         };
+
+
          case `/minesweeper`:
             switch (value) {
                case `games`:
@@ -119,7 +139,7 @@ export default async (interaction, firestore) => {
                   return Object.entries(data)
                      .map(([ userId, userData ]) =>
                         ({
-                           [userId]: Math.max(...userData.map(({ time }) => time)) / 1000
+                           [userId]: Math.min(...userData.map(({ time }) => time)) / 1000
                         })
                      )
                      .sort((a, b) => Object.values(a)[0] - Object.values(b)[0]);
