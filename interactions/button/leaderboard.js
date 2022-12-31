@@ -24,25 +24,43 @@ export default async (interaction, firestore) => {
    const userIsInGuild = async userId => !!await tryOrUndefined(interaction.guild.members.fetch(userId));
 
 
+   // set the booped button's emoji into a deferred state
+   const components = interaction.message.components;
+
+   const actionRowIndex = components.flat().findIndex(({ components }) => components.find(component => component.customId === interaction.customId));
+   const buttonIndex = components[actionRowIndex].components.findIndex(component => component.customId === interaction.customId);
+
+   const boopedButtonEmoji = components[actionRowIndex].components[buttonIndex].emoji;
+
+   Object.assign(components[actionRowIndex].components[buttonIndex].data, {
+      emoji: Discord.parseEmoji(emojis.loading)
+   });
+
+
    // "defer" the interaction
-   const disabledComponents = interaction.message.components.map(actionRow =>
+   const disabledComponents = components.map(actionRow =>
       actionRow.components.map(component => !component.disabled)
    );
 
    for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
       for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
          if (disabledComponent)
-            interaction.message.components[actionRowIndex].components[componentIndex].data.disabled = true;
+            components[actionRowIndex].components[componentIndex].data.disabled = true;
 
    await interaction.update({
-      content: emojis.loading,
-      components: interaction.message.components
+      components
    });
 
    for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
       for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
          if (disabledComponent)
-            interaction.message.components[actionRowIndex].components[componentIndex].data.disabled = false;
+            components[actionRowIndex].components[componentIndex].data.disabled = false;
+
+
+   // restore the "deferred" option's emoji
+   Object.assign(components[actionRowIndex].components[buttonIndex].data, {
+      emoji: boopedButtonEmoji
+   });
 
 
    // get these statistics
@@ -228,7 +246,6 @@ export default async (interaction, firestore) => {
 
    // edit the interaction's original reply
    return await interaction.editReply({
-      content: null,
       embeds: interaction.message.embeds,
       components: interaction.message.components
    });

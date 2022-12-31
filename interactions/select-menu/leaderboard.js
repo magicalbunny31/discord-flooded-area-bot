@@ -36,14 +36,21 @@ export default async (interaction, firestore) => {
    // set the selected value(s) as default in its select menu
    const components = interaction.message.components;
 
+   let selectMenuIndex, selectedValuesIndexes, selectedValueEmoji;
+
    if (interaction.isStringSelectMenu()) {
-      const selectMenuIndex = components.flat().findIndex(({ components }) => components[0].customId === interaction.customId);
-      const selectedValuesIndexes = components[selectMenuIndex].components[0].options.findIndex(option => option.value === value);
+      selectMenuIndex = components.flat().findIndex(({ components }) => components[0].customId === interaction.customId);
+      selectedValuesIndexes = components[selectMenuIndex].components[0].options.findIndex(option => option.value === value);
+
+      selectedValueEmoji = components[selectMenuIndex].components[0].options[selectedValuesIndexes].emoji;
 
       for (const option of components[selectMenuIndex].components[0].options)
          option.default = false;
 
-      components[selectMenuIndex].components[0].options[selectedValuesIndexes].default = true;
+      Object.assign(components[selectMenuIndex].components[0].options[selectedValuesIndexes], {
+         emoji: Discord.parseEmoji(emojis.loading),
+         default: true
+      });
    };
 
 
@@ -58,7 +65,6 @@ export default async (interaction, firestore) => {
             components[actionRowIndex].components[componentIndex].data.disabled = true;
 
    await interaction.update({
-      content: emojis.loading,
       components
    });
 
@@ -66,6 +72,13 @@ export default async (interaction, firestore) => {
       for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
          if (disabledComponent)
             components[actionRowIndex].components[componentIndex].data.disabled = false;
+
+
+   // restore the "deferred" option's emoji
+   if (interaction.isStringSelectMenu())
+      Object.assign(components[selectMenuIndex].components[0].options[selectedValuesIndexes], {
+         emoji: selectedValueEmoji
+      });
 
 
    // create the category's select menu
@@ -627,7 +640,6 @@ export default async (interaction, firestore) => {
 
    // edit the interaction's original reply
    return await interaction.editReply({
-      content: null,
       embeds,
       components
    });
