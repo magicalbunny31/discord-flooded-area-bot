@@ -118,8 +118,7 @@ export default async (interaction, firestore) => {
    // create an InteractionCollector
    const game = interaction.channel.createMessageComponentCollector({
       filter: i => i.customId.startsWith(interaction.id),
-      // time: createCollectorExpirationTime(interaction.createdTimestamp)
-      time: 10000
+      time: createCollectorExpirationTime(interaction.createdTimestamp)
    });
 
 
