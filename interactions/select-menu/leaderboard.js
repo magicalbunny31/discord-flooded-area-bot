@@ -315,7 +315,7 @@ export default async (interaction, firestore) => {
       // get these statistics
       const database = firestore.collection(`leaderboard-statistics`).doc(category.slice(1));
       const data = (await database.get()).data();
-      const statistics = data?.[value.id];
+      const statistics = data?.[value];
 
 
       // embeds
@@ -345,7 +345,7 @@ export default async (interaction, firestore) => {
 
                case `/currency`: {
                   const { "shop-items": shopItems } = (await firestore.collection(`command`).doc(`currency`).get()).data();
-                  const { items } = (await firestore.collection(`currency`).doc(value.id).get()).data();
+                  const { items } = (await firestore.collection(`currency`).doc(value).get()).data();
                   return new Discord.EmbedBuilder()
                      .setColor(colours.flooded_area)
                      .setDescription(
