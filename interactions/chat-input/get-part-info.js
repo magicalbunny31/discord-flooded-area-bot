@@ -56,7 +56,10 @@ export default async (interaction, firestore) => {
          .setDescription(`*${part[`flavour-text`]}*`)
          .addFields({
             name: `❓ what is it?`,
-            value: `>>> ${part.description}`,
+            value: `>>> ${
+               part.description
+                  .replaceAll(`\\n`, `\n`) // as a pre-caution, replace malformed newlines
+            }`,
             inline: false
          }, {
             name: `${
