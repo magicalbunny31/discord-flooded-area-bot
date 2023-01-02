@@ -614,6 +614,8 @@ export default async (interaction, firestore) => {
 
          const noItemToGive = !items.find(item => item.name === itemToGive);
 
+         const member = await interaction.guild.members.fetch(value);
+
 
          // user no longer has this item to give
          if (noItemToGive) {
@@ -644,7 +646,7 @@ export default async (interaction, firestore) => {
 
 
          // can't give item to themselves
-         if (value.id === interaction.user.id)
+         if (member.id === interaction.user.id)
             return await interaction.editReply({
                embeds: [
                   new Discord.EmbedBuilder()
@@ -659,7 +661,7 @@ export default async (interaction, firestore) => {
 
 
          // can't give items to bots
-         if (value.bot)
+         if (member.user.bot)
             return await interaction.editReply({
                embeds: [
                   new Discord.EmbedBuilder()
@@ -679,7 +681,7 @@ export default async (interaction, firestore) => {
             .length
             || 0;
 
-         const theyHave = (await firestore.collection(`currency`).doc(value.id).get())
+         const theyHave = (await firestore.collection(`currency`).doc(member.id).get())
             .data()
             ?.items
             ?.filter(item => item.name === itemToGive)
@@ -690,8 +692,8 @@ export default async (interaction, firestore) => {
             new Discord.EmbedBuilder()
                .setColor(colours.flooded_area)
                .setDescription(strip`
-                  📥 **give \`1\` \`${itemToGive}\` to ${value}?**
-                  > ${value} has \`${theyHave}\` ${theyHave === 1 ? `\`${itemToGive}\`` : `\`${itemToGive}\`s`}
+                  📥 **give \`1\` \`${itemToGive}\` to ${member}?**
+                  > ${member} has \`${theyHave}\` ${theyHave === 1 ? `\`${itemToGive}\`` : `\`${itemToGive}\`s`}
                `)
                .setFooter({
                   text: `🎒 you have ${youHave.toLocaleString()} of this item`
@@ -709,7 +711,7 @@ export default async (interaction, firestore) => {
                      .setEmoji(`🔙`)
                      .setStyle(Discord.ButtonStyle.Primary),
                   new Discord.ButtonBuilder()
-                     .setCustomId(`currency:give-item:${value.id}`)
+                     .setCustomId(`currency:give-item:${member.id}`)
                      .setLabel(`give item`)
                      .setEmoji(`📥`)
                      .setStyle(Discord.ButtonStyle.Success)
