@@ -53,7 +53,7 @@ export default async (interaction, firestore) => {
             name: part.name
          })
          .setThumbnail(`attachment://${imageName}.png`)
-         .setDescription(`*${part[`flavour-text`]}*`)
+         .setDescription(`*${Discord.escapeMarkdown(part[`flavour-text`])}*`)
          .addFields({
             name: `❓ what is it?`,
             value: `>>> ${
