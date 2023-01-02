@@ -287,7 +287,7 @@ export default async (interaction, firestore) => {
 
             // give an item to another member
             case `give-item`: {
-               // user has no items to sell
+               // user has no items to give
                if (!items.length) {
                   // remove any other components
                   components.splice(1, 4);
