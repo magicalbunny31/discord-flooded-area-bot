@@ -573,6 +573,28 @@ export default async (interaction, firestore) => {
          const noItemToGive = !items.find(item => item.name === value);
 
 
+         // embeds
+         const embeds = [
+            new Discord.EmbedBuilder()
+               .setColor(colours.flooded_area)
+               .setAuthor({
+                  name: interaction.user.tag,
+                  iconURL: (interaction.member || interaction.user).displayAvatarURL()
+               })
+               .setFields({
+                  name: `🎒 your items`,
+                  value: items
+                     .filter((item, index, self) =>
+                        index === self.findIndex(value => item.name === value.name)
+                     )
+                     .sort((a, b) => a.name.localeCompare(b.name))
+                     .map(item => `\`${items.filter(i => i.name === item.name).length.toLocaleString()}\` ${item.emoji} ${item.name}`)
+                     .join(`\n`),
+                  inline: true
+               })
+         ];
+
+
          // components
          components.splice(2, 3,
             new Discord.ActionRowBuilder()
@@ -602,6 +624,7 @@ export default async (interaction, firestore) => {
 
          // edit the interaction's original reply
          return await interaction.editReply({
+            embeds,
             components
          });
       };
