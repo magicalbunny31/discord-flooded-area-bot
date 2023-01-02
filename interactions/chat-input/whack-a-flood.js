@@ -6,7 +6,7 @@ export const data = new Discord.SlashCommandBuilder()
 import Discord from "discord.js";
 import dayjs from "dayjs";
 
-import { emojis, autoArray, createCollectorExpirationTime, number, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, autoArray, createCollectorExpirationTime, number, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ChatInputCommandInteraction} interaction
@@ -243,6 +243,22 @@ export default async (interaction, firestore) => {
 
    // game has ended
    whack.on(`end`, async (collected, reason) => {
+      // the game timed out
+      if (reason === `time`) {
+         // game ended
+         hasEnded = true;
+
+         // edit the interaction's original reply
+         return await interaction.editReply({
+            embeds: [
+               new Discord.EmbedBuilder()
+                  .setColor(colours.red)
+                  .setDescription(`**\`this game has timed out..\`** ${emojis.rip}`)
+            ],
+            components: getComponents(true)
+         });
+      };
+
       // add this score to the database
       const database = firestore.collection(`leaderboard-statistics`).doc(`whack-a-flood`);
 

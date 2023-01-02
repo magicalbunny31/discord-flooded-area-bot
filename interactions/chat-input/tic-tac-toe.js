@@ -351,6 +351,13 @@ export default async (interaction, firestore) => {
          if (reason === `game ended`)
             return;
 
+         // embeds
+         embeds.push(
+            new Discord.EmbedBuilder()
+               .setColor(colours.red)
+               .setDescription(`**\`this game has timed out..\`** ${emojis.rip}`)
+         );
+
          // disable the components
          for (const actionRow of components)
             for (const component of actionRow.components)
@@ -358,10 +365,7 @@ export default async (interaction, firestore) => {
 
          // edit the interaction's original reply
          return await interaction.editReply({
-            content: strip`
-               ${emojis.naught} ${playerNoughts} \`vs\` ${playerCrosses} ${emojis.no}
-               > **\`this game has timed out..\`** ${emojis.rip}
-            `,
+            content: `${emojis.naught} ${playerNoughts} \`vs\` ${playerCrosses} ${emojis.no}`,
             embeds,
             components,
             allowedMentions: {

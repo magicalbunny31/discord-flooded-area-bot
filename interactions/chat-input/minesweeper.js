@@ -118,7 +118,8 @@ export default async (interaction, firestore) => {
    // create an InteractionCollector
    const game = interaction.channel.createMessageComponentCollector({
       filter: i => i.customId.startsWith(interaction.id),
-      time: createCollectorExpirationTime(interaction.createdTimestamp)
+      // time: createCollectorExpirationTime(interaction.createdTimestamp)
+      time: 10000
    });
 
 
@@ -127,12 +128,12 @@ export default async (interaction, firestore) => {
    let complete = false;
    let startTime;
 
-   const recreateComponents = () => board.map((row, rowIndex) =>
+   const recreateComponents = (disabled = false) => board.map((row, rowIndex) =>
       new Discord.ActionRowBuilder()
          .setComponents(
             row.map((grid, gridIndex) =>
                new Discord.ButtonBuilder({
-                  label: thisGrid.isBomb
+                  label: thisGrid?.isBomb
                      ? !grid.isBomb && !grid.bombsAround
                         ? `\u200b`
                         : null
@@ -141,7 +142,7 @@ export default async (interaction, firestore) => {
                            ? `\u200b`
                            : null
                         : `\u200b`,
-                  emoji: thisGrid.isBomb
+                  emoji: thisGrid?.isBomb
                      ? grid.revealed && grid.isBomb
                         ? `💥`
                         : grid.emoji
@@ -161,7 +162,7 @@ export default async (interaction, firestore) => {
                               : `Primary`
                      ]
                   )
-                  .setDisabled(thisGrid.isBomb || grid.revealed || complete)
+                  .setDisabled(thisGrid?.isBomb || grid.revealed || complete || disabled)
             )
          )
    );
@@ -276,6 +277,17 @@ export default async (interaction, firestore) => {
 
    // game has ended
    game.on(`end`, async (collected, buttonInteraction) => {
+      // the game timed out
+      if (buttonInteraction === `time`)
+         return await interaction.editReply({
+            embeds: [
+               new Discord.EmbedBuilder()
+                  .setColor(colours.red)
+                  .setDescription(`**\`this game has timed out..\`** ${emojis.rip}`)
+            ],
+            components: recreateComponents(true)
+         });
+
       // time elapsed for this game
       const endTime   = Date.now();
       const timeElapsed = endTime - startTime;
