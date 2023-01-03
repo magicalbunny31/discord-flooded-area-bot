@@ -148,8 +148,15 @@ export default async (interaction, firestore) => {
                   provided by Mutant Standard emoji
                   mutant.tech
                `,
-               iconURL: `https://mutant.tech/-rsc/favicons/fv-228.png`
+               iconURL: `attachment://mutant_standard.png`
             })
+      ];
+
+
+      // files (for the embed)
+      const files = [
+         new Discord.AttachmentBuilder()
+            .setFile(`./assets/mutant_standard.png`)
       ];
 
 
@@ -219,6 +226,7 @@ export default async (interaction, firestore) => {
          content: `${emojis.naught} ${playerNoughts} \`vs\` ${playerCrosses} ${emojis.no}`,
          embeds,
          components,
+         files,
          allowedMentions: {
             users: [ getPlayerFrom(turn).id ]
          }
