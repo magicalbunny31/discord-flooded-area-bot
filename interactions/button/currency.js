@@ -595,7 +595,7 @@ export default async (interaction, firestore) => {
 
 
          // add this item to the user receiving the item
-         const { items: receivingUserItems = [] } = (await firestore.collection(`currency`).doc(giveItemTo).get()).data();
+         const { items: receivingUserItems = [] } = (await firestore.collection(`currency`).doc(giveItemTo).get()).data() || {};
 
          receivingUserItems.push(
             items.find(item => item.name === itemToGive)
