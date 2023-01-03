@@ -25,14 +25,12 @@ export default async (interaction, firestore) => {
 
 
    // set the booped button's emoji into a deferred state
-   const components = interaction.message.components;
+   const actionRowIndex = interaction.message.components.flat().findIndex(({ components }) => components.find(component => component.customId === interaction.customId));
+   const buttonIndex = interaction.message.components[actionRowIndex].components.findIndex(component => component.customId === interaction.customId);
 
-   const actionRowIndex = components.flat().findIndex(({ components }) => components.find(component => component.customId === interaction.customId));
-   const buttonIndex = components[actionRowIndex].components.findIndex(component => component.customId === interaction.customId);
+   const boopedButtonEmoji = interaction.message.components[actionRowIndex].components[buttonIndex].emoji;
 
-   const boopedButtonEmoji = components[actionRowIndex].components[buttonIndex].emoji;
-
-   Object.assign(components[actionRowIndex].components[buttonIndex].data, {
+   Object.assign(interaction.message.components[actionRowIndex].components[buttonIndex].data, {
       emoji: Discord.parseEmoji(emojis.loading)
    });
 
@@ -41,23 +39,23 @@ export default async (interaction, firestore) => {
 
    // update the message if this is the same command user as the select menu booper (or if the message is ephemeral)
    if (interaction.user.id === interaction.message.interaction?.user.id || !interaction.message.interaction) {
-      const disabledComponents = components.map(actionRow =>
+      const disabledComponents = interaction.message.components.map(actionRow =>
          actionRow.components.map(component => !component.disabled)
       );
 
       for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
          for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
             if (disabledComponent)
-               components[actionRowIndex].components[componentIndex].data.disabled = true;
+               interaction.message.components[actionRowIndex].components[componentIndex].data.disabled = true;
 
       await interaction.update({
-         components
+         components: interaction.message.components
       });
 
       for (const [ actionRowIndex, disabledComponentsActionRow ] of disabledComponents.entries())
          for (const [ componentIndex, disabledComponent ] of disabledComponentsActionRow.entries())
             if (disabledComponent)
-               components[actionRowIndex].components[componentIndex].data.disabled = false;
+               interaction.message.components[actionRowIndex].components[componentIndex].data.disabled = false;
 
    } else
       // this isn't the same person who used the command: create a new reply to the interaction
@@ -67,7 +65,7 @@ export default async (interaction, firestore) => {
 
 
    // restore the "deferred" option's emoji
-   Object.assign(components[actionRowIndex].components[buttonIndex].data, {
+   Object.assign(interaction.message.components[actionRowIndex].components[buttonIndex].data, {
       emoji: boopedButtonEmoji
    });
 
