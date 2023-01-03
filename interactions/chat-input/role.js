@@ -263,6 +263,32 @@ export const data = new Discord.SlashCommandBuilder()
                .setDescription(`🔎 view the suggestions banned role`)
          )
    )
+   .addSubcommandGroup(
+      new Discord.SlashCommandSubcommandGroupBuilder()
+         .setName(`votekick-protection`)
+         .setDescription(`⛔ manage the /votekick protection role`)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`remove`)
+               .setDescription(`🚫 remove the /votekick protection role`)
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`set`)
+               .setDescription(`➕ set the /votekick protection role`)
+               .addRoleOption(
+                  new Discord.SlashCommandRoleOption()
+                     .setName(`role`)
+                     .setDescription(`📛 the /votekick protection role`)
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`view`)
+               .setDescription(`🔎 view the /votekick protection role`)
+         )
+   )
    .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageChannels);
 
 export const guildOnly = true;

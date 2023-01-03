@@ -57,6 +57,24 @@ export default async (interaction, firestore) => {
    };
 
 
+   // trying to votekick someone with votekick protection
+   const { role: votekickProtectionRole } = (await firestore.collection(`role`).doc(`votekick-protection`).get()).data();
+
+   if (member.roles.cache.has(votekickProtectionRole))
+      return await interaction.reply({
+         content: strip`
+            📣 **${interaction.user} is a nerd**
+            > ${user} has ${Discord.roleMention(votekickProtectionRole)}!
+         `,
+         allowedMentions: {
+            roles: [],
+            users: [
+               interaction.user.id
+            ]
+         }
+      });
+
+
    // votekick is on cooldown
    const database = firestore.collection(`command`).doc(`votekick`);
    const { "cooldown-expires-at": cooldownExpiresAt, "votekick-in-progress-at": votekickInProgressAt, "current-votekick-message": currentVotekickMessage } = (await database.get()).data() || {};
