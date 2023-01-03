@@ -115,21 +115,43 @@ export default async (interaction, firestore) => {
 
          case `/currency`: {
             const data = await firestore.collection(`currency`).listDocuments();
-            return await (
-               await Promise.all(
-                  data
-                     .map(async document => {
-                        const { items } = (await document.get()).data();
-                        return items && items.filter(item => item.name === value).length
-                           ? ({
-                              [document.id]: items.filter(item => item.name === value).length
+
+            switch (value) {
+               case `net-worth`:
+                  return (
+                     await Promise.all(
+                        data
+                           .map(async document => {
+                              const { "shop-items": shopItems } = (await firestore.collection(`command`).doc(`currency`).get()).data();
+                              const { coins = 0, items = [] } = (await document.get()).data();
+                              return ({
+                                 [document.id]: coins + sum(
+                                    items.map(item => shopItems.find(shopItem => shopItem.name === item.name)?.price || 0)
+                                 )
+                              });
                            })
-                           : null;
-                     })
-               )
-            )
-               .filter(Boolean)
-               .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+                     )
+                  )
+                     .filter(Boolean)
+                     .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+
+               default:
+                  return (
+                     await Promise.all(
+                        data
+                           .map(async document => {
+                              const { items } = (await document.get()).data();
+                              return items && items.filter(item => item.name === value).length
+                                 ? ({
+                                    [document.id]: items.filter(item => item.name === value).length
+                                 })
+                                 : null;
+                           })
+                     )
+                  )
+                     .filter(Boolean)
+                     .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+            };
          };
 
 
