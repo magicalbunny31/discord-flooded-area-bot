@@ -1,0 +1,29 @@
+{
+   "name": "flooded-area-moderation",
+   "version": "1.0.0",
+   "description": "in-game moderation for Flooded Area Community 🌊",
+   "main": "index.js",
+   "type": "module",
+   "scripts": {
+      "start": "node index.js"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/magicalbunny31/discord-area-communities-bot.git"
+   },
+   "author": "magicalbunny31",
+   "bugs": {
+      "url": "https://github.com/magicalbunny31/discord-area-communities-bot/issues"
+   },
+   "dependencies": {
+      "@magicalbunny31/awesome-utility-stuff": "github:magicalbunny31/awesome-utility-stuff",
+      "dayjs": "^1.11.7",
+      "discord.js": "^14.7.1",
+      "dotenv": "^16.0.3",
+      "fastify": "^4.11.0",
+      "node-fetch": "^3.3.0"
+   },
+   "engines": {
+      "node": "16.14.2"
+   }
+}

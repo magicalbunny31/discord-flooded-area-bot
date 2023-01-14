@@ -1,0 +1,9 @@
+# 💻 vscode
+.vscode/
+*.code-workspace
+
+# 📜 .env
+.env
+
+# 📦 dependencies
+node_modules/
