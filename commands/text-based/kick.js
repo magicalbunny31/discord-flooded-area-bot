@@ -173,7 +173,9 @@ export default async (message, args) => {
 
          guild:   message.guild.id,   // this guild's id
          channel: message.channel.id, // this channel's id
-         message: commandReply.id     // this message's id
+         message: commandReply.id,    // this message's id
+
+         moderator: message.author.id // the id of the moderator who sent this kick
       });
 
 

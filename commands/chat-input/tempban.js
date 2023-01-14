@@ -155,9 +155,11 @@ export default async interaction => {
       username:    userByUserId?.name,        // player (username)     to ban
       avatarBust:  avatarBustByUserId,        // image url to player's avatar bust
 
-      guild:   interaction.guild.id,               // this guild's id
-      channel: interaction.channel.id,             // this channel's id
-      message: (await interaction.fetchReply()).id // this message's id
+      guild:   interaction.guild.id,                // this guild's id
+      channel: interaction.channel.id,              // this channel's id
+      message: (await interaction.fetchReply()).id, // this message's id
+
+      moderator: interaction.user.id // the id of the moderator who sent this ban
    });
 
 
