@@ -33,6 +33,7 @@ export default async (interaction, firestore) => {
          [ `she-her`,          rolesStrings.includes(`she-her`)          ],
          [ `they-them`,        rolesStrings.includes(`they-them`)        ],
          [ `other-pronouns`,   rolesStrings.includes(`other-pronouns`)   ],
+         [ `any-pronouns`,     rolesStrings.includes(`any-pronouns`)     ],
          [ `ask-for-pronouns`, rolesStrings.includes(`ask-for-pronouns`) ]
       ]
    }[type];

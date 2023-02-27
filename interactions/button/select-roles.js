@@ -105,6 +105,11 @@ export default async (interaction, firestore) => {
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(pronounRoles[`other-pronouns`])),
                   new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`any pronouns`)
+                     .setValue(`any-pronouns`)
+                     .setEmoji(emojis.mention)
+                     .setDefault(roles.has(pronounRoles[`any-pronouns`])),
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`ask for pronouns`)
                      .setValue(`ask-for-pronouns`)
                      .setEmoji(emojis.mention)
