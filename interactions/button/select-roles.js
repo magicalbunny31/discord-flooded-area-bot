@@ -116,7 +116,7 @@ export default async (interaction, firestore) => {
                      .setDefault(roles.has(pronounRoles[`ask-for-pronouns`]))
                )
                .setMinValues(0)
-               .setMaxValues(5)
+               .setMaxValues(6)
          ),
 
       new Discord.ActionRowBuilder()
