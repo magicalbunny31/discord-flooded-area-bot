@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * @param {Discord.StringSelectMenuInteraction} interaction
+ * @param {Discord.AnySelectMenuInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
