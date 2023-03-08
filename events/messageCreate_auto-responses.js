@@ -3,6 +3,9 @@ export const once = false;
 
 
 import Discord from "discord.js";
+
+import pkg from "../package.json" assert { type: "json" };
+
 import { choice } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
@@ -20,9 +23,33 @@ export default async (message, firestore) => {
       return;
 
 
+   // 8ball
+   if (message.content.startsWith(`<@${message.client.user.id}> 8ball`)) {
+      await message.channel.sendTyping();
+
+      const response = await fetch(`https://eightballapi.com/api`, {
+         headers: {
+            "Accept": `application/json`,
+            "User-Agent": `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`
+         }
+      });
+
+      if (!response.ok)
+         return;
+
+      const { reading } = await response.json();
+      return await message.reply({
+         content: `🎱 \`${reading}\``,
+         allowedMentions: {
+            repliedUser: false
+         }
+      });
+   };
+
+
    // "@Area Communities Bot 🌊"
-   if (message.content.includes(`<@983126054619189370>`))
-      await message.reply({
+   if (message.content.includes(`<@${message.client.user.id}>`))
+      return await message.reply({
          content: `what`,
          allowedMentions: {
             repliedUser: false
@@ -31,8 +58,8 @@ export default async (message, firestore) => {
 
 
    // "is <insert thing here> a cutie"
-   else if (/is .* a cutie/.test(message.content)) // <-- best feature yet (~a cutie)
-      await message.reply({
+   if (/is .* a cutie/.test(message.content)) // <-- best feature yet (~a cutie)
+      return await message.reply({
          content: choice([ `yes`, `no` ]),
          allowedMentions: {
             repliedUser: false
