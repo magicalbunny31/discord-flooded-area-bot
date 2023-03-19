@@ -13,7 +13,7 @@ export const data = new Discord.SlashCommandBuilder()
          .setName(`reason`)
          .setDescription(`Reason for this player's kick`)
          .setMaxLength(1024)
-         .setRequired(true)
+         .setRequired(false)
    )
    .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)
    .setDMPermission(false);
@@ -109,7 +109,7 @@ export default async interaction => {
                url: `https://www.roblox.com/users/${playerId}/profile`,
                iconURL: avatarBustByUserId
             })
-            .setDescription(`**\`reason\`** : \`${reason}\``)
+            .setDescription(`**\`reason\`** : ${reason ? `\`${reason}\`` : ``}`)
       ]
    });
 

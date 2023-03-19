@@ -22,7 +22,7 @@ export const data = new Discord.SlashCommandBuilder()
          .setName(`reason`)
          .setDescription(`Reason for this player's ban`)
          .setMaxLength(1024)
-         .setRequired(true)
+         .setRequired(false)
    )
    .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageGuild)
    .setDMPermission(false);
@@ -44,7 +44,7 @@ export default async interaction => {
    // options
    const playerId           = interaction.options.getInteger(`player`);
    const timeToBanInSeconds = interaction.options.getInteger(`time`);
-   const reason             = interaction.options.getString (`reason`);
+   const reason             = interaction.options.getString (`reason`) || ``;
 
 
    // defer the interaction
@@ -137,7 +137,7 @@ export default async interaction => {
                iconURL: avatarBustByUserId
             })
             .setDescription(strip`
-               **\`reason\`** : \`${reason}\`
+               **\`reason\`** : ${reason ? `\`${reason}\`` : ``}
                **\`length\`** : \`${formattedDuration}\`
             `)
       ]

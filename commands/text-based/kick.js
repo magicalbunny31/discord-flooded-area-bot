@@ -25,11 +25,8 @@ export default async (message, args) => {
    if (!player || !reason)
       return await message.reply({
          content: strip`
-            🗯️ **Missing ${
-               [ ...!player ? [ `__\`player\`__` ] : [], `__\`reason\`__` ]
-                  .join(` and `)
-            } ${!player && reason ? `arguments` : `argument`}.**
-            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}kick** ${!player ? `__\`player\`__` : `\`player\``} __\`reason\`__
+            🗯️ **Missing __\`player\`__ argument.**
+            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}kick** __\`player\`__ (\`reason\`)
          `,
          allowedMentions: {
             repliedUser: false
@@ -147,7 +144,7 @@ export default async (message, args) => {
                   url: `https://www.roblox.com/users/${player.id}/profile`,
                   iconURL: avatarBustByUserId
                })
-               .setDescription(`**\`reason\`** : \`${reason}\``)
+               .setDescription(`**\`reason\`** : ${reason ? `\`${reason}\`` : ``}`)
          ],
          components: [],
          allowedMentions: {

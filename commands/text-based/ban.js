@@ -22,14 +22,11 @@ export default async (message, args) => {
    const prefixRegexp = new RegExp(`^(<@!?${message.client.user.id}>|;)\\s*`);
    const [ _, matchedPrefix ] = message.content.toLowerCase().match(prefixRegexp);
 
-   if (!player || !reason)
+   if (!player)
       return await message.reply({
          content: strip`
-            🗯️ **Missing ${
-               [ ...!player ? [ `__\`player\`__` ] : [], `__\`reason\`__` ]
-                  .join(` and `)
-            } ${!player && reason ? `arguments` : `argument`}.**
-            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}ban** ${!player ? `__\`player\`__` : `\`player\``} __\`reason\`__
+            🗯️ **Missing __\`player\`__ argument.**
+            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}ban** __\`player\`__ (\`reason\`)
          `,
          allowedMentions: {
             repliedUser: false
@@ -147,7 +144,7 @@ export default async (message, args) => {
                   url: `https://www.roblox.com/users/${player.id}/profile`,
                   iconURL: avatarBustByUserId
                })
-               .setDescription(`**\`reason\`** : \`${reason}\``)
+               .setDescription(`**\`reason\`** : ${reason ? `\`${reason}\`` : ``}`)
          ],
          components: [],
          allowedMentions: {

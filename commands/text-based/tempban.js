@@ -15,7 +15,7 @@ export default async (message, args) => {
    // command arguments
    const [ player, timeToBanInSeconds ] = args;
    const reason = message.content
-      .slice(message.content.indexOf(timeToBanInSeconds) + timeToBanInSeconds?.length)
+      .slice((message.content.indexOf(` ${timeToBanInSeconds} `) !== -1 ? message.content.indexOf(` ${timeToBanInSeconds} `) : message.content.lastIndexOf(` ${timeToBanInSeconds}`)) + (timeToBanInSeconds?.length || 0) + 2)
       .trim();
 
 
@@ -23,15 +23,14 @@ export default async (message, args) => {
    const prefixRegexp = new RegExp(`^(<@!?${message.client.user.id}>|;)\\s*`);
    const [ _, matchedPrefix ] = message.content.toLowerCase().match(prefixRegexp);
 
-   if (!player || !timeToBanInSeconds || !reason)
+   if (!player || !timeToBanInSeconds)
       return await message.reply({
          content: strip`
             🗯️ **Missing ${
                (() => {
                   const list = [
                      ...!player             ? [ `__\`player\`__` ] : [],
-                     ...!timeToBanInSeconds ? [ `__\`time\`__` ]   : [],
-                     `__\`reason\`__`
+                     ...!timeToBanInSeconds ? [ `__\`time\`__` ]   : []
                   ];
                   return list
                      .concat(
@@ -39,8 +38,8 @@ export default async (message, args) => {
                      )
                      .join(`, `);
                })()
-            } ${(!player || !timeToBanInSeconds) && reason ? `arguments` : `argument`}.**
-            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}tempban** ${!player ? `__\`player\`__` : `\`player\``} ${!timeToBanInSeconds ? `__\`time\`__` : `\`time\``} __\`reason\`__
+            } ${(!player && !timeToBanInSeconds) ? `arguments` : `argument`}.**
+            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}tempban** ${!player ? `__\`player\`__` : `\`player\``} ${!timeToBanInSeconds ? `__\`time\`__` : `\`time\``} (\`reason\`)
          `,
          allowedMentions: {
             repliedUser: false
@@ -214,7 +213,7 @@ export default async (message, args) => {
                   iconURL: avatarBustByUserId
                })
                .setDescription(strip`
-                  **\`reason\`** : \`${reason}\`
+                  **\`reason\`** : ${reason ? `\`${reason}\`` : ``}
                   **\`length\`** : \`${formattedDuration}\`
                `)
          ],
