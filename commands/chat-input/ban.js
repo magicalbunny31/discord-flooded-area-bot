@@ -45,7 +45,7 @@ export default async interaction => {
 
 
    // get a user by user id
-   // https://users.roblox.com/docs#!/Users/get_v1_users_userId
+   // https://users.roblox.com/docs
    const userByUserId = await (async () => {
       // send a http get request
       const response = await fetch(`https://users.roblox.com/v1/users/${playerId}`, {

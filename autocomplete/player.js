@@ -22,7 +22,7 @@ export default async interaction => {
 
 
    // get a user by user id
-   // https://users.roblox.com/docs#!/Users/get_v1_users_userId
+   // https://users.roblox.com/docs
    const userByUserId = await (async () => {
       // this isn't a user id, can't get a player
       if (!+input)
@@ -47,7 +47,7 @@ export default async interaction => {
 
 
    // search for players with the input
-   // https://users.roblox.com/docs#!/UserSearch/get_v1_users_search
+   // https://users.roblox.com/docs
    const searchUsers = await (async () => {
       // send a http get request
       const response = await fetch(`https://users.roblox.com/v1/users/search?keyword=${input}&limit=25`, {
