@@ -30,7 +30,7 @@ export default async client => {
 
 
    // register application commands in the GUILD defined in .env
-   // await client.application.commands.set(data, process.env.GUILD);
+   await client.application.commands.set(data, process.env.GUILD);
 
 
    // bot is ready
