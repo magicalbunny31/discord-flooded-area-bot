@@ -42,7 +42,7 @@ export default async (message, args) => {
 
 
    // get a user by user id
-   // https://users.roblox.com/docs#!/Users/get_v1_users_userId
+   // https://users.roblox.com/docs#!/Users
    const userByUserId = async id => {
       // this isn't a user id, can't get a player
       if (!+id)
@@ -67,23 +67,28 @@ export default async (message, args) => {
 
 
    // get a user id by username
-   // https://api.roblox.com/users/get-by-username?username=UserName
+   // https://users.roblox.com/docs#!/Users
    const userIdByUsername = await (async () => {
-      // send a http get request
-      const response = await fetch(`https://api.roblox.com/users/get-by-username?username=${player}`, {
+      // send a http post request
+      const response = await fetch(`https://users.roblox.com/v1/usernames/users`, {
+         method: `POST`,
          headers: {
             "Accept": `application/json`,
+            "Content-Type": `application/json`,
             "User-Agent": userAgent
-         }
+         },
+         body: JSON.stringify({
+            usernames: [ player ]
+         })
       });
 
-      // response is good, return its data (or undefined if no user exists with this username)
-      if (response.ok)
-         return (await response.json())[`Id`];
-
       // something went wrong, return nothing
-      else
+      if (!response.ok)
          return null;
+
+      // response is good, return its data (or undefined if no user exists with this username)
+      const { data } = await response.json();
+      return data[0]?.id;
    })();
 
 
