@@ -62,7 +62,7 @@ for (const file of events) {
 await client.login(process.env.TOKEN);
 
 
-// webserver stuff
+// web server stuff
 import fastify from "fastify";
 const server = fastify();
 
@@ -133,7 +133,7 @@ server.get(`/`, async (request, response) => {
 
 // start the web server
 server.listen({ port: process.env.PORT }, async (error, address) => {
-   // an error occurred with the webserver
+   // an error occurred with the web server
    if (error) {
       server.log.error(error);
       process.exit(1);
@@ -141,7 +141,7 @@ server.listen({ port: process.env.PORT }, async (error, address) => {
 
 
    // web server is ready
-   console.log(`💻 webserver listening on ${address}`);
+   console.log(`💻 web server listening on ${address}`);
 });
 
 
