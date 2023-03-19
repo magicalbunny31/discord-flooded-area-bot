@@ -3,6 +3,35 @@ export const data = new Discord.SlashCommandBuilder()
    .setDescription(`🔑 set some channels in the database for commands to work`)
    .addSubcommandGroup(
       new Discord.SlashCommandSubcommandGroupBuilder()
+         .setName(`report-a-player`)
+         .setDescription(`💬 manage the report a player channel`)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`remove`)
+               .setDescription(`🚫 remove the report a player channel`)
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`set`)
+               .setDescription(`➕ set the report a player channel`)
+               .addChannelOption(
+                  new Discord.SlashCommandChannelOption()
+                     .setName(`channel`)
+                     .setDescription(`#️⃣ the report a player channel`)
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildText
+                     )
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`view`)
+               .setDescription(`🔎 view the report a player channel`)
+         )
+   )
+   .addSubcommandGroup(
+      new Discord.SlashCommandSubcommandGroupBuilder()
          .setName(`suggestions`)
          .setDescription(`💬 manage the suggestion channels`)
          .addSubcommand(
@@ -66,6 +95,35 @@ export const data = new Discord.SlashCommandBuilder()
             new Discord.SlashCommandSubcommandBuilder()
                .setName(`view`)
                .setDescription(`🔎 view the suggestion channels`)
+         )
+   )
+   .addSubcommandGroup(
+      new Discord.SlashCommandSubcommandGroupBuilder()
+         .setName(`ticket-logs`)
+         .setDescription(`💬 manage the ticket logs channel`)
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`remove`)
+               .setDescription(`🚫 remove the ticket logs channel`)
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`set`)
+               .setDescription(`➕ set the ticket logs channel`)
+               .addChannelOption(
+                  new Discord.SlashCommandChannelOption()
+                     .setName(`channel`)
+                     .setDescription(`#️⃣ the ticket logs channel`)
+                     .addChannelTypes(
+                        Discord.ChannelType.GuildText
+                     )
+                     .setRequired(true)
+               )
+         )
+         .addSubcommand(
+            new Discord.SlashCommandSubcommandBuilder()
+               .setName(`view`)
+               .setDescription(`🔎 view the ticket logs channel`)
          )
    )
    .setDefaultMemberPermissions(Discord.PermissionFlagsBits.ManageChannels);
@@ -139,10 +197,10 @@ export default async (interaction, firestore) => {
          // set the channel in the database
          Object.entries((await database.get()).data() || {}).length
             ? await database.update({
-               [type || `role`]: role.id
+               [type || `channel`]: channel.id
             })
             : await database.set({
-               [type || `role`]: role.id
+               [type || `channel`]: channel.id
             });
 
          // edit the deferred interaction
