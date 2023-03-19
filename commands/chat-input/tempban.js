@@ -130,9 +130,7 @@ export default async interaction => {
          new Discord.EmbedBuilder()
             .setColor(colours.flooded_area)
             .setAuthor({
-               name: userByUserId
-                  ? `${userByUserId.displayName} (@${userByUserId.name})`
-                  : `A Player with the id \`${playerId}\``,
+               name: `${userByUserId.displayName} (@${userByUserId.name})`,
                url: `https://www.roblox.com/users/${playerId}/profile`,
                iconURL: avatarBustByUserId
             })

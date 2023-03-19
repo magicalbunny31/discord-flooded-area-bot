@@ -135,9 +135,7 @@ export default async (message, args) => {
             new Discord.EmbedBuilder()
                .setColor(colours.flooded_area)
                .setAuthor({
-                  name: userByUserId
-                     ? `${player.displayName} (@${player.name})`
-                     : `A Player with the id \`${player.id}\``,
+                  name: `${player.displayName} (@${player.name})`,
                   url: `https://www.roblox.com/users/${player.id}/profile`,
                   iconURL: avatarBustByUserId
                })
