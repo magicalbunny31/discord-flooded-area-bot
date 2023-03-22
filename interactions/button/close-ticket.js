@@ -63,7 +63,8 @@ export default async (interaction, firestore) => {
 
    if (!interaction.member.roles.cache.has(moderationTeam))
       return await interaction.reply({
-         content: `❌ Only a member of the ${Discord.roleMention(moderationTeam)} can close this ticket.`
+         content: `❌ Only a member of the ${Discord.roleMention(moderationTeam)} can close this ticket.`,
+         ephemeral: true
       });
 
 
