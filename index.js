@@ -7,7 +7,7 @@
 
 
 // some awesome utilities that i pretty much need or else my code will suck 🐾
-import { colours } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, noop } from "@magicalbunny31/awesome-utility-stuff";
 
 
 // filesystem
@@ -117,12 +117,21 @@ server.get(`/`, async (request, response) => {
 
       try {
          // try to edit the message
-         return await message.edit(payload);
+         await message.edit(payload);
 
       } catch {
-         // stop here
-         return;
+         // break
+         noop;
       };
+
+
+      // respond to the request
+      return await response
+         .status(200)
+         .send({
+            code: 200,
+            message: `OK`
+         });
    };
 
 
