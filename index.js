@@ -128,10 +128,7 @@ server.get(`/`, async (request, response) => {
       // respond to the request
       return await response
          .status(200)
-         .send({
-            code: 200,
-            message: `OK`
-         });
+         .send(`200 OK`);
    };
 
 
