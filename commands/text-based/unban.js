@@ -1,3 +1,6 @@
+export const names = [ `unban`, `ub`, `revoke-ban`, `revokeban`, `rb`, `pardon` ];
+
+
 import Discord from "discord.js";
 import fetch from "node-fetch";
 
@@ -8,9 +11,10 @@ import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Message} message
+ * @param {string} commandName
  * @param {string[]} args
  */
-export default async (message, args) => {
+export default async (message, commandName, args) => {
    // command arguments
    const [ player ] = args;
 
@@ -23,7 +27,7 @@ export default async (message, args) => {
       return await message.reply({
          content: strip`
             🗯️ **Missing __\`player\`__ argument.**
-            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}unban** __\`player\`__
+            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}${commandName}** __\`player\`__
          `,
          allowedMentions: {
             repliedUser: false

@@ -1,3 +1,6 @@
+export const names = [ `tempban`, `tb`, `exile` ];
+
+
 import Discord from "discord.js";
 import fetch from "node-fetch";
 import dayjs from "dayjs";
@@ -9,9 +12,10 @@ import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Message} message
+ * @param {string} commandName
  * @param {string[]} args
  */
-export default async (message, args) => {
+export default async (message, commandName, args) => {
    // command arguments
    const [ player, timeToBanInSeconds ] = args;
    const reason = message.content
@@ -39,7 +43,7 @@ export default async (message, args) => {
                      .join(`, `);
                })()
             } ${(!player && !timeToBanInSeconds) ? `arguments` : `argument`}.**
-            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}tempban** ${!player ? `__\`player\`__` : `\`player\``} ${!timeToBanInSeconds ? `__\`time\`__` : `\`time\``} (\`reason\`)
+            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}${commandName}** ${!player ? `__\`player\`__` : `\`player\``} ${!timeToBanInSeconds ? `__\`time\`__` : `\`time\``} (\`reason\`)
          `,
          allowedMentions: {
             repliedUser: false

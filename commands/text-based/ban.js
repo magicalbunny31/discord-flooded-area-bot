@@ -1,3 +1,6 @@
+export const names = [ `ban`, `b`, `kill`, `murder` ];
+
+
 import Discord from "discord.js";
 import fetch from "node-fetch";
 
@@ -8,9 +11,10 @@ import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Message} message
+ * @param {string} commandName
  * @param {string[]} args
  */
-export default async (message, args) => {
+export default async (message, commandName, args) => {
    // command arguments
    const [ player ] = args;
    const reason = message.content
@@ -26,7 +30,7 @@ export default async (message, args) => {
       return await message.reply({
          content: strip`
             🗯️ **Missing __\`player\`__ argument.**
-            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}ban** __\`player\`__ (\`reason\`)
+            > **${matchedPrefix === `;` ? matchedPrefix : `${matchedPrefix} `}${commandName}** __\`player\`__ (\`reason\`)
          `,
          allowedMentions: {
             repliedUser: false

@@ -36,16 +36,21 @@ export default async message => {
    const [ commandName, ...args ] = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 
 
-   // this isn't a command
-   const commands = (await fs.readdir(`./commands/text-based`))
-      .map(file => file.split(`.`).shift());
-
-   if (!commands.includes(commandName))
-      return;
-
-
    // get this command's file
-   const file = await import(`../commands/text-based/${commandName}.js`);
+   const file = await (async () => {
+      const commands = await fs.readdir(`./commands/text-based`);
+      for (const command of commands) {
+
+         const file = await import(`../commands/text-based/${command}`);
+         if (file.names.includes(commandName))
+            return file;
+      };
+   })();
+
+
+   // this isn't a command
+   if (!file)
+      return;
 
 
    try {
@@ -53,7 +58,7 @@ export default async message => {
       await message.channel.sendTyping();
 
       // run the command for this file
-      return await file.default(message, args);
+      return await file.default(message, commandName, args);
 
    } catch (error) {
       // log this error
