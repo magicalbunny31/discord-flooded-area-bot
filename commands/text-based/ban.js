@@ -1,4 +1,4 @@
-export const names = [ `ban`, `b`, `kill`, `murder` ];
+export const names = [ `ban`, `b`, `kill`, `murder`, `smite`, `get` ];
 
 
 import Discord from "discord.js";

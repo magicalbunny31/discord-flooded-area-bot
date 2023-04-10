@@ -1,4 +1,4 @@
-export const names = [ `unban`, `ub`, `revoke-ban`, `revokeban`, `rb`, `pardon` ];
+export const names = [ `unban`, `ub`, `revoke-ban`, `revokeban`, `rb`, `pardon`, `revive` ];
 
 
 import Discord from "discord.js";
