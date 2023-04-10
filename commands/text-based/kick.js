@@ -26,7 +26,7 @@ export default async (message, commandName, args) => {
    const prefixRegexp = new RegExp(`^(<@!?${message.client.user.id}>|;)\\s*`);
    const [ _, matchedPrefix ] = message.content.toLowerCase().match(prefixRegexp);
 
-   if (!player || !reason)
+   if (!player)
       return await message.reply({
          content: strip`
             🗯️ **Missing __\`player\`__ argument.**
