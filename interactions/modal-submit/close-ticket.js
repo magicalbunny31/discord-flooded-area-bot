@@ -29,8 +29,7 @@ export default async (interaction, firestore) => {
 
 
    // log this ticket
-   const { channel: ticketLogsId } = (await firestore.collection(`channel`).doc(`ticket-logs`).get()).data();
-   const ticketLogs = await interaction.guild.channels.fetch(ticketLogsId);
+   const ticketLogs = await interaction.guild.channels.fetch(process.env.CHANNEL_TICKET_LOGS);
 
    const { id: ticketId, openedAt, reportingUser } = (await firestore.collection(`report-a-player`).doc(interaction.channel.id).get()).data();
 

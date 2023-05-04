@@ -56,8 +56,7 @@ export default async (interaction, firestore) => {
    // get notes
    let { notes = [] } = (await firestore.collection(`command`).doc(`notes`).get()).data();
 
-   const { role: moderationTeam } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
-   const isStaff = interaction.member.roles.cache.has(moderationTeam);
+   const isStaff = interaction.member.roles.cache.has(process.env.ROLE_MODERATION_TEAM);
 
 
    // remove notes

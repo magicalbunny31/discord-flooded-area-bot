@@ -23,9 +23,7 @@ export default async (interaction, firestore) => {
 
 
       // this is not a thread with the parent as the report a player channel
-      const { channel: reportAPlayer } = (await firestore.collection(`channel`).doc(`report-a-player`).get()).data();
-
-      if (!interaction.channel.isThread() || interaction.channel.parent?.id !== reportAPlayer) {
+      if (!interaction.channel.isThread() || interaction.channel.parent?.id !== process.env.CHANNEL_REPORT_A_PLAYER) {
          await interaction.deleteReply();
          await interaction.message.delete();
          return;
@@ -34,9 +32,8 @@ export default async (interaction, firestore) => {
 
       // this is not the reporting user (and not a staff member too)
       const { reportingUser } = (await firestore.collection(`report-a-player`).doc(interaction.channel.id).get()).data();
-      const { role: moderationTeam } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
 
-      if (!interaction.member.roles.cache.has(moderationTeam) && interaction.user.id !== reportingUser)
+      if (!interaction.member.roles.cache.has(process.env.ROLE_MODERATION_TEAM) && interaction.user.id !== reportingUser)
          return await interaction.editReply({
             content: `❌ Only the user who created this ticket (${Discord.userMention(reportingUser)}) can close this ticket.`
          });
@@ -59,11 +56,9 @@ export default async (interaction, firestore) => {
 
 
    // only staff can close an open ticket
-   const { role: moderationTeam } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
-
-   if (!interaction.member.roles.cache.has(moderationTeam))
+   if (!interaction.member.roles.cache.has(process.env.ROLE_MODERATION_TEAM))
       return await interaction.reply({
-         content: `❌ Only a member of the ${Discord.roleMention(moderationTeam)} can close this ticket.`,
+         content: `❌ Only a member of the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} can close this ticket.`,
          ephemeral: true
       });
 

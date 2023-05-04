@@ -17,14 +17,8 @@ export default async (interaction, firestore) => {
    });
 
 
-   // roles
-   const { role: moderationTeam } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
-
-
    // this is not a thread with the parent as the report a player channel
-   const { channel: reportAPlayer } = (await firestore.collection(`channel`).doc(`report-a-player`).get()).data();
-
-   if (!interaction.channel.isThread() || interaction.channel.parent?.id !== reportAPlayer) {
+   if (!interaction.channel.isThread() || interaction.channel.parent?.id !== process.env.CHANNEL_REPORT_A_PLAYER) {
       await interaction.deleteReply();
       await interaction.message.delete();
       return;
@@ -99,8 +93,8 @@ export default async (interaction, firestore) => {
                         > There are no chat logs, so do not rely on that!
                         > Examples of sufficient evidence are images or video clips: just text is __not__ valid evidence.
                         > You can also use third-party sites that embed content as images/videos (like ${Discord.hyperlink(`Streamable`, `https://streamable.com`)}, ${Discord.hyperlink(`Medal`, `https://medal.tv`)}, ${Discord.hyperlink(`ShareX`, `https://getsharex.com`)}...).
-                        > Without evidence, the ${Discord.roleMention(moderationTeam)} may not be able to do anything.
-                        > If you constantly create reports without sufficient evidence, you may be blocked from ${Discord.channelMention(reportAPlayer)}.
+                        > Without evidence, the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} may not be able to do anything.
+                        > If you constantly create reports without sufficient evidence, you may be blocked from ${Discord.channelMention(process.env.CHANNEL_REPORT_A_PLAYER)}.
                      `
                   })
             ]
@@ -183,7 +177,7 @@ export default async (interaction, firestore) => {
 
       while (true) {
          const members = (await interaction.guild.members.list({ limit: 1000, ...fetchedMembers.length ? { after: fetchedMembers.at(-1).id } : {} }))
-            .filter(member => member.roles.cache.has(moderationTeam));
+            .filter(member => member.roles.cache.has(process.env.ROLE_MODERATION_TEAM));
 
          fetchedMembers.push(...members.values());
 
@@ -238,7 +232,7 @@ export default async (interaction, firestore) => {
    return await interaction.editReply({
       content: strip`
          ✅ ${interaction.channel} opened!
-         👥 Users in this ticket with the ${Discord.roleMention(moderationTeam)} role will be able to handle this report.
+         👥 Users in this ticket with the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} role will be able to handle this report.
       `,
       allowedMentions: {
          parse: []

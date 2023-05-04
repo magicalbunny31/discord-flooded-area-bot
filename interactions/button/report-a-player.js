@@ -19,7 +19,6 @@ export default async (interaction, firestore) => {
 
    // this user is blacklisted
    const { members } = (await firestore.collection(`report-a-player`).doc(`blacklist`).get()).data();
-   const { role: moderationTeam } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
 
    if (members.includes(interaction.user.id))
       return await interaction.editReply({
@@ -30,7 +29,7 @@ export default async (interaction, firestore) => {
                   name: `🚫 Cannot open menu`,
                   value: strip`
                      > You have been blacklisted from ${interaction.channel}.
-                     > If you believe this is in error, contact a member of the ${Discord.roleMention(moderationTeam)}.
+                     > If you believe this is in error, contact a member of the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)}.
                   `
                })
          ],

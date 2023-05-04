@@ -185,10 +185,6 @@ export default async (interaction, firestore) => {
    embeds[1].setDescription(null);
 
 
-   // roles
-   const { role: moderationTeam } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
-
-
    // create this report if it doesn't exist already
    if (!reportData)
       await firestore.collection(`temporary-stuff`).doc(id).set({
@@ -363,7 +359,7 @@ export default async (interaction, firestore) => {
             .spliceFields(1, 1, {
                name: `👤 Are you sure your Roblox username is not needed?`,
                value: strip`
-                  > Inputting a username may help the ${Discord.roleMention(moderationTeam)} with your report.
+                  > Inputting a username may help the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} with your report.
                `
             });
 
@@ -479,7 +475,7 @@ export default async (interaction, firestore) => {
             .spliceFields(1, 1, {
                name: `👥 Are you sure you forgot their username?`,
                value: strip`
-                  > It helps the ${Discord.roleMention(moderationTeam)} know exactly who you're reporting!
+                  > It helps the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} know exactly who you're reporting!
                   > If you roughly remember a part of their username or display name, you can input it when you create the ticket.
                `
             });
@@ -670,7 +666,7 @@ export default async (interaction, firestore) => {
                .spliceFields(1, 1, {
                   name: `💬 Are you sure you forgot the reason?`,
                   value: strip`
-                     > It helps the ${Discord.roleMention(moderationTeam)} know how you got votekicked!
+                     > It helps the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} know how you got votekicked!
                      > If you have a screenshot or other evidence, feel free to send them in the ticket instead.
                   `
                });
@@ -702,7 +698,7 @@ export default async (interaction, firestore) => {
                .spliceFields(1, 1, {
                   name: `❌ You must input a reason`,
                   value: strip`
-                     > Without a reason, the ${Discord.roleMention(moderationTeam)} will not know why you are reporting this player.
+                     > Without a reason, the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} will not know why you are reporting this player.
                   `
                });
 
@@ -879,7 +875,7 @@ export default async (interaction, firestore) => {
                name: `💻 Please send your debug info, too!`,
                value: strip`
                   > Take a screenshot of the information displayed: below is an example.
-                  > This helps the ${Discord.roleMention(moderationTeam)} join your server, in case they need to.
+                  > This helps the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)} join your server, in case they need to.
                   > It can be found at \`Settings\` ➡️ \`Other\` ➡️ \`"Click to show debug info"\`.
                `
             })

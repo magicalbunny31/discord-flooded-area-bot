@@ -58,13 +58,11 @@ export default async (interaction, firestore) => {
 
 
    // trying to votekick someone with votekick protection
-   const { role: votekickProtectionRole } = (await firestore.collection(`role`).doc(`votekick-protection`).get()).data();
-
-   if (member.roles.cache.has(votekickProtectionRole))
+   if (member.roles.cache.has(process.env.ROLE_VOTEKICK_PROTECTION))
       return await interaction.reply({
          content: strip`
             📣 **${interaction.user} is a nerd**
-            > ${user} has ${Discord.roleMention(votekickProtectionRole)}!
+            > ${user} has ${Discord.roleMention(process.env.ROLE_VOTEKICK_PROTECTION)}!
          `,
          allowedMentions: {
             roles: [],
@@ -119,10 +117,6 @@ export default async (interaction, firestore) => {
    const voters = autoArray(requiredVotes, () => `> 👥 ${emojis.loading}`);
 
 
-   // get the /votekick pings roles
-   const { "votekick-pings": votekickPings } = (await firestore.collection(`role`).doc(`mention-roles`).get()).data();
-
-
    // components
    const components = [
       new Discord.ActionRowBuilder()
@@ -140,7 +134,7 @@ export default async (interaction, firestore) => {
 
    await interaction.reply({
       content: strip`
-         📢 **${Discord.roleMention(votekickPings)}**
+         📢 **${Discord.roleMention(process.env.ROLE_VOTEKICK_PINGS)}**
          📣 **a votekick on ${user} has been started by ${interaction.user} for the reason of \`${reason}\`**
          📰 **${requiredVotes} votes are needed ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}**
          ${voters.join(`\n`)}
@@ -148,7 +142,7 @@ export default async (interaction, firestore) => {
       components,
       allowedMentions: {
          users: [ user.id ],
-         roles: [ votekickPings ]
+         roles: [ process.env.ROLE_VOTEKICK_PINGS ]
       }
    });
 
@@ -194,14 +188,14 @@ export default async (interaction, firestore) => {
       // update the interaction
       await buttonInteraction.update({
          content: strip`
-            📢 **${Discord.roleMention(votekickPings)}**
+            📢 **${Discord.roleMention(process.env.ROLE_VOTEKICK_PINGS)}**
             📣 **a votekick on ${user} has been started by ${interaction.user} for the reason of \`${reason}\`**
             📰 **${requiredVotes} votes are needed ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}**
             ${voters.join(`\n`)}
          `,
          allowedMentions: {
             users: [ user.id ],
-            roles: [ votekickPings ]
+            roles: [ process.env.ROLE_VOTEKICK_PINGS ]
          }
       });
 

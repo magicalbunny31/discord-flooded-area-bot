@@ -11,10 +11,6 @@ export default async (interaction, firestore) => {
    const [ reason ] = interaction.values;
 
 
-   // roles
-   const { role } = (await firestore.collection(`role`).doc(`moderation-team`).get()).data();
-
-
    // reason descriptions
    const descriptions = {
       "false-votekicking": strip`
@@ -69,7 +65,7 @@ export default async (interaction, firestore) => {
       `,
       "other": strip`
          > Anything else you'd like to report?
-         > Maybe you have an urgent query for the ${Discord.roleMention(role)}.
+         > Maybe you have an urgent query for the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)}.
       `
    };
 

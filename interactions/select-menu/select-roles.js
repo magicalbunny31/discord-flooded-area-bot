@@ -40,8 +40,27 @@ export default async (interaction, firestore) => {
 
 
    // get role ids to set for this member
-   const database = firestore.collection(`role`);
-   const roles = (await database.doc(type).get()).data();
+   const roles = {
+      "mention-roles": {
+         "looking-for-group":         process.env.ROLE_LOOKING_FOR_GROUP,
+         "events":                    process.env.ROLE_EVENTS,
+         "polls":                     process.env.ROLE_POLLS,
+         "updates-sneak-peaks":       process.env.ROLE_UPDATES_SNEAK_PEAKS,
+         "giveaways":                 process.env.ROLE_GIVEAWAYS,
+         "challenges":                process.env.ROLE_CHALLENGES,
+         "doruk's-exceptional-pings": process.env.ROLE_DORUKS_EXCEPTIONAL_PINGS,
+         "votekick-pings":            process.env.ROLE_VOTEKICK_PINGS
+      },
+
+      "pronoun-roles": {
+         "he-him":           process.env.ROLE_HE_HIM,
+         "she-her":          process.env.ROLE_SHE_HER,
+         "they-them":        process.env.ROLE_THEY_THEM,
+         "other-pronouns":   process.env.ROLE_OTHER_PRONOUNS,
+         "any-pronouns":     process.env.ROLE_ANY_PRONOUNS,
+         "ask-for-pronouns": process.env.ROLE_ASK_FOR_PRONOUNS
+      }
+   }[type];
 
 
    // give the member these roles

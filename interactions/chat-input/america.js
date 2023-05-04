@@ -32,8 +32,7 @@ export default async (interaction, firestore) => {
 
 
    // this person is a closet furry (they have the role @bunny was here)
-   const { role } = (await firestore.collection(`role`).doc(`bunny-was-here`).get()).data();
-   const hasRole = interaction.member.roles.cache.has(role);
+   const hasRole = interaction.member.roles.cache.has(process.env.ROLE_BUNNY_WAS_HERE);
 
    if (hasRole)
       america = choice([

@@ -15,10 +15,7 @@ import { emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
  */
 export default async (interaction, firestore) => {
    // this command wasn't run in the suggestion channels
-   const rawChannelIds = (await firestore.collection(`channel`).doc(`suggestions`).get()).data();
-   const channelIds = Object.values(rawChannelIds);
-
-   if (!interaction.channel.parent || !channelIds.includes(interaction.channel.parent.id) || interaction.channel.parent.id === rawChannelIds[`bug-reports`])
+   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(interaction.channel.parent?.id))
       return await interaction.reply({
          content: `you can only use this command in posts in the forum channels for suggestions ${emojis.rip}`,
          ephemeral: true

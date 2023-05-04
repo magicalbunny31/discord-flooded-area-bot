@@ -29,7 +29,7 @@ export default async (messageReaction, user, firestore) => {
 
    // some variables that are guaranteed to exist due to partials
    // https://discord.com/developers/docs/topics/gateway#message-reaction-add
-   const channelId = messageReaction.message.channel.parent.id;
+   const channelId = messageReaction.message.channel.parent?.id;
 
 
    // ignore bot reactions
@@ -38,15 +38,7 @@ export default async (messageReaction, user, firestore) => {
 
 
    // only listen for reactions in the suggestion channels
-   const rawChannelIds = (await firestore.collection(`channel`).doc(`suggestions`).get()).data();
-   const channelIds = Object.values(rawChannelIds);
-
-   if (!channelIds.includes(channelId))
-      return;
-
-
-   // exclude bug report "suggestions"
-   if (channelId === rawChannelIds[`bug-reports`])
+   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(channelId))
       return;
 
 
