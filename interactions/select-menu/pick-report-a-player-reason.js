@@ -38,7 +38,7 @@ export default async (interaction, firestore) => {
       `,
       "toxicity": strip`
          > Toxicity is when a player is constantly bullying or unironically bashing another player.
-         > This includes players who also intentionally try to stat arguments.
+         > This includes players who also intentionally try to start arguments.
          > Regular trash talk, like "L" or "noob", is __not__ included in this rule.
       `,
       "bug-abuse": strip`
