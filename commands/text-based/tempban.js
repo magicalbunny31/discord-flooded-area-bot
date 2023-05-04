@@ -55,7 +55,7 @@ export default async (message, commandName, args) => {
    if (isNaN(+timeToBanInSeconds))
       return await message.reply({
          content: strip`
-            🗯️ **__time__ argument \`${timeToBanInSeconds}\` not a number.**
+            🗯️ **__\`time\`__ argument \`${timeToBanInSeconds}\` not a number.**
             > It must be a natural number consisting of *only* numbers.
          `,
          allowedMentions: {
@@ -68,7 +68,7 @@ export default async (message, commandName, args) => {
    if (BigInt(timeToBanInSeconds) > BigInt(Number.MAX_SAFE_INTEGER))
       return await message.reply({
          content: strip`
-            🗯️ **__time__ argument \`${timeToBanInSeconds}\` too large.**
+            🗯️ **__\`time\`__ argument \`${timeToBanInSeconds}\` too large.**
             > It must be a natural number less than or equal to \`${Number.MAX_SAFE_INTEGER.toLocaleString()}\`.
          `,
          allowedMentions: {
@@ -81,7 +81,7 @@ export default async (message, commandName, args) => {
    if (+timeToBanInSeconds <= 0)
       return await message.reply({
          content: strip`
-            🗯️ **__time__ argument \`${timeToBanInSeconds}\` too small.**
+            🗯️ **__\`time\`__ argument \`${timeToBanInSeconds}\` too small.**
             > It must be a natural number (greater than 0).
          `,
          allowedMentions: {
