@@ -48,7 +48,7 @@ export default async (message, firestore) => {
 
 
    // "@Area Communities Bot 🌊"
-   if (message.content.includes(`<@${message.client.user.id}>`))
+   if (message.content === `<@${message.client.user.id}>`)
       return await message.reply({
          content: `what`,
          allowedMentions: {

@@ -18,8 +18,9 @@
    "dependencies": {
       "@google-cloud/firestore": "^6.3.0",
       "@magicalbunny31/awesome-utility-stuff": "github:magicalbunny31/awesome-utility-stuff",
+      "@magicalbunny31/fennec-utilities": "github:magicalbunny31/fennec-utilities",
       "dayjs": "^1.11.3",
-      "discord.js": "^14.7.1",
+      "discord.js": "^14.10.2",
       "dotenv": "^16.0.1",
       "fuzzysort": "^2.0.1",
       "i18next": "^22.4.12",

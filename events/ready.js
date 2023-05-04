@@ -33,8 +33,19 @@ export default async (client, firestore) => {
 
 
    // statuses
-   setInterval(() => {
-      //? list of statuses
+   setInterval(async () => {
+      // offline-soon or maintenance
+      const fennecStatus = await client.fennec.getStatus();
+      if ([ `offline-soon`, `maintenance` ].includes(fennecStatus))
+         return client.user.setPresence({
+            status: Discord.PresenceUpdateStatus.DoNotDisturb,
+            activities: [{
+               type: Discord.ActivityType.Playing,
+               name: `${fennecStatus === `offline-soon` ? `offline soon~` : `in maintenance!`} 🔧`
+            }]
+         });
+
+      // list of statuses
       const activities = {
          [Discord.ActivityType.Playing]: [
             `Flooded Area 🌊`,
@@ -58,7 +69,7 @@ export default async (client, firestore) => {
       const activityName = choice(activities[activityType]);
 
       client.user.setPresence({
-         status: `online`,
+         status: Discord.PresenceUpdateStatus.Online,
          activities: [{
             type: activityType,
             name: activityName

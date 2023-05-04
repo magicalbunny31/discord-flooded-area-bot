@@ -3,7 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { emojis, sendBotError } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
@@ -23,6 +23,17 @@ export default async (interaction, firestore) => {
    // this file is for ButtonInteractions
    if (!interaction.isButton())
       return;
+
+
+   // this user is in the global blacklist
+   if (interaction.client.blacklist.includes(interaction.user.id))
+      return await interaction.client.fennec.warnBlacklisted(interaction, process.env.SUPPORT_GUILD);
+
+
+   // maintenance
+   if (await interaction.client.fennec.getStatus() === `maintenance`)
+      if (!JSON.parse(process.env.DEVELOPERS.replaceAll(`'`, `"`)).includes(interaction.user.id))
+         return await interaction.client.fennec.warnMaintenance(interaction);
 
 
    // button info
@@ -47,20 +58,18 @@ export default async (interaction, firestore) => {
 
 
    try {
-      // run the button for this file
-      return await file.default(interaction, firestore);
+      // run the file
+      await file.default(interaction, firestore);
 
 
    } catch (error) {
       // an error occurred
-      console.error(error);
+      try {
+         await interaction.client.fennec.respondToInteractionWithError(interaction);
+         return await interaction.client.fennec.sendError(error, Math.floor(interaction.createdTimestamp / 1000), interaction);
 
-      return await sendBotError(
-         interaction,
-         {
-            url: process.env.WEBHOOK_ERRORS
-         },
-         error
-      );
+      } finally {
+         return console.error(error.stack);
+      };
    };
 };

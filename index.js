@@ -7,7 +7,11 @@
 
 
 // some awesome utilities that i pretty much need or else my code will suck 🐾
-import { sendBotError } from "@magicalbunny31/awesome-utility-stuff";
+import { colours } from "@magicalbunny31/awesome-utility-stuff";
+
+
+// utilities for interacting with fennec 💻
+import { Client } from "@magicalbunny31/fennec-utilities";
 
 
 // filesystem
@@ -93,23 +97,37 @@ for (const file of events) {
 };
 
 
-// send errors to an error webhook
-process.on("uncaughtException", async (error, origin) => {
-   await sendBotError(
-      `uncaughtException`,
-      {
-         url: process.env.WEBHOOK_ERRORS
-      },
-      error
-   );
-
-   console.error(error);
-   process.exit();
-});
-
-
 // log in to discord
 await client.login(process.env.TOKEN);
+
+
+// set-up fennec-utilities
+const fennecGuild = await client.guilds.fetch(process.env.GUILD_BOT_LOGS);
+const fennecMember = await fennecGuild.members.fetch(client.user);
+
+client.fennec = new Client({
+   avatarURL: client.user.avatarURL({
+      extension: `png`,
+      size: 4096
+   }),
+   colour: colours.flooded_area,
+   formattedName: fennecMember.displayName,
+   firestore: {
+      clientEmail: process.env.FENNEC_GCP_CLIENT_EMAIL,
+      privateKey:  process.env.FENNEC_GCP_PRIVATE_KEY,
+      projectId:   process.env.FENNEC_GCP_PROJECT_ID
+   },
+   id: process.env.FENNEC_ID,
+   threadId: process.env.FENNEC_THREAD,
+   webhook: {
+      url: process.env.FENNEC_WEBHOOK
+   }
+});
+
+client.fennec.updater(client);
+
+client.blacklist = await client.fennec.getGlobalBlacklist();
+setInterval(async () => client.blacklist = await client.fennec.getGlobalBlacklist(), 3.6e+6);
 
 
 // watch schedules
@@ -120,69 +138,27 @@ for (const file of schedules) {
    const schedule = await import(`./schedules/${file}`);
    const job = scheduleJob(schedule.cron, async () => await schedule.default(client, firestore));
 
-   job.on(`error`, async error =>
-      await sendBotError(
-         `job/${file}`,
-         {
-            url: process.env.WEBHOOK_ERRORS
-         },
-         error
-      )
-   );
+   job.on(`error`, async error => {
+      try {
+         return await client.fennec.sendError(error, Math.floor(Date.now() / 1000), `job/${file}`);
+
+      } finally {
+         console.warn(`error in schedule! see below~`);
+         console.error(error.stack);
+         return process.exit(1);
+      };
+   });
 };
 
 
-// TODO revamp /flooded-area statistics (make it subcommand) to show historical data
+// process events
+process.on("uncaughtException", async (error, origin) => {
+   try {
+      return await client.fennec.sendError(error, Math.floor(Date.now() / 1000), origin);
 
-
-
-
-// import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
-// const guild = await client.guilds.fetch(`977254354589462618`);
-// const channel = await guild.channels.fetch(`977254355319283744`);
-// const thread = await channel.threads.fetch(`1018616540389711953`);
-
-// await thread.send({
-//    embeds: [
-//       new Discord.EmbedBuilder()
-//          .setColor(colours.flooded_area)
-//          .setTitle(`Parts 🧱`)
-//          .setDescription(strip`
-//             **finding it out in the open**
-//             > \`Balloon\` : \\🎈 balloon
-//             > \`Bread\` : \\🍞 bread
-//             > \`Cake\` : \\🍰 cake
-
-//             **crafting or part packs**
-//             > ...
-//          `)
-//          .setFooter({
-//             iconURL: `https://cdn.discordapp.com/emojis/995461994989756526.webp`,
-//             text: `/get-part-info <part>`
-//          }),
-//       new Discord.EmbedBuilder()
-//          .setColor(colours.flooded_area)
-//          .setTitle(`Maps 🗺️`)
-//          .setDescription(strip`
-//             **survival**
-//             > \`Resource Haven\` : \\⛰️ resource haven
-//             > \`Encave\` : \\⛰️ encave
-//             > \`The Silent Hotel\` : \\🏨 the silent hotel
-
-//             **two-team elimination**
-//             > ...
-//          `)
-//          .setFooter({
-//             iconURL: `https://cdn.discordapp.com/emojis/995461994989756526.webp`,
-//             text: `/get-map-info <map>`
-//          })
-//    ]
-// });
-
-
-
-
-
-// await (await (await client.guilds.fetch(`977254354589462618`)).channels.fetch(`1072945802256855170`)).send({
-//    content: ``
-// });
+   } finally {
+      console.warn(`error in uncaught exception! see below~`);
+      console.error(error.stack);
+      return process.exit(1);
+   };
+});
