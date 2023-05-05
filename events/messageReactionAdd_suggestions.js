@@ -27,18 +27,13 @@ export default async (messageReaction, user, firestore) => {
       return;
 
 
-   // some variables that are guaranteed to exist due to partials
-   // https://discord.com/developers/docs/topics/gateway#message-reaction-add
-   const channelId = messageReaction.message.channel.parent?.id;
+   // this post isn't from the suggestion channels
+   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(messageReaction.message.channel.parent?.id))
+      return;
 
 
    // ignore bot reactions
    if (user.bot)
-      return;
-
-
-   // only listen for reactions in the suggestion channels
-   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(channelId))
       return;
 
 
@@ -47,17 +42,14 @@ export default async (messageReaction, user, firestore) => {
    const guild = await tryOrUndefined(messageReaction.client.guilds.fetch(process.env.GUILD_FLOODED_AREA));
    const member = await tryOrUndefined(guild?.members.fetch(user.id));
 
-   const database = firestore.collection(`role`).doc(`suggestions-banned`);
-   const { "role": suggestionsBannedId } = (await database.get()).data() || {};
-
-   if (member?.roles.cache.has(suggestionsBannedId))
-      await tryOrUndefined(messageReaction.users.remove(user.id));
+   if (member?.roles.cache.has(process.env.ROLE_SUGGESTIONS_BANNED))
+      return await tryOrUndefined(messageReaction.users.remove(user.id));
 
 
    // remove the thread's starter message's author's reaction
    const starterMessage = await tryOrUndefined(messageReaction.message.channel.fetchStarterMessage());
    if (starterMessage?.author.id === user.id)
-      await tryOrUndefined(messageReaction.users.remove(user.id));
+      return await tryOrUndefined(messageReaction.users.remove(user.id));
 
 
    // the post was made by a bot, don't edit its tags
@@ -74,7 +66,7 @@ export default async (messageReaction, user, firestore) => {
       ?.count
       || 0;
 
-   const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
+   const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `Popular`).id;
 
    if (highestMessageReactionCount >= 10 && !messageReaction.message.channel.appliedTags.includes(popularTag))
       await messageReaction.message.channel.setAppliedTags([ ...messageReaction.message.channel.appliedTags, popularTag ]);

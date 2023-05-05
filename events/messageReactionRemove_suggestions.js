@@ -27,18 +27,13 @@ export default async (messageReaction, user, firestore) => {
       return;
 
 
-   // some variables that are guaranteed to exist due to partials
-   // https://discord.com/developers/docs/topics/gateway#message-reaction-add
-   const channelId = messageReaction.message.channel.parent?.id;
+   // this post isn't from the suggestion channels
+   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(messageReaction.message.channel.parent?.id))
+      return;
 
 
    // ignore bot reactions
    if (user.bot)
-      return;
-
-
-   // only listen for reactions in the suggestion channels
-   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(channelId))
       return;
 
 
@@ -56,7 +51,7 @@ export default async (messageReaction, user, firestore) => {
       .at(-1)
       ?.count;
 
-   const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `[ POPULAR ]`).id;
+   const popularTag = messageReaction.message.channel.parent.availableTags.find(tag => tag.name === `Popular`).id;
    const popularTagIndex = messageReaction.message.channel.appliedTags.findIndex(id => id === popularTag);
 
    if (popularTagIndex > 0)
