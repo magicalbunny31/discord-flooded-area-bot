@@ -19,7 +19,7 @@ export default async (interaction, firestore) => {
       "looking-for-group":         process.env.ROLE_LOOKING_FOR_GROUP,
       "events":                    process.env.ROLE_EVENTS,
       "polls":                     process.env.ROLE_POLLS,
-      "updates-sneak-peaks":       process.env.ROLE_UPDATES_SNEAK_PEAKS,
+      "updates-sneak-peeks":       process.env.ROLE_UPDATES_SNEAK_PEEKS,
       "giveaways":                 process.env.ROLE_GIVEAWAYS,
       "challenges":                process.env.ROLE_CHALLENGES,
       "doruk's-exceptional-pings": process.env.ROLE_DORUKS_EXCEPTIONAL_PINGS,
@@ -60,10 +60,10 @@ export default async (interaction, firestore) => {
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`polls`])),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`updates/sneak peaks`)
-                     .setValue(`updates-sneak-peaks`)
+                     .setLabel(`updates/sneak peeks`)
+                     .setValue(`updates-sneak-peeks`)
                      .setEmoji(emojis.mention)
-                     .setDefault(roles.has(mentionRoles[`updates-sneak-peaks`])),
+                     .setDefault(roles.has(mentionRoles[`updates-sneak-peeks`])),
                   new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`giveaways`)
                      .setValue(`giveaways`)
