@@ -89,6 +89,9 @@ export default async (interaction, firestore) => {
 
    // @mention this role
    return await interaction.reply({
-      content: roleToMention
+      content: roleToMention,
+      allowedMentions: {
+         roles: [ roleId ]
+      }
    });
 };
