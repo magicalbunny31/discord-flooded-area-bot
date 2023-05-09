@@ -17,6 +17,9 @@ export const data = new Discord.SlashCommandBuilder()
          }, {
             name: `Challenges`,
             value: `ROLE_CHALLENGES`
+         }, {
+            value: `Doruk's Exceptional Pings`,
+            value: `ROLE_DORUKS_EXCEPTIONAL_PINGS`
          })
          .setRequired(true)
    )
@@ -76,7 +79,7 @@ export default async (interaction, firestore) => {
       });
 
 
-   // @Moderation Team role needed to @mention this role
+   // @Moderation Team role needed to @mention other roles
    if (!roles.has(moderationTeam) && ![ events, challenges ].includes(roleId))
       return await interaction.reply({
          content: `❌ **You need the role ${Discord.roleMention(moderationTeam)} to @mention ${roleToMention}.**`,
