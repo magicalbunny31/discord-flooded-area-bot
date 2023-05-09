@@ -18,7 +18,7 @@ export const data = new Discord.SlashCommandBuilder()
             name: `Challenges`,
             value: `ROLE_CHALLENGES`
          }, {
-            value: `Doruk's Exceptional Pings`,
+            name: `Doruk's Exceptional Pings`,
             value: `ROLE_DORUKS_EXCEPTIONAL_PINGS`
          })
          .setRequired(true)
