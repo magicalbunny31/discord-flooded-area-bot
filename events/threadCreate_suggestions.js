@@ -27,7 +27,7 @@ export default async (thread, newlyCreated, firestore) => {
    // this post's starter message content doesn't reach the minimum character limit (excludes server suggestions)
    const starterMessage = await thread.fetchStarterMessage();
 
-   if ((starterMessage.content || ``).length < 256 && thread.parent?.id !== process.env.CHANNEL_SERVER_SUGGESTIONS) {
+   if ((starterMessage.content || ``).length < 100 && thread.parent?.id !== process.env.CHANNEL_SERVER_SUGGESTIONS) {
       // create a private thread in the bot channel
       const botChannel = await thread.guild.channels.fetch(process.env.CHANNEL_BOT_COMMANDS);
 
@@ -44,7 +44,7 @@ export default async (thread, newlyCreated, firestore) => {
             Hello, ${starterMessage.author}! 👋
 
             Your ${Discord.channelMention(thread.parent.id)} "${Discord.escapeMarkdown(thread.name)}" __could not be sent__ due to the following reason:
-            > \\- Your suggestion does not reach the __minimum character limit of 256 characters__.
+            > \\- Your suggestion does not reach the __minimum character limit of 100 characters__.
 
             Fix up these issues then feel free to __re-submit your suggestion__!
             __You are not in trouble__. This is just a friendly reminder from ${thread.client.user}.
