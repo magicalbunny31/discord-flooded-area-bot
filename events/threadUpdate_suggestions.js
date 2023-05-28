@@ -2,7 +2,6 @@ export const name = Discord.Events.ThreadUpdate;
 
 
 import Discord from "discord.js";
-import { set } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ThreadChannel} oldThread

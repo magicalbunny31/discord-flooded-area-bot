@@ -74,7 +74,7 @@ const client = new Discord.Client({
    ],
 
    presence: {
-      status: `dnd`
+      status: Discord.PresenceUpdateStatus.DoNotDisturb
    },
 
    intents: [

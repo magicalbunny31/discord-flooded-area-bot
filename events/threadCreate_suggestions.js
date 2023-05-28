@@ -2,7 +2,7 @@ export const name = Discord.Events.ThreadCreate;
 
 
 import Discord from "discord.js";
-import { colours, emojis, strip, sum, wait } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ThreadChannel} thread
