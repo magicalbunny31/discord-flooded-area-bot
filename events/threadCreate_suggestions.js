@@ -24,75 +24,8 @@ export default async (thread, newlyCreated, firestore) => {
    await wait(1000);
 
 
-   // this post's starter message content doesn't reach the minimum character limit (excludes server suggestions)
-   const starterMessage = await thread.fetchStarterMessage();
-
-   if ((starterMessage.content || ``).length < 100 && thread.parent?.id !== process.env.CHANNEL_SERVER_SUGGESTIONS) {
-      // create a private thread in the bot channel
-      const botChannel = await thread.guild.channels.fetch(process.env.CHANNEL_BOT_COMMANDS);
-
-      const createdThread = await botChannel.threads.create({
-         name: `❌┃your-suggestion-was-blocked`,
-         autoArchiveDuration: Discord.ThreadAutoArchiveDuration.OneHour,
-         type: Discord.ChannelType.PrivateThread,
-         invitable: false
-      });
-
-      // send a message as to why their suggestion was blocked
-      await createdThread.send({
-         content: strip`
-            Hello, ${starterMessage.author}! 👋
-
-            Your ${Discord.channelMention(thread.parent.id)} "${Discord.escapeMarkdown(thread.name)}" __could not be sent__ due to the following reason:
-            > \\- Your suggestion does not reach the __minimum character limit of 100 characters__.
-
-            Fix up these issues then feel free to __re-submit your suggestion__!
-            __You are not in trouble__. This is just a friendly reminder from ${thread.client.user}.
-         `
-      });
-
-      // send their (blocked) suggestion in the thread too
-      await createdThread.sendTyping();
-
-      const maxUploadLimit = (() => {
-         switch (thread.guild.premiumTier) {
-            case Discord.GuildPremiumTier.None:  return  25;
-            case Discord.GuildPremiumTier.Tier1: return  25;
-            case Discord.GuildPremiumTier.Tier2: return  50;
-            case Discord.GuildPremiumTier.Tier3: return 100;
-         }
-      })();
-
-      const attachmentsTooLarge = sum(starterMessage.attachments.map(attachment => attachment.size)) / 1e+6 > maxUploadLimit; // attachments file size > max upload limit (in mb)
-
-      await createdThread.send({
-         content: attachmentsTooLarge && starterMessage.attachments.size
-            ? `Your attachments for this suggestion were too large to attach to this message. Sorry!`
-            : null,
-         embeds: starterMessage.content
-            ? [
-               new Discord.EmbedBuilder()
-                  .setColor(starterMessage.author.accentColor || (await starterMessage.author.fetch(true)).accentColor || colours.flooded_area)
-                  .setDescription(starterMessage.content)
-                  .setFooter({
-                     text: `Here is your suggestion! You can copy it for editing later.`
-                  })
-            ]
-            : [],
-         files: !attachmentsTooLarge && starterMessage.attachments.size
-            ? starterMessage.attachments.map(attachment =>
-               new Discord.AttachmentBuilder()
-                  .setFile(attachment.url)
-            )
-            : []
-      });
-
-      // delete their suggestion
-      return await thread.delete();
-   };
-
-
    // pin the starter message
+   const starterMessage = await thread.fetchStarterMessage();
    await starterMessage.pin();
 
 
