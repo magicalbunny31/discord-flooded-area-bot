@@ -6,6 +6,9 @@ export const data = new Discord.SlashCommandBuilder()
          .setName(`role`)
          .setDescription(`📛 the role to @mention`)
          .setChoices({
+            name: `Moderation Team`,
+            value: `ROLE_MODERATION_TEAM`
+         }, {
             name: `Events`,
             value: `ROLE_EVENTS`
          }, {
@@ -58,7 +61,7 @@ export default async (interaction, firestore) => {
 
 
    // @Moderation Team or @Event Host role needed to @mention @Events
-   if (![ moderationTeam, eventHost ].some(role => roles.has(role)) && roleId === events)
+   if (![ eventHost ].some(role => roles.has(role)) && roleId === events)
       return await interaction.reply({
          content: `❌ **You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(eventHost)} to @mention ${roleToMention}.**`,
          allowedMentions: {
@@ -69,7 +72,7 @@ export default async (interaction, firestore) => {
 
 
    // @Moderation Team or @Challenge Host role needed to @mention @Challenges
-   if (![ moderationTeam, challengeHost ].some(role => roles.has(role)) && roleId === challenges)
+   if (![ challengeHost ].some(role => roles.has(role)) && roleId === challenges)
       return await interaction.reply({
          content: `❌ **You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(challengeHost)} to @mention ${roleToMention}.**`,
          allowedMentions: {
@@ -80,7 +83,7 @@ export default async (interaction, firestore) => {
 
 
    // @Moderation Team role needed to @mention other roles
-   if (!roles.has(moderationTeam) && ![ events, challenges ].includes(roleId))
+   if (!roles.has(moderationTeam))
       return await interaction.reply({
          content: `❌ **You need the role ${Discord.roleMention(moderationTeam)} to @mention ${roleToMention}.**`,
          allowedMentions: {
