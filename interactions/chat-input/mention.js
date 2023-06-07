@@ -61,7 +61,7 @@ export default async (interaction, firestore) => {
 
 
    // @Moderation Team or @Event Host role needed to @mention @Events
-   if (![ eventHost ].some(role => roles.has(role)) && roleId === events)
+   if (![ moderationTeam, eventHost ].some(role => roles.has(role)) && roleId === events)
       return await interaction.reply({
          content: `❌ **You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(eventHost)} to @mention ${roleToMention}.**`,
          allowedMentions: {
@@ -72,7 +72,7 @@ export default async (interaction, firestore) => {
 
 
    // @Moderation Team or @Challenge Host role needed to @mention @Challenges
-   if (![ challengeHost ].some(role => roles.has(role)) && roleId === challenges)
+   if (![ moderationTeam, challengeHost ].some(role => roles.has(role)) && roleId === challenges)
       return await interaction.reply({
          content: `❌ **You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(challengeHost)} to @mention ${roleToMention}.**`,
          allowedMentions: {
