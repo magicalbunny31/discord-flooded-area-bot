@@ -117,47 +117,7 @@ export default async (interaction, firestore) => {
 
 
    // trying to votekick someone with votekick protection
-   if (member.roles.cache.has(process.env.FA_ROLE_VOTEKICK_PROTECTION)) {
-      // decrement this user's votekick protection
-      const votekickProtectionDocRef  = firestore.collection(`votekick-protection`).doc(interaction.guild.id);
-      const votekickProtectionDocSnap = await votekickProtectionDocRef.get();
-      const votekickProtectionDocData = votekickProtectionDocSnap.data() || {};
-
-      const thisUserVotekickProtectionUsed = votekickProtectionDocData[user.id]?.[`next-votekick-at`];
-      const thisUserVotekickProtectionUses = votekickProtectionDocData[user.id]?.[`uses-left`];
-
-      if (thisUserVotekickProtectionUsed.seconds < dayjs().unix())
-         await votekickProtectionDocRef.update({
-            [`${user.id}.next-votekick-at`]: new Timestamp(dayjs().add(1, `hour`).unix(), 0),
-            [`${user.id}.uses-left`]:        thisUserVotekickProtectionUses - 1
-         });
-
-
-      // try to dm the votekicked user
-      try {
-         if (thisUserVotekickProtectionUsed.seconds < dayjs().unix())
-            await user.send({
-               content: strip`
-                  ### 📢 ${interaction.user} tried to votekick you!
-                  > - Your votekick protection will save you for ${thisUserVotekickProtectionUses - 1} more ${thisUserVotekickProtectionUses - 1 === 1 ? `votekick` : `votekicks`}.
-                  >  - It won't be consumed until after ${Discord.time(dayjs().add(1, `hour`).unix())} (${Discord.time(dayjs().add(1, `hour`).unix(), Discord.TimestampStyles.RelativeTime)}).
-               `,
-               components: [
-                  new Discord.ActionRowBuilder()
-                     .setComponents(
-                        new Discord.ButtonBuilder()
-                           .setLabel(`View failed votekick message`)
-                           .setStyle(Discord.ButtonStyle.Link)
-                           .setURL(message.url)
-                     )
-               ]
-            });
-      } catch {
-         noop;
-      };
-
-
-      // edit the deferred interaction
+   if (member.roles.cache.has(process.env.FA_ROLE_VOTEKICK_PROTECTION))
       return await interaction.editReply({
          content: strip`
             ### 📢 ${interaction.user} is a nerd!
@@ -165,15 +125,9 @@ export default async (interaction, firestore) => {
          `,
          allowedMentions: {
             roles: [],
-            users: [
-               interaction.user.id,
-               ...thisUserVotekickProtectionUsed.seconds < dayjs().unix()
-                  ? [ user.id ]
-                  : []
-            ]
+            users: [ user.id ]
          }
       });
-   };
 
 
    // number of people required to votekick this user

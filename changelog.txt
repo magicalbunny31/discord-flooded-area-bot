@@ -355,3 +355,26 @@
 >  - <:area_communities_bot:1135719948224843856> </mention:1116857516324827149>
 >  - <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>
 > - the way command permissions are checked (aka: if you can use a command out of <#977267452050280498>) will be improved soon™️
+
+
+
+------------
+==============
+==============
+------------
+12/aug/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> new stuffs!!
+
+### bunny what did you do to votekicks
+> - revered the changes to <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152> and @​/votekick Protection
+>  - formatting remains the same
+>  - the role now costs 🪙 500 coins (from 🪙 100 coins)
+>  - you now only need <a:shield:921777486172405823> `Level 5` to buy the role
+>  - you will always get @mentioned for failed votekicks
+>  - people who got their 🪙 1,000 coins can keep them
