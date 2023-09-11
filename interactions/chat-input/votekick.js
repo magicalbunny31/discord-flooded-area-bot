@@ -330,7 +330,7 @@ export default async (interaction, firestore) => {
       return await interaction.editReply({
          content: strip`
             ### ✅ ${user} has been timed out for ${timedOutFor / (60 * 1000)} minutes.
-            > - 📰 Reason: \`${reason}\`
+            > - 📰 Reason: ${reason}
             > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
             ${voters.join(`\n`)}
          `,
