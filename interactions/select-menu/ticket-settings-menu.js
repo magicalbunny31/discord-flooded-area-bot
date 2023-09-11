@@ -1,8 +1,11 @@
+export const name = "ticket-settings-menu";
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
+
 import Discord from "discord.js";
 import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * @param {Discord.AnySelectMenuInteraction} interaction
+ * @param {Discord.StringSelectMenuInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
@@ -52,9 +55,10 @@ export default async (interaction, firestore) => {
 
    // current ticket settings
    const {
-      mentions = defaultMentions,
-      members  = []
-   } = (await firestore.collection(`ticket-settings`).doc(interaction.user.id).get()).data() || {};
+      mentions                  = defaultMentions,
+      members                   = [],
+      "ban-appeals": banAppeals = true
+   } = (await firestore.collection(`tickets`).doc(interaction.guild.id).get()).data().moderators[interaction.user.id] || {};
 
 
 
@@ -183,33 +187,31 @@ export default async (interaction, firestore) => {
          ]
       },
 
-      "blacklist": {
-         emoji: `🚫`,
-         name: `Blacklisted members`,
+      "ban-appeals": {
+         emoji: `🔨`,
+         name: `Ban Appeals`,
          description: strip`
-            > Blacklist members from creating tickets.
-            > Pretty self-explanatory, huh?
+            > Don't like being @mentioned for ban appeals? 
+            > You can remove yourself from them here!
          `,
          components: [
             new Discord.ActionRowBuilder()
                .setComponents(
-                  new Discord.UserSelectMenuBuilder()
-                     .setCustomId(`blacklist:add`)
-                     .setPlaceholder(`➕ Add a member to the blacklist...`)
-               ),
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.UserSelectMenuBuilder()
-                     .setCustomId(`blacklist:remove`)
-                     .setPlaceholder(`➖ Remove a member from the blacklist...`)
-               ),
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.ButtonBuilder()
-                     .setCustomId(`blacklist`)
-                     .setLabel(`View the blacklist`)
-                     .setEmoji(`📃`)
-                     .setStyle(Discord.ButtonStyle.Secondary)
+                  new Discord.StringSelectMenuBuilder()
+                     .setCustomId(`ticket-settings-ban-appeals`)
+                     .setPlaceholder(`🔔 Select an option...`)
+                     .setOptions(
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setEmoji(`✅`)
+                           .setLabel(`Notifications enabled`)
+                           .setValue(`true`)
+                           .setDefault(banAppeals),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setEmoji(`❌`)
+                           .setLabel(`Notifications disabled`)
+                           .setValue(`false`)
+                           .setDefault(!banAppeals)
+                     )
                )
          ]
       }
@@ -225,6 +227,9 @@ export default async (interaction, firestore) => {
             ${descriptions[setting].emoji} **${descriptions[setting].name}**
             ${descriptions[setting].description}
          `)
+         .setFooter({
+            text: `this needs redoing soon ~bunny` // TODO
+         })
    ];
 
 

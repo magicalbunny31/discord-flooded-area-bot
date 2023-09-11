@@ -3,6 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
+import { noop } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
@@ -14,19 +15,38 @@ export default async (interaction, firestore) => {
       return;
 
 
+   // fennec-utilities
+   const isBlacklisted = interaction.client.blacklist?.includes(interaction.user.id);
+
+   const developers = JSON.parse(process.env.DEVELOPERS.replaceAll(`'`, `"`));
+   const isDeveloper = developers.includes(interaction.user.id);
+
+
    // this user is in the global blacklist
-   if (interaction.client.blacklist.includes(interaction.user.id))
+   if (isBlacklisted)
       return;
 
 
    // maintenance
-   if (await interaction.client.fennec.getStatus() === `maintenance`)
-      if (!JSON.parse(process.env.DEVELOPERS.replaceAll(`'`, `"`)).includes(interaction.user.id))
-         return;
+   if (await interaction.client.fennec.getStatus() === `maintenance` && !isDeveloper)
+      return;
 
 
-   // get this command's file
-   const file = await import(`../interactions/autocomplete/${interaction.commandName}.js`);
+   // get this file
+   const name = [
+      interaction.commandName,
+      interaction.options.getSubcommandGroup(false),
+      interaction.options.getSubcommand(false)
+   ]
+      .filter(Boolean)
+      .join(` `);
+
+   const file = interaction.client.interactions.autocomplete.get(name);
+
+
+   // this file isn't for this guild
+   if (!file.guilds.includes(interaction.guild.id))
+      return;
 
 
    try {
@@ -36,10 +56,13 @@ export default async (interaction, firestore) => {
    } catch (error) {
       // an error occurred
       try {
-         return await interaction.client.fennec.sendError(error, Math.floor(interaction.createdTimestamp / 1000), interaction);
+         await interaction.client.fennec.sendError(error, Math.floor(interaction.createdTimestamp / 1000), interaction);
+
+      } catch {
+         noop;
 
       } finally {
-         return console.error(error.stack);
+         console.error(error.stack);
       };
    };
 };

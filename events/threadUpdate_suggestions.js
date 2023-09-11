@@ -2,6 +2,7 @@ export const name = Discord.Events.ThreadUpdate;
 
 
 import Discord from "discord.js";
+import { colours } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ThreadChannel} oldThread
@@ -10,7 +11,7 @@ import Discord from "discord.js";
  */
 export default async (oldThread, newThread, firestore) => {
    // this post isn't from the suggestion channels
-   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(newThread.parent?.id))
+   if (![ process.env.FA_CHANNEL_GAME_SUGGESTIONS, process.env.FA_CHANNEL_SERVER_SUGGESTIONS, process.env.FA_CHANNEL_PART_SUGGESTIONS ].includes(newThread.parent?.id))
       return;
 
 
@@ -22,14 +23,30 @@ export default async (oldThread, newThread, firestore) => {
 
 
    // constants
+   const addedTag       = `Added`;
    const addedInGameTag = `Added In-Game`;
    const deniedTag      = `Denied`;
 
-   const closureTags = [ addedInGameTag, deniedTag ];
+   const closureTags = [ addedTag, addedInGameTag, deniedTag ];
 
 
    // the newThread's tags contains a closure tag
-   if (newPostTags.some(tag => closureTags.includes(tag))) {
+   if (newPostTags.some(tag => closureTags.includes(tag)) && !(newThread.locked || newThread.archived)) {
+      // send a message in the post
+      await newThread.sendTyping();
+      await newThread.send({
+         embeds: [
+            new Discord.EmbedBuilder()
+               .setColor(colours.flooded_area)
+               .setTitle(
+                  !newPostTags.includes(deniedTag)
+                     ? `✅ This suggestion has been approved`
+                     : `❌ This suggestion has been denied`
+               )
+               .setDescription(`> - ${newThread} will now be locked and closed.`)
+         ]
+      });
+
       // lock this post
       await newThread.setLocked(true);
 

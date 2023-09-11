@@ -1,3 +1,6 @@
+export const name = "what-are-pronouns";
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
+
 import Discord from "discord.js";
 
 /**
@@ -14,7 +17,7 @@ export default async (interaction, firestore) => {
    // files
    const files = [
       new Discord.AttachmentBuilder()
-         .setFile(`./assets/what-are-pronouns_brainpop.mp4`)
+         .setFile(`./assets/select-roles/what-are-pronouns_brainpop.mp4`)
    ];
 
 
@@ -23,7 +26,7 @@ export default async (interaction, firestore) => {
       new Discord.ActionRowBuilder()
          .setComponents([
             new Discord.ButtonBuilder()
-               .setLabel(`further reading`)
+               .setLabel(`Further reading`)
                .setEmoji(`📰`)
                .setStyle(Discord.ButtonStyle.Link)
                .setURL(`https://uwm.edu/lgbtrc/support/gender-pronouns`)

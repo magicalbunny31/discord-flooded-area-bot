@@ -1,28 +1,29 @@
+export const name = "votekick";
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
+
 export const data = new Discord.SlashCommandBuilder()
    .setName(`votekick`)
-   .setDescription(`📣 call a votekick on someone`)
+   .setDescription(`Call a votekick on a user`)
    .addUserOption(
       new Discord.SlashCommandUserOption()
          .setName(`user`)
-         .setDescription(`👥 user to votekick`)
+         .setDescription(`The user to call a votekick on`)
          .setRequired(true)
    )
    .addStringOption(
       new Discord.SlashCommandStringOption()
          .setName(`reason`)
-         .setDescription(`📝 reason for the votekick`)
+         .setDescription(`The reason for this votekick`)
          .setMaxLength(128)
          .setRequired(true)
    );
 
-export const guildOnly = true;
-
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { FieldValue, Timestamp } from "@google-cloud/firestore";
+import { emojis, autoArray, choice, noop, strip } from "@magicalbunny31/awesome-utility-stuff";
 
-import { emojis, autoArray, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
+import cache from "../../data/cache.js";
 
 /**
  * @param {Discord.ChatInputCommandInteraction} interaction
@@ -39,7 +40,23 @@ export default async (interaction, firestore) => {
 
    if (!member)
       return await interaction.reply({
-         content: `i'm not sure if you've realised this but ${user} isn't in this server`,
+         content: `### ❌ ${user} isn't in this server.`,
+         ephemeral: true
+      });
+
+
+   // trying to votekick someone already timed out
+   if (member.communicationDisabledUntil)
+      return await interaction.reply({
+         content: `### ❌ ${user} is already timed out.`,
+         ephemeral: true
+      });
+
+
+   // trying to votekick a bot
+   if (user.bot)
+      return await interaction.reply({
+         content: `### ❌ ${user} is a bot.`,
          ephemeral: true
       });
 
@@ -52,69 +69,113 @@ export default async (interaction, firestore) => {
 
       // reply to the interaction
       return await interaction.reply({
-         content: `📣 **${interaction.user} is a nerd**`
+         content: `### 📢 ${interaction.user} is a nerd!`
       });
    };
 
 
-   // trying to votekick someone with votekick protection
-   if (member.roles.cache.has(process.env.ROLE_VOTEKICK_PROTECTION))
-      return await interaction.reply({
-         content: strip`
-            📣 **${interaction.user} is a nerd**
-            > ${user} has ${Discord.roleMention(process.env.ROLE_VOTEKICK_PROTECTION)}!
-         `,
-         allowedMentions: {
-            roles: [],
-            users: [
-               interaction.user.id
-            ]
-         }
-      });
-
-
    // votekick is on cooldown
-   const database = firestore.collection(`command`).doc(`votekick`);
-   const { "cooldown-expires-at": cooldownExpiresAt, "votekick-in-progress-at": votekickInProgressAt, "current-votekick-message": currentVotekickMessage } = (await database.get()).data() || {};
+   const { cooldownExpiresAt = 0, votekickInProgressAt = 0, currentVotekickMessage } = cache.get(`votekick`) || {};
 
-   if (dayjs().unix() < cooldownExpiresAt.seconds)
+   if (dayjs().unix() < cooldownExpiresAt)
       return await interaction.reply({
          content: strip`
-            ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)} is on cooldown!
-            try again ${Discord.time(cooldownExpiresAt.seconds, Discord.TimestampStyles.RelativeTime)}~
+            ### ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)} is on cooldown!
+            > - Try again ${Discord.time(cooldownExpiresAt, Discord.TimestampStyles.RelativeTime)}.
          `,
          ephemeral: true
       });
 
 
    // a votekick is in progress
-   const votekickProbablyStillInProgress = dayjs().unix() - votekickInProgressAt?.seconds < 120; // two minutes haven't passed yet: the votekick probably is still ongoing
+   const votekickProbablyStillInProgress = dayjs().unix() - votekickInProgressAt < 120; // two minutes haven't passed yet: the votekick probably is still ongoing
 
    if (votekickInProgressAt && votekickProbablyStillInProgress)
       return await interaction.reply({
-         content: `a ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)} is still in progress in the server!`,
-         components: [
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.ButtonBuilder()
-                     .setLabel(`view current /votekick`)
-                     .setEmoji(`📨`)
-                     .setStyle(Discord.ButtonStyle.Link)
-                     .setURL(currentVotekickMessage)
-               )
-         ],
+         content: `### 👞 A ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)} is still in progress in the server!`,
+         components: currentVotekickMessage
+            ? [
+               new Discord.ActionRowBuilder()
+                  .setComponents(
+                     new Discord.ButtonBuilder()
+                        .setLabel(`View current /votekick`)
+                        .setEmoji(`📨`)
+                        .setStyle(Discord.ButtonStyle.Link)
+                        .setURL(currentVotekickMessage)
+                  )
+            ]
+            : [],
          ephemeral: true
       });
 
 
+   // defer the interaction
+   const message = await interaction.deferReply({
+      fetchReply: true
+   });
+
+
+   // trying to votekick someone with votekick protection
+   if (member.roles.cache.has(process.env.FA_ROLE_VOTEKICK_PROTECTION)) {
+      // decrement this user's votekick protection
+      const votekickProtectionDocRef  = firestore.collection(`votekick-protection`).doc(interaction.guild.id);
+      const votekickProtectionDocSnap = await votekickProtectionDocRef.get();
+      const votekickProtectionDocData = votekickProtectionDocSnap.data() || {};
+
+      const thisUserVotekickProtection = votekickProtectionDocData[user.id];
+      await votekickProtectionDocRef.update({
+         [user.id]: thisUserVotekickProtection - 1
+      });
+
+
+      // try to dm the votekicked user
+      try {
+         await user.send({
+            content: strip`
+               ### 📢 ${interaction.user} tried to votekick you!
+               > - Your votekick protection will save you for ${thisUserVotekickProtection - 1} more ${thisUserVotekickProtection - 1 === 1 ? `votekick` : `votekicks`}.
+            `,
+            components: [
+               new Discord.ActionRowBuilder()
+                  .setComponents(
+                     new Discord.ButtonBuilder()
+                        .setLabel(`View failed votekick message`)
+                        .setStyle(Discord.ButtonStyle.Link)
+                        .setURL(message.url)
+                  )
+            ]
+         });
+      } catch {
+         noop;
+      };
+
+
+      // edit the deferred interaction
+      return await interaction.editReply({
+         content: strip`
+            ### 📢 ${interaction.user} is a nerd!
+            > - ${user} has ${Discord.roleMention(process.env.FA_ROLE_VOTEKICK_PROTECTION)}...
+         `,
+         allowedMentions: {
+            roles: [],
+            users: [
+               interaction.user.id,
+               user.id
+            ]
+         }
+      });
+   };
+
+
    // number of people required to votekick this user
    const requiredVotes = choice([
-      2, 2, 2,
-      3, 3,
-      4
+      2, 2, 2, 2,
+      3, 3, 3,
+      4, 4,
+      5
    ]);
 
-   const voters = autoArray(requiredVotes, () => `> 👥 ${emojis.loading}`);
+   const voters = [];
 
 
    // components
@@ -134,25 +195,22 @@ export default async (interaction, firestore) => {
 
    await interaction.reply({
       content: strip`
-         📢 **${Discord.roleMention(process.env.ROLE_VOTEKICK_PINGS)}**
-         📣 **a votekick on ${user} has been started by ${interaction.user} for the reason of \`${reason}\`**
-         📰 **${requiredVotes} votes are needed ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}**
-         ${voters.join(`\n`)}
+         ### 👞 A votekick on ${user} has been started by ${interaction.user}.
+         > - 📰 Reason: ${reason}
+         > - 👥 ${requiredVotes} votes are required ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}.
       `,
       components,
       allowedMentions: {
          users: [ user.id ],
-         roles: [ process.env.ROLE_VOTEKICK_PINGS ]
+         roles: []
       }
    });
 
-   const message = await interaction.fetchReply();
-
 
    // set the votekick in progress
-   await database.update({
-      "votekick-in-progress-at": new Timestamp(dayjs().unix(), 0),
-      "current-votekick-message": message.url
+   cache.set(`votekick`, {
+      votekickInProgressAt:   Math.floor(message.createdTimestamp / 1000),
+      currentVotekickMessage: message.url
    });
 
 
@@ -165,13 +223,18 @@ export default async (interaction, firestore) => {
 
    // count a vote
    vote.on(`collect`, async buttonInteraction => {
-      // this person is calling the votekick
+      // this user called the votekick
       if (buttonInteraction.user.id === interaction.user.id)
          return await buttonInteraction.deferUpdate();
 
 
-      // can't votekick self
+      // this user is being votekicked
       if (buttonInteraction.user.id === user.id)
+         return await buttonInteraction.deferUpdate();
+
+
+      // this user is votekick banned
+      if (buttonInteraction.member.roles.cache.has(process.env.FA_ROLE_VOTEKICK_BANNED))
          return await buttonInteraction.deferUpdate();
 
 
@@ -180,50 +243,47 @@ export default async (interaction, firestore) => {
          return await buttonInteraction.deferUpdate();
 
 
-      // add this user to the voters list
-      const indexOfSpace = voters.findIndex(voter => voter.includes(emojis.loading));
-      voters.splice(indexOfSpace, 1, `> 👥 ${buttonInteraction.user}`);
+      // add this user to the voters list (if it's not already reached its max)
+      if (voters.length < requiredVotes)
+         voters.push(`>  - 🗳️ ${buttonInteraction.user}`);
 
 
       // update the interaction
       await buttonInteraction.update({
          content: strip`
-            📢 **${Discord.roleMention(process.env.ROLE_VOTEKICK_PINGS)}**
-            📣 **a votekick on ${user} has been started by ${interaction.user} for the reason of \`${reason}\`**
-            📰 **${requiredVotes} votes are needed ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}**
+            ### 👞 A votekick on ${user} has been started by ${interaction.user}.
+            > - 📰 Reason: ${reason}
+            > - 👥 ${requiredVotes} votes are required ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}.
             ${voters.join(`\n`)}
          `,
          allowedMentions: {
             users: [ user.id ],
-            roles: [ process.env.ROLE_VOTEKICK_PINGS ]
+            roles: []
          }
       });
 
 
       // the required amount of votes have been reached
-      if (voters.every(voter => !voter.includes(emojis.loading)))
+      if (voters.length >= requiredVotes)
          vote.stop(`required votes reached`);
    });
 
 
-   vote.on(`end`, async (collected, reason) => {
+   vote.on(`end`, async (collected, endReason) => {
       // set the cooldown and votekick progress
-      await database.update({
-         "cooldown-expires-at": new Timestamp(dayjs().add(`30`, `seconds`).unix(), 0),
-         "votekick-in-progress-at": FieldValue.delete(),
-         "current-votekick-message": FieldValue.delete()
+      cache.set(`votekick`, {
+         cooldownExpiresAt:      dayjs().add(30, `seconds`).unix(),
+         votekickInProgressAt:   null,
+         currentVotekickMessage: null
       });
 
 
       // didn't reach the required votes in the time
-      if (reason === `time`) {
-         // replace all unfilled voter spaces with an x
-         for (let i = 0; i < voters.length; i ++) {
-            if (!voters[i].includes(emojis.loading))
-               continue;
-
-            voters[i] = `> 👥 ❌`;
-         };
+      if (endReason === `time`) {
+         // add all unfilled voter spaces
+         voters.push(
+            ...autoArray(requiredVotes - voters.length, () => `>  - 🗳️`)
+         );
 
          // disable the components
          for (const actionRow of components)
@@ -233,8 +293,9 @@ export default async (interaction, firestore) => {
          // edit the original interaction's reply
          return await interaction.editReply({
             content: strip`
-               📣 **votekick on ${user} has failed**
-               ⌚ **30 second cooldown on more ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)}s**
+               ### ❌ Votekick on ${user} has failed.
+               > - 📰 Reason: ${reason}
+               > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
                ${voters.join(`\n`)}
             `,
             components: [],
@@ -246,14 +307,8 @@ export default async (interaction, firestore) => {
 
 
       // InteractionCollector ended for some other reason
-      if (reason !== `required votes reached`)
+      if (endReason !== `required votes reached`)
          return;
-
-
-      // add this to the database
-      await firestore.collection(`leaderboard-statistics`).doc(`votekick`).update({
-         [user.id]: FieldValue.increment(1)
-      });
 
 
       // time out the user depending on how many required votes there were
@@ -265,8 +320,9 @@ export default async (interaction, firestore) => {
       // edit the interaction's original reply
       return await interaction.editReply({
          content: strip`
-            📣 **${user} has been ~~kicked~~ *timed out* for \`${timedOutFor / (60 * 1000)} minutes\` with ${requiredVotes} votes**
-            ⌚ **30 second cooldown on more ${emojis.flooded_area} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.client.application.id)}s**
+            ### ✅ ${user} has been timed out for ${timedOutFor / (60 * 1000)} minutes.
+            > - 📰 Reason: \`${reason}\`
+            > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
             ${voters.join(`\n`)}
          `,
          components: [],

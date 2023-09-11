@@ -1,0 +1,354 @@
+==============
+------------
+24/jul/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> new stuffs!!
+
+### /currency
+> - <:flooded_area:995461994989756526> </currency balance:1116857516324827148>: you can view your coins, net worth (coins including value of items) and total coins earned (coins earned from chatting only)
+> - <:flooded_area:995461994989756526> </currency items:1116857516324827148>: see yur bought items, manage your personal item (an item that you create yourself and sell in the shop) and list your items for sale in the flea market
+>  - if you had items before, they have been refunded back into your coin balance
+>  - ..\🦊 test items? oh, you'll just have to earn them back another way~
+> - <:flooded_area:995461994989756526> </currency shop:1116857516324827148>: buy things from the hourly-rotating bunny's shop, buy special items like votekick protection, see the flea market listings and participate in the "animal crossing" series-inspired stalk market
+>  - as a thanks for those who originally had participated in the previous generation of currency commands, i kept your items in the shop (they can be edited at any time)
+>  - also don't tell anyone but there's a \🦊 test item listed in the flea market
+> - and more currency commands which'll be implemented soon..
+>  - <:flooded_area:995461994989756526> </currency events:1116857516324827148>
+>  - <:flooded_area:995461994989756526> </currency leaderboard:1116857516324827148>
+>  - <:flooded_area:995461994989756526> </currency trade:1116857516324827148>
+
+### /levels
+> - <:flooded_area:995461994989756526> </levels rewards:1132730748370174045>: get cool rewards for being active in the server! rn there's just votekick protection and image/embed perms~
+> - <:flooded_area:995461994989756526> </levels view-level:1132730748370174045>: view your level in the server
+>  - there's options to change your progress bar in <a:progress_start_full_pride:1132384512735715358> progress pride or <a:progress_start_full_trans:1132387256339005562> trans colours because they looked pawesome
+>  - to stay fair for people previously active, you have been given exp on *all* your messages in the current text channels only (not threads), regardless of the 5-second limit when earning experience normally
+> - and more levelling commands which'll be implemented soon..
+>  - <:flooded_area:995461994989756526> </levels leaderboard:1132730748370174045>
+> - the levelling commands were sponsored by <@216533284891525121> and <@955859143451869274> go say thanks to them
+
+### /music-player
+> - <:flooded_area:995461994989756526> </music-player play track:1132730748370174046>: stream a specific track from flooded area to a voice channel
+> - <:flooded_area:995461994989756526> </music-player play category:1132730748370174046>: same as above but for tracks in a category (lobby music, holiday lobby music, music players, maps, ...)
+> - <:flooded_area:995461994989756526> </music-player play random:1132730748370174046>: also same as above but for *any* track from flooded area
+> - <:flooded_area:995461994989756526> </music-player stop:1132730748370174046>: self-explanatory
+> - <:flooded_area:995461994989756526> </music-player view-tracks:1132730748370174046>: view the tracks that play in flooded area
+
+### other slash commands
+> - <:flooded_area:995461994989756526> </create-event:1132730748370174043>
+>  - this command was made for <@&1016762832324403371>s who can no longer create events by themselves because of the server switching to 2fa for moderation
+>  - that said, this command can only be used by people with the <@&1016762832324403371> role (and moderators....but they all already have 2fa enabled <:shrug:553622991359967242>)
+> - <:flooded_area:995461994989756526> </game-info:1132730748370174044>
+>  - view current and historical data for flooded area (and in graphical form too!!)
+
+### text-based commands
+> - "**<@983126054619189370> ball/balls/baller**" (credit to <@764777120710000660> for the idea~)
+>  - sends an image of some balls from/related to flooded area
+> - "**<@983126054619189370> pancake/pancakes**" (made for <@926240357820297306>~)
+>  - redeem a pancake every day!
+>  - leaderboards soon..
+
+### and other general things changed
+> - emojis in embed titles will now use discord's default emojis (instead of being escaped)
+>  - this was because they did not show in some mobile interfaces: i expected discord to fix this *months* ago....but they didn't
+> - when a suggestion from https://discord.com/channels/977254354589462618/1019673285459443753, https://discord.com/channels/977254354589462618/1023769843125715036 or https://discord.com/channels/977254354589462618/1023770810856513538 gets automatically closed, a message is sent in the thread explaining why it got closed
+> - suggestions in https://discord.com/channels/977254354589462618/1019673285459443753, https://discord.com/channels/977254354589462618/1023769843125715036 and https://discord.com/channels/977254354589462618/1023770810856513538 will now automatically close when the suggestion's thread/post's original message gets deleted
+> - removed <@983126054619189370>'s 10% chance to smash its keyboard (misspell things) when using text-based commands
+
+### 🌌
+> - commands will no longer randomly error, and will instead display some helpful information about why the command can't be used
+> - ..but you don't know what *that* means, right? <a:furthinking:817599069098606602>
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### commands
+> - <:flooded_area:995461994989756526> </who-joined-at by-member:1119030722582294649>, <:flooded_area:995461994989756526> </who-joined-at by-position:1119030722582294649>
+>  - fixed <@983126054619189370> updating a user's first join position whenever they rejoined the server
+>  - fixed <@983126054619189370> not updating its historical "first join position" data when new users join the server
+>  - fixed REALLY OLD members not having an entry in the historical data (indirectly fixing the historical data being slightly inaccurate, sowwy for any misinformation)
+> - <:flooded_area:995461994989756526> </america:1116857516324827146>
+>  - fixed first-ever </america:1116857516324827146> responses showing its first count of `NaN` (not a number)
+>  - edited https://discord.com/channels/977254354589462618/977267452050280498/1044146926821572618 to show its correct count
+>  - edited https://discord.com/channels/977254354589462618/977267452050280498/1126522553465307196 to show its correct count
+> - <:flooded_area:995461994989756526> </wiki:1118292793136250983>
+>  - fixed the command sometimes erroring when given a `search-term` argument consisting of only non-alphanumeric characters
+
+### suggestions
+> - fixed https://discord.com/channels/977254354589462618/1023769843125715036 suggestions not being automatically closed when approved
+>  - this was because of the approved tag's name being changed to "added": turns out i didn't update that on the code-side
+
+### tickets
+> - fixed some text formatting in the "you need to provide proof" embed for https://discord.com/channels/977254354589462618/1072945802256855170 tickets
+>  - there was a double space in the embed!!
+
+
+## <@490178047325110282>'s notes
+
+### NOT READING ALLAT 🤦🤣
+> - shut the fuck up
+
+### jesus christ bunny this took a while
+> - 397 files created/changed/removed, ~2 months and a whole heck of hot chocolate consumed~
+
+### future plans
+> - next, commands that are to be implemented will be added:
+>  - <:flooded_area:995461994989756526> </currency events:1116857516324827148>
+>  - <:flooded_area:995461994989756526> </currency leaderboard:1116857516324827148>
+>  - <:flooded_area:995461994989756526> </currency trade:1116857516324827148>
+>  - <:flooded_area:995461994989756526> </levels leaderboard:1132730748370174045>
+> - then i'll probably focus on bug fixes as a lot of major commands were added - they all have very intricate parts!
+
+### footnote
+> - thanks for letting me do things literally nobody asked for!!
+> - go see the other cool stuff i do because i don't just work on <@983126054619189370> 24/7
+>  - https://nuzzles.dev
+>  - https://ko-fi.com/magicalbunny31
+>  - https://discord.com/application-directory/964619726888239255
+
+
+~ magicalbunny31 \🐾
+
+
+
+------------
+==============
+==============
+------------
+24/jul/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> new stuffs!!
+
+### day -1 update
+> - commands can only be used in https://discord.com/channels/977254354589462618/977267452050280498 or in threads (excludes <:flooded_area:995461994989756526> </votekick:1116857516324827152> and staff)
+> - that one "oh moderators!" gif is sent when opening a ticket in https://discord.com/channels/977254354589462618/1072945802256855170 and https://discord.com/channels/977254354589462618/1082650454044979210
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### commands
+> - <:flooded_area:995461994989756526> </currency shop:1116857516324827148>
+>  - fixed the stalk market selling carrots at an incorrect price
+
+
+
+------------
+==============
+==============
+------------
+25/jul/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### commands
+> - <:flooded_area:995461994989756526> </currency items:1116857516324827148>
+>  - so uh increasing your item's quantity was *meant* to cost 75% of its price but for some reason you were paying 25% instead so now it *really* costs 75% of your item's price
+>  - fixed not being able to list a flea market item that is the same as someone else's item
+
+
+
+------------
+==============
+==============
+------------
+02/aug/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> new stuffs!!
+
+### /currency
+> - added user context menu commands for viewing another person's balance and items easily
+> - added a `marketplace` option to <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148>, to start the menu at a specific area
+> - <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> now has its own markets and shopkeepers
+>  - **🏷️ Items** ➡️ "🏪 bunny's shop" ➡️ halo (10:00am - 09:59pm gmt+0000) and bunny (10:00pm - 09:59am gmt+0000)
+>  - **🏬 Special items** ➡️ "🏪 bunny's shop" ➡️ halo (10:00am - 09:59pm gmt+0000) and bunny (10:00pm - 09:59am gmt+0000)
+>  - **🛍️ Flea market** ➡️ "🐉 dragon deals" ➡️ ruby
+>  - **🥕 Stalk market** ➡️ "🧺 your local carrot farm" ➡️ a random deer oc
+> - <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** now shows the item's original seller
+> - updated <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **🏷️ Items**' information about tax rates (as well as making both mentions of this tax rate equal)
+> - added a `menu` option to <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148>, to start the menu at a specific area
+> - you can now view other people's <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148> (**🎒 Items** only)
+> - <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148> ➡️ **🎒 Items** uses your profile banner colour in the embed (like <:area_communities_bot:1135719948224843856> </levels view-level:1132730748370174045>!)
+> - <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💸 List an item on the flea market** gives information on how to remove a user's own listed item from the flea market
+
+### /levels
+> - added a user context menu command <:area_communities_bot:1135719948224843856> "**/levels view-level**" for viewing another person's level easily
+
+### the miscellaneous corner (hai hewwo hai)
+> - removed the embed title when viewing tracks with <:area_communities_bot:1135719948224843856> </music-player view-tracks:1132730748370174046> because i thought it looked ugly
+> - added more references to other server members when bunny says something in <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148>
+
+### cool backend changes that affects NOTHING for you !!
+> - improved the reliability of buttons and select menus being set to a "<a:loading:701942569210478623> deferred" state
+>  - this indirectly fixed <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💸 List an item on the flea market**'s left arrow button always being set to a "<a:loading:701942569210478623> deferred" state when changing menus
+> - generally improved the algorithm used to populate autocomplete options for slash command options
+>  - this indirectly fixed no options appearing when a single letter is entered as the option (with autocomplete enabled)'s value
+> - income and expenditure for the past 24 hours is now calculated whenever you send a message in the server
+>  - this will save some database read usages: that's real good for me!
+>  - commands which display this info will still filter the data, the above *just* updates the database
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### /america <a:haha_uhh:1112599343715864637>
+> - fixed people with the @"bunny was here" role had *vastly* higher chances of getting a rare response (such as bri'ish) than people without the role
+>  - normal behaviour was that it's a 50% chance for the furry response and all other responses were slightly lowered to fill in the other 50%
+>  - also, to make it fair for everyone, i've wiped out all the "bri'ish" responses from the server and the database so we can all start from scratch again: happy <:area_communities_bot:1135719948224843856> </america:1116857516324827146>ing!
+
+### /currency
+> - fixed <:area_communities_bot:1135719948224843856> </currency balance:1116857516324827148>'s income/expenditure stats never updating
+> - fixed <:area_communities_bot:1135719948224843856> </currency balance:1116857516324827148> not taking into account for the value of bought carrots
+> - fixed <:area_communities_bot:1135719948224843856> </currency balance:1116857516324827148> displaying the command user's embed colour when asking the **🏦 Bank** for a specific person's currency stats
+>  - please do not actually go to a bank irl and ask the staff there about someone else's financial status
+> - fixed <:area_communities_bot:1135719948224843856> </currency balance:1116857516324827148> showing a bot's currency statistics, even though they aren't part of the currency system
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **🏷️ Items**/**💸 Flea market** failing to display information about an item
+>  - the way the item's info is displayed was internally changed to accept user ids only (excluding special items), which potentially paves the way for multiple personal items in the future owo
+> - fixed <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💸 List an item on the flea market** arrow buttons being enabled/disabled incorrectly when changing menus
+> - fixed <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💸 List an item on the flea market** not allowing you to list the same item on the flea market as another person's item
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** displaying incorrect carrot sell prices an hour before they're meant to change
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** saying that your carrots have expired if you had 0 carrots
+>  - it'll now say "previous carrots" instead of "carrots from last week" as it doesn't check when exactly those carrots expired (it would still show "carrots from last week" if said carrots expired more than a week ago)
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💳 Buy carrots**/**💰 Sell carrots** not formatting the final buy/sell price with commas
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💳 Buy carrots** showing "can't sell carrots" when trying to buy carrots and an invalid number was inputted
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** ➡️ **💰 Sell carrots** showing "you haven't been charged" when trying to sell carrots
+
+### /levels
+> - fixed <:area_communities_bot:1135719948224843856> </levels view-level:1132730748370174045> displaying the command user's embed colour when a view specific person's levelling stats
+
+### /music-player
+> - fixed <:area_communities_bot:1135719948224843856> </music-player view-tracks:1132730748370174046> not replying ephemerally when you use the select menu of another user's command
+
+
+## <@490178047325110282>'s notes
+
+### these stuffs are coming in a future update
+> - make the other currency commands actually work
+> - give pancakes a use
+>  - pancake leaderboards
+> - replace text-based commands with /cmd
+> - alerts
+> - nerf currency overall
+> - update the bot emoji from <:flooded_area:995461994989756526> to <:area_communities_bot:1135719948224843856>
+> - most commands will be ephemeral to avoid floods and probably other stuff ??
+>  - https://discord.com/channels/977254354589462618/977267452050280498/1133120077575753729
+
+
+
+------------
+==============
+==============
+------------
+03/aug/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> new stuffs!!
+
+### the emoji update
+> - updated <@983126054619189370>'s bot emoji for application commands
+>  - (<:flooded_area:995461994989756526> to <:area_communities_bot:1135719948224843856>)
+> - replaced the <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> shopkeeper emojis
+>  - <:currency_shopkeeper_bunny:1136538004329091082> bunny
+>  - <:currency_shopkeeper_halo:1136538010356293723> halo
+>  - <:currency_shopkeeper_ruby:1136538067063287848> ruby
+>  - <:currency_shopkeeper_deerie:1136538082875817986> deerie
+
+
+
+------------
+==============
+==============
+------------
+11/sep/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> new stuffs!!
+
+### 🌌
+> - currency and levelling commands are now available in spaced out!
+>  - coins and experience have been credited to your total message count in all text-based channels
+> - <:area_communities_bot:1135719948224843856> </game-info:1132730748370174044>, <:area_communities_bot:1135719948224843856> </who-joined-at by-member:1119030722582294649> and <:area_communities_bot:1135719948224843856> </who-joined-at by-position:1119030722582294649> now works in spaced out
+
+### cool bot stuff
+> - added support for custom statuses
+>  - statuses now change every 10 minutes (from every 30 minutes)
+> - updated command names and descriptions to match my current formatting
+
+### /currency
+> - bunny and halo now are together for 12 hours in bunny's shop in <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> \<3
+>  - ..also, halo's shop responses were updated to be more wholesome ~
+> - it now costs 25% of your personal item's price to increase its quantity (from 75% of its price) in <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148>
+> - it now costs 🪙 100 coins (from 🪙 500 coins) to create/edit your personal item
+> - made embed footers less verbose in <:area_communities_bot:1135719948224843856> </currency items:1116857516324827148>
+> - removed `/currency leaderboard` (it's been replaced by <:area_communities_bot:1135719948224843856> </leaderboards:1150546246625406986>)
+> - re-formatted/updated embed field names in <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148>
+
+### /level
+> - merged `/levels rewards` and `/levels view-level` into <:area_communities_bot:1135719948224843856> </level:1150546246625406987>
+> - removed `/levels leaderboard` (it's been replaced by <:area_communities_bot:1135719948224843856> </leaderboards:1150546246625406986>)
+
+### /votekick
+> - removed the `@/votekick Pings` @mention from <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>
+> - removed escaped text from <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152> reasons
+> - reworked how @​/votekick Protection works
+>  - reduced the cost to 🪙 100 coins (from 🪙 1000 coins)
+>  - it now protects the person from 5 votekicks before having to buy the role again
+>  - it can't be stacked to protect from more than 5 votekicks
+>  - when <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>ing someone with @​/votekick Protection, the person with @​/votekick Protection also gets @mentioned too, to be notified about the votekick
+
+### miscellaneous
+> - removed `/close-ticket` because it was never used, and <:area_communities_bot:1135719948224843856> </jump-to-top:1119768647355859026> can do a similar function
+> - <:area_communities_bot:1135719948224843856> </game-info:1132730748370174044>'s graphs displays humanised time, instead of timestamps
+> - "re-added" <:area_communities_bot:1135719948224843856> </get-map-info:1148872290990301286> and <:area_communities_bot:1135719948224843856> </get-part-info:1148872290990301287>
+> - made <:area_communities_bot:1135719948224843856> </jump-to-top:1119768647355859026> *much* faster and be able to work in orphaned threads and text channels
+> - <:area_communities_bot:1135719948224843856> </music-player view-tracks:1132730748370174046> now shows the name of the radio which plays the selected category
+> - added `@Archived Access` to <@983126054619189370>'s <#1002631503248892077>
+> - text-based commands (used out of <#977267452050280498>) will now auto-delete the alert and the command message
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### /currency
+> - fixed <:area_communities_bot:1135719948224843856> </currency shop:1116857516324827148> ➡️ **💸 Flea market** not loading when there's 25 items listed
+>  - the flea market will now hold 24 items max
+
+### /votekick
+> - fixed already timed out users and bot users being able to be <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>ed
+
+
+## <@490178047325110282>'s notes
+
+### you can now use more commands out of <#977267452050280498>
+> - the list of commands that *can* be used out of <#977267452050280498> is now..
+>  - <:area_communities_bot:1135719948224843856> </create-event:1132730748370174043>
+>  - <:area_communities_bot:1135719948224843856> </get-map-info:1148872290990301286>
+>  - <:area_communities_bot:1135719948224843856> </get-part-info:1148872290990301287>
+>  - <:area_communities_bot:1135719948224843856> </jump-to-top:1119768647355859026>
+>  - <:area_communities_bot:1135719948224843856> </mention:1116857516324827149>
+>  - <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>
+> - the way command permissions are checked (aka: if you can use a command out of <#977267452050280498>) will be improved soon™️

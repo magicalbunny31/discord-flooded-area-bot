@@ -1,3 +1,6 @@
+export const name = "ticket-settings";
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
+
 import Discord from "discord.js";
 import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
 
@@ -6,15 +9,22 @@ import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
+   // button info
+   const [ _button ] = interaction.customId.split(`:`);
+
+
    // embeds
    const embeds = [
       new Discord.EmbedBuilder()
          .setColor(colours.flooded_area)
          .setTitle(`🔧 Ticket Settings`)
          .setDescription(strip`
-            ${emojis.bun_paw_wave} **Hello, ${interaction.user}!**
-            > Change your settings for tickets below...
+            ### ${emojis.bun_paw_wave} Hello, ${interaction.user}!
+            > - Change your settings for tickets below...
          `)
+         .setFooter({
+            text: `this needs redoing soon ~bunny` // TODO
+         })
    ];
 
 
@@ -37,10 +47,10 @@ export default async (interaction, firestore) => {
                      .setDescription(`Mute tickets created by specific members.`)
                      .setValue(`members`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`🚫`)
-                     .setLabel(`Blacklisted members`)
-                     .setDescription(`Blacklist members from creating tickets.`)
-                     .setValue(`blacklist`)
+                     .setEmoji(`🔨`)
+                     .setLabel(`Ban appeals`)
+                     .setDescription(`Enable or disable ban appeal notifications.`)
+                     .setValue(`ban-appeals`)
                )
          )
    ];

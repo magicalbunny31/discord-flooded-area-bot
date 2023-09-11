@@ -1,8 +1,11 @@
+export const name = "select-roles";
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
+
 import Discord from "discord.js";
 import { partition } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
- * @param {Discord.AnySelectMenuInteraction} interaction
+ * @param {Discord.StringSelectMenuInteraction} interaction
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
@@ -25,7 +28,7 @@ export default async (interaction, firestore) => {
          [ `giveaways`,                 rolesStrings.includes(`giveaways`)                 ],
          [ `challenges`,                rolesStrings.includes(`challenges`)                ],
          [ `doruk's-exceptional-pings`, rolesStrings.includes(`doruk's-exceptional-pings`) ],
-         [ `votekick-pings`,            rolesStrings.includes(`votekick-pings`)            ]
+         [ `archived-access`,           rolesStrings.includes(`archived-access`)            ]
       ],
 
       "pronoun-roles": [
@@ -42,23 +45,23 @@ export default async (interaction, firestore) => {
    // get role ids to set for this member
    const roles = {
       "mention-roles": {
-         "looking-for-group":         process.env.ROLE_LOOKING_FOR_GROUP,
-         "events":                    process.env.ROLE_EVENTS,
-         "polls":                     process.env.ROLE_POLLS,
-         "updates-sneak-peeks":       process.env.ROLE_UPDATES_SNEAK_PEEKS,
-         "giveaways":                 process.env.ROLE_GIVEAWAYS,
-         "challenges":                process.env.ROLE_CHALLENGES,
-         "doruk's-exceptional-pings": process.env.ROLE_DORUKS_EXCEPTIONAL_PINGS,
-         "votekick-pings":            process.env.ROLE_VOTEKICK_PINGS
+         "looking-for-group":         process.env.FA_ROLE_LOOKING_FOR_GROUP,
+         "events":                    process.env.FA_ROLE_EVENTS,
+         "polls":                     process.env.FA_ROLE_POLLS,
+         "updates-sneak-peeks":       process.env.FA_ROLE_UPDATES_SNEAK_PEEKS,
+         "giveaways":                 process.env.FA_ROLE_GIVEAWAYS,
+         "challenges":                process.env.FA_ROLE_CHALLENGES,
+         "doruk's-exceptional-pings": process.env.FA_ROLE_DORUKS_EXCEPTIONAL_PINGS,
+         "archived-access":           process.env.FA_ROLE_ARCHIVED_ACCESS
       },
 
       "pronoun-roles": {
-         "he-him":           process.env.ROLE_HE_HIM,
-         "she-her":          process.env.ROLE_SHE_HER,
-         "they-them":        process.env.ROLE_THEY_THEM,
-         "other-pronouns":   process.env.ROLE_OTHER_PRONOUNS,
-         "any-pronouns":     process.env.ROLE_ANY_PRONOUNS,
-         "ask-for-pronouns": process.env.ROLE_ASK_FOR_PRONOUNS
+         "he-him":           process.env.FA_ROLE_HE_HIM,
+         "she-her":          process.env.FA_ROLE_SHE_HER,
+         "they-them":        process.env.FA_ROLE_THEY_THEM,
+         "other-pronouns":   process.env.FA_ROLE_OTHER_PRONOUNS,
+         "any-pronouns":     process.env.FA_ROLE_ANY_PRONOUNS,
+         "ask-for-pronouns": process.env.FA_ROLE_ASK_FOR_PRONOUNS
       }
    }[type];
 

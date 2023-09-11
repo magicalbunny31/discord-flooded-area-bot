@@ -2,6 +2,16 @@
 .vscode/
 *.code-workspace
 
+# 🤖 random code
+code_snippets/
+
+# 🎶 music
+assets/music-player/*.ogg
+assets/music-player/*.mp3
+
+# 📦 databases
+database/
+
 # 📜 .env
 .env
 

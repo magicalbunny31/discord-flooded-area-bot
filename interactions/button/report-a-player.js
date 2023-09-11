@@ -1,5 +1,11 @@
+export const name = "report-a-player";
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
+
 import Discord from "discord.js";
-import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
+
+import cache from "../../data/cache.js";
+import pkg from "../../package.json" assert { type: "json" };
 
 /**
  * @param {Discord.ButtonInteraction} interaction
@@ -7,31 +13,77 @@ import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
  */
 export default async (interaction, firestore) => {
    // button info
-   const [ _button, updateResponse ] = interaction.customId.split(`:`);
+   const [ _button ] = interaction.customId.split(`:`);
 
 
    // defer the interaction
-   if (!updateResponse)
-      await interaction.deferReply({
-         ephemeral: true
-      });
+   await interaction.deferReply({
+      ephemeral: true
+   });
+
+
+   // set this user's bloxlink linked account in the cache
+   if (!cache.get(`bloxlink-linked-account`)?.[interaction.user.id]) {
+      const userAgent = `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`;
+
+      const playerId = await (async () => {
+         const response = await fetch(`https://v3.blox.link/developer/discord/${interaction.user.id}?guildId=${interaction.guild.id}`, {
+            headers: {
+               "api-key":      process.env.BLOXLINK_API_KEY,
+               "Content-Type": `application/json`,
+               "User-Agent":   userAgent
+            }
+         });
+
+         if (!response.ok)
+            return null;
+
+         const data = await response.json();
+
+         if (!data.success)
+            return null;
+
+         return data.user?.primaryAccount;
+      })();
+
+      // get this player's roblox account
+      const player = await (async () => {
+         const response = await fetch(`https://users.roblox.com/v1/users/${playerId}`, {
+            headers: {
+               "Content-Type": `application/json`,
+               "User-Agent": userAgent
+            }
+         });
+
+         if (!response.ok)
+            return null;
+
+         return await response.json();
+      })();
+
+      if (player) {
+         const bloxlinkLinkedAccounts = cache.get(`bloxlink-linked-account`) || {};
+         bloxlinkLinkedAccounts[interaction.user.id] = {
+            displayName: player?.displayName || player?.name || null,
+            name: player?.name,
+            id: player?.id
+         };
+         cache.set(`bloxlink-linked-account`, bloxlinkLinkedAccounts);
+      };
+   };
 
 
    // this user is blacklisted
-   const { members } = (await firestore.collection(`report-a-player`).doc(`blacklist`).get()).data();
-
-   if (members.includes(interaction.user.id))
+   if (interaction.member.roles.cache.has(process.env.FA_ROLE_REPORT_A_PLAYER_BANNED))
       return await interaction.editReply({
          embeds: [
             new Discord.EmbedBuilder()
                .setColor(colours.red)
-               .addFields({
-                  name: `🚫 Cannot open menu`,
-                  value: strip`
-                     > You have been blacklisted from ${interaction.channel}.
-                     > If you believe this is in error, contact a member of the ${Discord.roleMention(process.env.ROLE_MODERATION_TEAM)}.
-                  `
-               })
+               .setDescription(strip`
+                  ### 🚫 Cannot open menu.
+                  > - You have been blacklisted from ${interaction.channel}.
+                  > - If you believe this is in error, contact a member of the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)}.
+               `)
          ],
          components: []
       });
@@ -43,8 +95,9 @@ export default async (interaction, firestore) => {
          .setColor(colours.flooded_area)
          .setTitle(`📣 Report a Player`)
          .setDescription(strip`
-            ${emojis.bun_paw_wave} **Hello, ${interaction.user}!**
-            > What are you making a report for?
+            ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
+            > - Here, you can report other people for breaking the ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}.
+            > - Use the select menu below to select a report reason...
          `)
    ];
 
@@ -54,8 +107,8 @@ export default async (interaction, firestore) => {
       new Discord.ActionRowBuilder()
          .setComponents(
             new Discord.StringSelectMenuBuilder()
-               .setCustomId(`pick-report-a-player-reason`)
-               .setPlaceholder(`🏷️ Select a reason..`)
+               .setCustomId(`report-a-player`)
+               .setPlaceholder(`Select a reason...`)
                .setOptions(
                   new Discord.StringSelectMenuOptionBuilder()
                      .setEmoji(`🥾`)
@@ -108,6 +161,11 @@ export default async (interaction, firestore) => {
                      .setDescription(`A previously-banned player is evading a ban.`)
                      .setValue(`ban-evade`),
                   new Discord.StringSelectMenuOptionBuilder()
+                     .setEmoji(`🚨`)
+                     .setLabel(`Moderator abuse`)
+                     .setDescription(`An in-game moderator is abusing their powers.`)
+                     .setValue(`mod-abuse`),
+                  new Discord.StringSelectMenuOptionBuilder()
                      .setEmoji(`❓`)
                      .setLabel(`Other...`)
                      .setDescription(`You are reporting a player for a reason not listed here.`)
@@ -117,16 +175,8 @@ export default async (interaction, firestore) => {
    ];
 
 
-   // update the response, as this may have come from the "other" reason
-   if (updateResponse === `true`)
-      return await interaction.update({
-         embeds,
-         components
-      });
-
-
    // edit the deferred interaction
-   return await interaction.editReply({
+   await interaction.editReply({
       embeds,
       components
    });

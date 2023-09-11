@@ -28,7 +28,7 @@ export default async (messageReaction, user, firestore) => {
 
 
    // this post isn't from the suggestion channels
-   if (![ process.env.CHANNEL_GAME_SUGGESTIONS, process.env.CHANNEL_SERVER_SUGGESTIONS, process.env.CHANNEL_PART_SUGGESTIONS ].includes(messageReaction.message.channel.parent?.id))
+   if (![ process.env.FA_CHANNEL_GAME_SUGGESTIONS, process.env.FA_CHANNEL_SERVER_SUGGESTIONS, process.env.FA_CHANNEL_PART_SUGGESTIONS ].includes(messageReaction.message.channel.parent?.id))
       return;
 
 

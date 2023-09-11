@@ -1,89 +1,108 @@
+export const name = "currency";
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+
 export const data = new Discord.SlashCommandBuilder()
    .setName(`currency`)
-   .setDescription(`💰 do things with coins`);
-
-export const guildOnly = true;
+   .setDescription(`Access the currency commands`)
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`balance`)
+         .setDescription(`View your currency statistics`)
+         .addUserOption(
+            new Discord.SlashCommandUserOption()
+               .setName(`user`)
+               .setDescription(`User's currency statistics to view`)
+               .setRequired(false)
+         )
+   )
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`events`)
+         .setDescription(`See any events that may affect the economy`)
+   )
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`items`)
+         .setDescription(`View your items`)
+         .addUserOption(
+            new Discord.SlashCommandUserOption()
+               .setName(`user`)
+               .setDescription(`User's items to view`)
+               .setRequired(false)
+         )
+         .addStringOption(
+            new Discord.SlashCommandStringOption()
+               .setName(`menu`)
+               .setDescription(`Start the menu at a specific area`)
+               .setChoices({
+                  name: `🎒 Items`,
+                  value: `items`
+               }, {
+                  name: `🏷️ Personal item`,
+                  value: `item`
+               }, {
+                  name: `💸 Flea market`,
+                  value: `flea-market`
+               })
+               .setRequired(false)
+         )
+   )
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`shop`)
+         .setDescription(`Enter the currency shop to exchange coins for items`)
+         .addStringOption(
+            new Discord.SlashCommandStringOption()
+               .setName(`marketplace`)
+               .setDescription(`Start the menu at a specific area`)
+               .setChoices({
+                  name: `🏷️ Items`,
+                  value: `shop-items`
+               }, {
+                  name: `🏬 Special items`,
+                  value: `special-items`
+               }, {
+                  name: `💸 Flea market`,
+                  value: `flea-market`
+               }, {
+                  name: `🥕 Stalk market`,
+                  value: `stalk-market`
+               })
+               .setRequired(false)
+         )
+   )
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`trade`)
+         .setDescription(`Send a trade request to another member`)
+         .addUserOption(
+            new Discord.SlashCommandUserOption()
+               .setName(`user`)
+               .setDescription(`The user to send the trade request to`)
+               .setRequired(true)
+         )
+         .addStringOption(
+            new Discord.SlashCommandStringOption()
+               .setName(`item-given`)
+               .setDescription(`The item that you'd give to this member`)
+               .setAutocomplete(true)
+               .setRequired(true)
+         )
+         .addIntegerOption(
+            new Discord.SlashCommandIntegerOption()
+               .setName(`item-given-quantity`)
+               .setDescription(`The quantity of the items you'd give to this member`)
+               .setMinValue(1)
+               .setRequired(false)
+         )
+         .addStringOption(
+            new Discord.SlashCommandStringOption()
+               .setName(`item-wanted`)
+               .setDescription(`The item that you want to receive in exchange for the item given from this member`)
+               .setAutocomplete(true)
+               .setRequired(false)
+         )
+   );
 
 
 import Discord from "discord.js";
-import { colours, emojis } from "@magicalbunny31/awesome-utility-stuff";
-
-/**
- * @param {Discord.ChatInputCommandInteraction} interaction
- * @param {import("@google-cloud/firestore").Firestore} firestore
- */
-export default async (interaction, firestore) => {
-   // defer the interaction
-   await interaction.deferReply();
-
-
-   // get this user's currency stuffs in the database
-   const { coins = 0, items = [] } = (await firestore.collection(`currency`).doc(interaction.user.id).get()).data() || {};
-
-
-   // embeds
-   const embeds = [
-      new Discord.EmbedBuilder()
-         .setColor(colours.flooded_area)
-         .setAuthor({
-            name: interaction.user.tag,
-            iconURL: (interaction.member || interaction.user).displayAvatarURL()
-         })
-         .setFields({
-            name: `👛 coin balance`,
-            value: `\`${coins.toLocaleString()}\` ${coins === 1 ? `coin` : `coins`}`,
-            inline: true
-         }, {
-            name: `🎒 your items`,
-            value: items
-               .filter((item, index, self) =>
-                  index === self.findIndex(value => item.name === value.name)
-               )
-               .sort((a, b) => a.name.localeCompare(b.name))
-               .map(item => `\`${items.filter(i => i.name === item.name).length.toLocaleString()}\` ${item.emoji} ${item.name}`)
-               .join(`\n`)
-               || `**\`no items..\`** ${emojis.rip}`,
-            inline: true
-         })
-         .setFooter({
-            text: `🪙 you earn 1 coin per message every minute!`
-         })
-   ];
-
-
-   // components
-   const components = [
-      new Discord.ActionRowBuilder()
-         .setComponents(
-            new Discord.StringSelectMenuBuilder()
-               .setCustomId(`currency:menu`)
-               .setPlaceholder(`select from the currency menu.. 🪙`)
-               .setOptions(
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`coin balance and items`)
-                     .setValue(`balance`)
-                     .setEmoji(`👛`)
-                     .setDefault(true),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`the shop`)
-                     .setValue(`shop`)
-                     .setEmoji(`🏪`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`sell an item`)
-                     .setValue(`sell-item`)
-                     .setEmoji(`💰`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`give an item to another member`)
-                     .setValue(`give-item`)
-                     .setEmoji(`📥`)
-               )
-         )
-   ];
-
-
-   // edit the deferred interaction
-   return await interaction.editReply({
-      embeds,
-      components
-   });
-};

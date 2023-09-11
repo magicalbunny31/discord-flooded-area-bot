@@ -3,6 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
+import { noop } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Interaction} interaction
@@ -14,23 +15,39 @@ export default async (interaction, firestore) => {
       return;
 
 
+   // fennec-utilities
+   const isBlacklisted = interaction.client.blacklist?.includes(interaction.user.id);
+
+   const developers = JSON.parse(process.env.DEVELOPERS.replaceAll(`'`, `"`));
+   const isDeveloper = developers.includes(interaction.user.id);
+
+
    // this user is in the global blacklist
-   if (interaction.client.blacklist.includes(interaction.user.id))
-      return await interaction.client.fennec.warnBlacklisted(interaction, process.env.SUPPORT_GUILD);
+   if (isBlacklisted)
+      return await interaction.client.fennec.notify(interaction, `blacklist`);
 
 
    // maintenance
-   if (await interaction.client.fennec.getStatus() === `maintenance`)
-      if (!JSON.parse(process.env.DEVELOPERS.replaceAll(`'`, `"`)).includes(interaction.user.id))
-         return await interaction.client.fennec.warnMaintenance(interaction);
+   if (await interaction.client.fennec.getStatus() === `maintenance` && !isDeveloper)
+      return await interaction.client.fennec.notify(interaction, `maintenance`);
 
 
    // modal info
    const [ modal ] = interaction.customId.split(`:`);
 
 
-   // get this modal's file
-   const file = await import(`../interactions/modal-submit/${modal}.js`);
+   // get this file
+   const file = interaction.client.interactions[`modal-submit`].get(modal);
+
+
+   // this file doesn't exist
+   if (!file)
+      return;
+
+
+   // this file isn't for this guild
+   if (!file.guilds.includes(interaction.guild.id))
+      return;
 
 
    try {
@@ -42,10 +59,32 @@ export default async (interaction, firestore) => {
       // an error occurred
       try {
          await interaction.client.fennec.respondToInteractionWithError(interaction);
-         return await interaction.client.fennec.sendError(error, Math.floor(interaction.createdTimestamp / 1000), interaction);
+         await interaction.client.fennec.sendError(error, Math.floor(interaction.createdTimestamp / 1000), interaction);
+
+      } catch {
+         noop;
 
       } finally {
-         return console.error(error.stack);
+         console.error(error.stack);
       };
+   };
+
+
+   // alerts
+   const hasSeenAlertNotification =   await interaction.client.fennec.hasSeenNotification(interaction.user, `alert`);
+   const isAlertNotification      = !!await interaction.client.fennec.getNotification(`alert`);
+
+   if (!hasSeenAlertNotification && isAlertNotification) {
+      await interaction.client.fennec.notify(interaction, `alert`);
+      await interaction.client.fennec.setSeenNotification(interaction.user, `alert`);
+   };
+
+
+   // offline soon
+   const hasSeenOfflineSoonNotification = await interaction.client.fennec.hasSeenNotification(interaction.user, `offline-soon`);
+
+   if (await interaction.client.fennec.getStatus() === `offline-soon` && !hasSeenOfflineSoonNotification) {
+      await interaction.client.fennec.notify(interaction, `offline-soon`);
+      await interaction.client.fennec.setSeenNotification(interaction.user, `offline-soon`);
    };
 };
