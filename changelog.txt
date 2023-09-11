@@ -378,3 +378,9 @@
 >  - you now only need <a:shield:921777486172405823> `Level 5` to buy the role
 >  - you will always get @mentioned for failed votekicks
 >  - people who got their 🪙 1,000 coins can keep them
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### /leaderboards
+> - fixed <:area_communities_bot:1135719948224843856> </leaderboards:1150546246625406986> trying to display [discord's deleted user id placeholder](<https://twitter.com/Squibbus/status/1321853863708733447>) even though said user id is invalid

@@ -46,11 +46,13 @@ export default async (client, firestore) => {
 
          // data fetched from the documents
          const data = Object.assign({},
-            ...docs.map(doc =>
-               ({
-                  [doc.id]: doc.data()
-               })
-            )
+            ...docs
+               .filter(doc => doc.id !== `456226577798135808`) // filter discord's placeholder deleted user id
+               .map(doc =>
+                  ({
+                     [doc.id]: doc.data()
+                  })
+               )
          );
 
          // set the data into the leaderboards database

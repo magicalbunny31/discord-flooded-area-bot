@@ -235,7 +235,7 @@ export default async (interaction, firestore) => {
                      const placement = (i + 1) + (index * size);
                      const nameDisplayed = await userIsInGuild(userId)
                         ? Discord.userMention(userId)
-                        : `@${Discord.escapeMarkdown((await interaction.client.users.fetch(userId)).username)}`;
+                        : `@${Discord.escapeMarkdown((await tryOrUndefined(interaction.client.users.fetch(userId)))?.username || userId)}`;
                      const level = getLevel(experience);
                      return `${placement}. ${nameDisplayed} : \`Level ${level}\` / \`${experience.toLocaleString()} experience\``;
                   })
