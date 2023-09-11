@@ -45,11 +45,6 @@ export default async (interaction, firestore) => {
             (() => {
                switch (interaction.guild.id) {
                   case process.env.GUILD_FLOODED_AREA: return [{
-                     name: `${emojis.shield} \`Level 10\``,
-                     value: strip`
-                        > - ${Discord.roleMention(process.env.FA_ROLE_VOTEKICK_PROTECTION)} (buy from ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`currency`, `shop`, commandCurrencyId)})
-                     `
-                  }, {
                      name: `${emojis.shield} \`Level 20\``,
                      value: strip`
                         > - ${Discord.roleMention(process.env.FA_ROLE_IMAGE_EMBED_PERMS)}
