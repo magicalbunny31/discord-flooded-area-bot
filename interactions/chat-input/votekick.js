@@ -21,6 +21,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
+import { Timestamp } from "@google-cloud/firestore";
 import { emojis, autoArray, choice, noop, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 import cache from "../../data/cache.js";
@@ -46,7 +47,7 @@ export default async (interaction, firestore) => {
 
 
    // trying to votekick someone already timed out
-   if (member.communicationDisabledUntil)
+   if (member.communicationDisabledUntilTimestamp > Date.now())
       return await interaction.reply({
          content: `### ❌ ${user} is already timed out.`,
          ephemeral: true
@@ -122,29 +123,35 @@ export default async (interaction, firestore) => {
       const votekickProtectionDocSnap = await votekickProtectionDocRef.get();
       const votekickProtectionDocData = votekickProtectionDocSnap.data() || {};
 
-      const thisUserVotekickProtection = votekickProtectionDocData[user.id];
-      await votekickProtectionDocRef.update({
-         [user.id]: thisUserVotekickProtection - 1
-      });
+      const thisUserVotekickProtectionUsed = votekickProtectionDocData[user.id]?.[`next-votekick-at`];
+      const thisUserVotekickProtectionUses = votekickProtectionDocData[user.id]?.[`uses-left`];
+
+      if (thisUserVotekickProtectionUsed.seconds < dayjs().unix())
+         await votekickProtectionDocRef.update({
+            [`${user.id}.next-votekick-at`]: new Timestamp(dayjs().add(1, `hour`).unix(), 0),
+            [`${user.id}.uses-left`]:        thisUserVotekickProtectionUses - 1
+         });
 
 
       // try to dm the votekicked user
       try {
-         await user.send({
-            content: strip`
-               ### 📢 ${interaction.user} tried to votekick you!
-               > - Your votekick protection will save you for ${thisUserVotekickProtection - 1} more ${thisUserVotekickProtection - 1 === 1 ? `votekick` : `votekicks`}.
-            `,
-            components: [
-               new Discord.ActionRowBuilder()
-                  .setComponents(
-                     new Discord.ButtonBuilder()
-                        .setLabel(`View failed votekick message`)
-                        .setStyle(Discord.ButtonStyle.Link)
-                        .setURL(message.url)
-                  )
-            ]
-         });
+         if (thisUserVotekickProtectionUsed.seconds < dayjs().unix())
+            await user.send({
+               content: strip`
+                  ### 📢 ${interaction.user} tried to votekick you!
+                  > - Your votekick protection will save you for ${thisUserVotekickProtectionUses - 1} more ${thisUserVotekickProtectionUses - 1 === 1 ? `votekick` : `votekicks`}.
+                  >  - It won't be consumed until after ${Discord.time(dayjs().add(1, `hour`).unix())} (${Discord.time(dayjs().add(1, `hour`).unix(), Discord.TimestampStyles.RelativeTime)}).
+               `,
+               components: [
+                  new Discord.ActionRowBuilder()
+                     .setComponents(
+                        new Discord.ButtonBuilder()
+                           .setLabel(`View failed votekick message`)
+                           .setStyle(Discord.ButtonStyle.Link)
+                           .setURL(message.url)
+                     )
+               ]
+            });
       } catch {
          noop;
       };
@@ -160,7 +167,9 @@ export default async (interaction, firestore) => {
             roles: [],
             users: [
                interaction.user.id,
-               user.id
+               ...thisUserVotekickProtectionUsed.seconds < dayjs().unix()
+                  ? [ user.id ]
+                  : []
             ]
          }
       });
@@ -193,7 +202,7 @@ export default async (interaction, firestore) => {
    // reply to the interaction
    const voteEndsAt = dayjs().add(2, `minutes`).unix();
 
-   await interaction.reply({
+   await interaction.editReply({
       content: strip`
          ### 👞 A votekick on ${user} has been started by ${interaction.user}.
          > - 📰 Reason: ${reason}

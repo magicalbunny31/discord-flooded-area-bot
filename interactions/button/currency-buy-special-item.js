@@ -192,6 +192,16 @@ export default async (interaction, firestore) => {
       await interaction.member.roles.add(item.role);
 
 
+   // this is the @/votekick Protection role, add this member to the database
+   if (item.role === process.env.FA_ROLE_VOTEKICK_PROTECTION)
+      await firestore.collection(`votekick-protection`).doc(interaction.guild.id).update({
+         [interaction.user.id]: {
+            "next-votekick-at": new Timestamp(dayjs().unix(), 0),
+            "uses-left":        5
+         }
+      });
+
+
    // update this user's currency
    const userExpenditure = {
       coins: priceToPay,

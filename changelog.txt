@@ -316,10 +316,13 @@
 > - removed the `@/votekick Pings` @mention from <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>
 > - removed escaped text from <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152> reasons
 > - reworked how @​/votekick Protection works
->  - reduced the cost to 🪙 100 coins (from 🪙 1000 coins)
+>  - reduced the cost to 🪙 100 coins (from 🪙 1,000 coins)
+>  - removed the level requirement to buy @​/votekick Protection
 >  - it now protects the person from 5 votekicks before having to buy the role again
 >  - it can't be stacked to protect from more than 5 votekicks
 >  - when <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>ing someone with @​/votekick Protection, the person with @​/votekick Protection also gets @mentioned too, to be notified about the votekick
+>  - people who previously had the @​/votekick Protection role have been gifted 🪙 1,000 coins
+>  - you can no longer votekick the same person fr the next 1 hour to prevent abuse (if you do manage to spam it for 5 hours straight i applaud you)
 
 ### miscellaneous
 > - removed `/close-ticket` because it was never used, and <:area_communities_bot:1135719948224843856> </jump-to-top:1119768647355859026> can do a similar function
