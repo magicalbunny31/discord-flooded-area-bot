@@ -32,20 +32,25 @@ export default async (interaction, firestore) => {
             > - A message to the ${Discord.roleMention(process.env.FA_ROLE_HEAD_OF_MODERATION)}
             > - A server-related query or question
             > - Claiming a ${Discord.channelMention(process.env.FA_CHANNEL_GIVEAWAYS)}
-            > - Concerns about another person here
+            > - Concerns about another person here (underage, being weird on a consistent basis)
             > - Issues with moderation in this server
             > - Help on something about this server
 
-            ### ❌ You cannot submit modmail for:
+            ### ❌ You cannot submit modmail for...
             > - Reporting players in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)} use ${Discord.channelMention(process.env.FA_CHANNEL_REPORT_A_PLAYER)}
             > - Appealing against moderative actions in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, use ${Discord.channelMention(process.env.FA_CHANNEL_BAN_APPEALS)}
             > - Reporting bugs in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, use ${Discord.channelMention(process.env.FA_CHANNEL_BUG_REPORTS)}
-            > - Exposing a person here
             > - Reporting a member in this server for breaking the ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}, notify a member of the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} instead
             > - Sending silly messages for no reason
+
+            ### 🚨 If there is an active situation in chat (such as a raid or racism), ping the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} first
+            > - Do not bring up personal issues in ${interaction.channel} messages if it's not relevant.
          `)
          .setFooter({
-            text: `Press the button below to open a form.`
+            text: strip`
+               "thank you mimi" ~bunny 🐰
+               Press the button below to open a form.
+            `
          })
    ];
 
