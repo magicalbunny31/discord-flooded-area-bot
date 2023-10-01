@@ -46,10 +46,10 @@ export default async (interaction, firestore) => {
          .setColor(interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || colours.flooded_area)
          .setAuthor({
             iconURL: interaction.user.displayAvatarURL(),
-            name: interaction.member.displayName === interaction.user.username
+            name: interaction.user.displayName === interaction.user.username
                ? `@${interaction.user.username}`
                : strip`
-                  ${interaction.member.displayName}
+                  ${interaction.user.displayName}
                   @${interaction.user.username}
                `
          })

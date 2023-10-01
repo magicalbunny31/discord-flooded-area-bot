@@ -46,7 +46,7 @@ export default async (interaction, firestore) => {
 
 
    // this file isn't for this guild
-   if (!file.guilds.includes(interaction.guild.id))
+   if (interaction.inGuild() && !file.guilds.includes(interaction.guild.id))
       return;
 
 
