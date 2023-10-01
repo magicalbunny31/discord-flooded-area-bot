@@ -14,67 +14,6 @@ export default async (interaction, firestore) => {
    const [ _button, type, id ] = interaction.customId.split(`:`);
 
 
-   // what to show for the modal
-   const fields = {
-      "false-votekicking": [
-         new Discord.ActionRowBuilder()
-            .setComponents(
-               new Discord.TextInputBuilder()
-                  .setCustomId(`reason`)
-                  .setLabel(`WHY YOU WERE VOTEKICKED`)
-                  .setPlaceholder(`What was the reason of the votekick?`)
-                  .setStyle(Discord.TextInputStyle.Short)
-                  .setMaxLength(200)
-                  .setRequired(false)
-            )
-      ],
-      "griefing":  [],
-      "spamming":  [],
-      "bypassing": [],
-      "toxicity":  [],
-      "bug-abuse": [],
-      "inappropriate-player": [
-         new Discord.ActionRowBuilder()
-            .setComponents(
-               new Discord.TextInputBuilder()
-                  .setCustomId(`reason`)
-                  .setLabel(`HOW THEY WERE BEING INAPPROPRIATE`)
-                  .setPlaceholder(`What were they doing that was inappropriate?`)
-                  .setStyle(Discord.TextInputStyle.Paragraph)
-                  .setMaxLength(1000)
-                  .setRequired(true)
-            )
-      ],
-      "bigotry":    [],
-      "exploiting": [],
-      "ban-evade":  [],
-      "mod-abuse": [
-         new Discord.ActionRowBuilder()
-            .setComponents(
-               new Discord.TextInputBuilder()
-                  .setCustomId(`reason`)
-                  .setLabel(`HOW THEY WERE ABUSING THEIR POWERS`)
-                  .setPlaceholder(`How was this moderator abusing their powers?`)
-                  .setStyle(Discord.TextInputStyle.Paragraph)
-                  .setMaxLength(1000)
-                  .setRequired(true)
-            )
-      ],
-      "other": [
-         new Discord.ActionRowBuilder()
-            .setComponents(
-               new Discord.TextInputBuilder()
-                  .setCustomId(`reason`)
-                  .setLabel(`WHY THEY'RE BEING REPORTED`)
-                  .setPlaceholder(`Why are you reporting this player?`)
-                  .setStyle(Discord.TextInputStyle.Paragraph)
-                  .setMaxLength(1000)
-                  .setRequired(true)
-            )
-      ]
-   };
-
-
    // modal
    const modal = new Discord.ModalBuilder()
       .setCustomId(`create-report:${type}`)
@@ -101,8 +40,7 @@ export default async (interaction, firestore) => {
                   .setMinLength(3)
                   .setMaxLength(20)
                   .setRequired(true)
-            ),
-         ...fields[type]
+            )
       );
 
 

@@ -36,32 +36,25 @@ export default async (interaction, firestore) => {
 
    // fields
    const typeOfReport = {
-      "false-votekicking":    `False votekicking`,
-      "spamming":             `Spamming`,
-      "bypassing":            `Bypassing / Swearing`,
-      "toxicity":             `Toxicity / Harassment`,
-      "bug-abuse":            `Bug abusing`,
-      "inappropriate-player": `Inappropriate player`,
-      "bigotry":              `Bigotry`,
-      "exploiting":           `Exploiting / Hacking`,
-      "ban-evade":            `Ban evading`,
-      "mod-abuse":            `Moderator abuse`,
-      "other":                `Other`
+      "false-votekicking":    [ `During a round`, `Started an invalid votekick`                         ],
+      "harassed-people":      [ `Chat`,           `Verbally harassed me or someone else`                ],
+      "threatened-people":    [ `Chat`,           `Threatened violence or real world harm`              ],
+      "hate-speech":          [ `Chat`,           `Promoted hate based on identity or vulnerability`    ],
+      "violence":             [ `Chat`,           `Celebrated or glorified acts of violence`            ],
+      "swore-in-chat":        [ `Chat`,           `Used offensive language`                             ],
+      "sexual-in-chat":       [ `Chat`,           `Said something explicit or sexual`                   ],
+      "inappropriate-avatar": [ `Player`,         `Inappropriate avatar`                                ],
+      "exploiting":           [ `Player`,         `Using exploits, cheats, or hacks`                    ],
+      "bug-abuse":            [ `Player`,         `Abusing a bug or glitch to gain an unfair advantage` ],
+      "sexual-build":         [ `Player`,         `Built something explicit or sexual`                  ],
+      "being-sexual":         [ `Player`,         `Being suggestive or sexual in-game`                  ],
+      "ban-evasion":          [ `Player`,         `Evading a ban with an alternate account`             ],
+      "moderator-abuse":      [ `Something else`, `Moderator abusing their powers`                      ],
+      "other":                [ `Something else`, `Another reason...`                                   ]
    }[type];
 
    const reportingPlayerUsername = interaction.fields.getTextInputValue(`reporting-player`).trim();
    const reportedPlayerUsername  = interaction.fields.getTextInputValue(`reported-player`) .trim();
-   const reason                  = interaction.fields.fields.find(field => field.customId === `reason`)?.value.trim();
-
-   const reasonLabel = {
-      "false-votekicking":    `WHY YOU WERE VOTEKICKED`,
-      "inappropriate-player": `HOW THEY WERE BEING INAPPROPRIATE`,
-      "mod-abuse":            `HOW THEY WERE ABUSING THEIR POWERS`,
-      "other":                `WHY THEY'RE BEING REPORTED`
-   }[type];
-
-   const reasonRequired = [ `inappropriate-player`, `mod-abuse`, `other` ].includes(type);
-   const proofRequired  = [ `spamming`, `bypassing`, `toxicity`, `bug-abuse`, `inappropriate-player`, `bigotry`, `exploiting`, `ban-evade`, `other` ].includes(type);
 
 
    // get the reporting/reported players
@@ -125,8 +118,7 @@ export default async (interaction, firestore) => {
    // set this data in the cache
    cache.set(id, {
       reportingPlayerUsername,
-      reportedPlayerUsername,
-      reason
+      reportedPlayerUsername
    });
 
 
@@ -136,30 +128,23 @@ export default async (interaction, firestore) => {
          .setColor(interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || colours.flooded_area)
          .setTitle(`📣 Report a Player`)
          .setFields(
-            [
-               {
-                  name: `TYPE OF REPORT`,
-                  value: `> ${typeOfReport}`,
-                  inline: true
-               },
-               {
-                  name: `YOUR ROBLOX ACCOUNT`,
-                  value: formattedReportingPlayer,
-                  inline: true
-               },
-               {
-                  name: `PLAYER YOU'RE REPORTING`,
-                  value: formattedReportedPlayer,
-                  inline: true
-               },
-               ...reasonLabel
-                  ? [{
-                     name: reasonLabel,
-                     value: `>>> ${reason || `\`not set\``}`,
-                     inline: true
-                  }]
-                  : []
-            ]
+            [{
+               name: `REPORT SUMMARY`,
+               value: typeOfReport
+                  .map(reason => `> - ${reason}`)
+                  .join(`\n`),
+               inline: true
+            },
+            {
+               name: `YOUR ROBLOX ACCOUNT`,
+               value: formattedReportingPlayer,
+               inline: true
+            },
+            {
+               name: `PLAYER YOU'RE REPORTING`,
+               value: formattedReportedPlayer,
+               inline: true
+            }]
          )
          .setFooter({
             text: `Your report will not be sent until you confirm it in the next channel.`
@@ -168,7 +153,7 @@ export default async (interaction, firestore) => {
 
 
    // errors in the report data
-   const invalidReport = (reasonRequired && !reason) || (!reportedPlayerUsername);
+   const invalidReport = !reportedPlayerUsername;
 
    const errors = [
       ...!invalidReport
@@ -197,19 +182,6 @@ export default async (interaction, firestore) => {
                      > - Or, if this is as much as you can remember, feel free to continue.
                   `
                }]
-               : [],
-
-            ...!reasonRequired && reasonLabel && !reason
-               ? [{
-                  name: `Are you sure you don't want to input ${
-                     {
-                        "false-votekicking": `why you were votekicked`
-                     }[type]
-                  }?`,
-                  value: strip`
-                     > - Any bit of information can help the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} with your report.
-                  `
-               }]
                : []
          ]
 
@@ -220,21 +192,6 @@ export default async (interaction, firestore) => {
                   value: strip`
                      > - It helps the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} know exactly who you're reporting!
                      > - You can input anything, even if it's not a valid Roblox account, if you roughly remember parts of their username.
-                  `
-               }]
-               : [],
-
-            ...reasonRequired && !reason
-               ? [{
-                  name: `You must input ${
-                     {
-                        "inappropriate-player": `how they were being inappropriate`,
-                        "mod-abuse":            `how they were abusing their powers`,
-                        "other":                `why you're reporting this player`
-                     }[type]
-                  }.`,
-                  value: strip`
-                     > Without a reason, the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} won't know why you're reporting this player.
                   `
                }]
                : []
@@ -251,8 +208,8 @@ export default async (interaction, firestore) => {
             )
             .setTitle(
                !invalidReport
-                  ? `\\💣 Before you send your report...`
-                  : `\\💥 You can't send this report just yet.`
+                  ? `💣 Before you send your report...`
+                  : `💥 You can't send this report just yet.`
             )
             .setFields(errors)
       );
@@ -263,7 +220,7 @@ export default async (interaction, firestore) => {
       new Discord.ActionRowBuilder()
          .setComponents(
             new Discord.ButtonBuilder()
-               .setCustomId(`create-report-thread:${type}:${proofRequired}:${!!errors.length}`)
+               .setCustomId(`create-report-thread:${type}:${!!errors.length}`)
                .setLabel(`Continue`)
                .setEmoji(`➡️`)
                .setStyle(Discord.ButtonStyle.Primary)

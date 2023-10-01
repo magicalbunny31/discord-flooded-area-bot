@@ -46,10 +46,11 @@ export default async (interaction, firestore) => {
 
    // mentions
    const defaultMentions = [
-      `false-votekicking`,    `griefing`, `spamming`,
-      `bypassing`,            `toxicity`, `bug-abuse`,
-      `inappropriate-player`, `bigotry`,  `exploiting`,
-      `ban-evade`,            `other`
+      `false-votekicking`, `harassed-people`,      `threatened-people`,
+      `hate-speech`,       `violence`,             `swore-in-chat`,
+      `sexual-in-chat`,    `inappropriate-avatar`, `exploiting`,
+      `bug-abuse`,         `sexual-build`,         `being-sexual`,
+      `ban-evasion`,       `moderator-abuse`,      `other`
    ];
 
 
@@ -79,63 +80,83 @@ export default async (interaction, firestore) => {
                      .setPlaceholder(`🏷️ Select mention reasons to be notified for...`)
                      .setOptions(
                         new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Started an invalid votekick`)
                            .setEmoji(`🥾`)
-                           .setLabel(`False votekicking`)
                            .setValue(`false-votekicking`)
                            .setDefault(mentions.includes(`false-votekicking`)),
                         new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`💣`)
-                           .setLabel(`Griefing`)
-                           .setValue(`griefing`)
-                           .setDefault(mentions.includes(`griefing`)),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`💬`)
-                           .setLabel(`Spamming`)
-                           .setValue(`spamming`)
-                           .setDefault(mentions.includes(`spamming`)),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`💭`)
-                           .setLabel(`Bypassing / Swearing`)
-                           .setValue(`bypassing`)
-                           .setDefault(mentions.includes(`bypassing`)),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`🗯️`)
-                           .setLabel(`Toxicity / Harassment`)
-                           .setValue(`toxicity`)
-                           .setDefault(mentions.includes(`toxicity`)),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`🐛`)
-                           .setLabel(`Bug abusing`)
-                           .setValue(`bug-abuse`)
-                           .setDefault(mentions.includes(`bug-abuse`)),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`🪪`)
-                           .setLabel(`Inappropriate player`)
-                           .setValue(`inappropriate-player`)
-                           .setDefault(mentions.includes(`inappropriate-player`)),
-                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Verbally harassed me or someone else`)
                            .setEmoji(`💢`)
-                           .setLabel(`Bigotry`)
-                           .setValue(`bigotry`)
-                           .setDefault(mentions.includes(`bigotry`)),
+                           .setValue(`harassed-people`)
+                           .setDefault(mentions.includes(`harassed-people`)),
                         new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Threatened violence or real world harm`)
+                           .setEmoji(`💢`)
+                           .setValue(`threatened-people`)
+                           .setDefault(mentions.includes(`threatened-people`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Promoted hate based on identity or vulnerability`)
+                           .setEmoji(`💢`)
+                           .setValue(`hate-speech`)
+                           .setDefault(mentions.includes(`hate-speech`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Celebrated or glorified acts of violence`)
+                           .setEmoji(`💢`)
+                           .setValue(`violence`)
+                           .setDefault(mentions.includes(`violence`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Used offensive language`)
+                           .setEmoji(`🗯️`)
+                           .setValue(`swore-in-chat`)
+                           .setDefault(mentions.includes(`swore-in-chat`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Said something explicit or sexual`)
+                           .setEmoji(`🗯️`)
+                           .setValue(`sexual-in-chat`)
+                           .setDefault(mentions.includes(`sexual-in-chat`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Inappropriate avatar`)
+                           .setEmoji(`🔞`)
+                           .setValue(`inappropriate-avatar`)
+                           .setDefault(mentions.includes(`inappropriate-avatar`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Using exploits, cheats, or hacks`)
                            .setEmoji(`💻`)
-                           .setLabel(`Exploiting / Hacking`)
                            .setValue(`exploiting`)
                            .setDefault(mentions.includes(`exploiting`)),
                         new Discord.StringSelectMenuOptionBuilder()
-                           .setEmoji(`👥`)
-                           .setLabel(`Ban evading`)
-                           .setValue(`ban-evade`)
-                           .setDefault(mentions.includes(`ban-evade`)),
+                           .setLabel(`Abusing a bug or glitch to gain an unfair advantage`)
+                           .setEmoji(`🐛`)
+                           .setValue(`bug-abuse`)
+                           .setDefault(mentions.includes(`bug-abuse`)),
                         new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Built something explicit or sexual`)
+                           .setEmoji(`🔞`)
+                           .setValue(`sexual-build`)
+                           .setDefault(mentions.includes(`sexual-build`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Being suggestive or sexual in-game`)
+                           .setEmoji(`🔞`)
+                           .setValue(`being-sexual`)
+                           .setDefault(mentions.includes(`being-sexual`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Evading a ban with an alternate account`)
+                           .setEmoji(`👥`)
+                           .setValue(`ban-evasion`)
+                           .setDefault(mentions.includes(`ban-evasion`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Moderator abusing their powers`)
+                           .setEmoji(`🚨`)
+                           .setValue(`moderator-abuse`)
+                           .setDefault(mentions.includes(`moderator-abuse`)),
+                        new Discord.StringSelectMenuOptionBuilder()
+                           .setLabel(`Another reason...`)
                            .setEmoji(`❓`)
-                           .setLabel(`Other...`)
                            .setValue(`other`)
                            .setDefault(mentions.includes(`other`))
                      )
                      .setMinValues(0)
-                     .setMaxValues(11)
+                     .setMaxValues(15)
                )
          ]
       },

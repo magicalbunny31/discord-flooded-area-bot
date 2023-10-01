@@ -115,7 +115,7 @@ export default async (interaction, firestore) => {
             value: `>>> ${whyReconsider || `\`not set\``}`
          })
          .setFooter({
-            text: `Your report will not be sent until you confirm it below.`
+            text: `Your appeal will not be sent until you confirm it below.`
          })
    ];
 

@@ -80,8 +80,8 @@ export default async (interaction, firestore) => {
             new Discord.EmbedBuilder()
                .setColor(colours.red)
                .setDescription(strip`
-                  ### 🚫 Cannot open menu.
-                  > - You have been blacklisted from ${interaction.channel}.
+                  ### 🚫 Can't open menu
+                  > - You've been blacklisted from ${interaction.channel}.
                   > - If you believe this is in error, contact a member of the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)}.
                `)
          ],
@@ -96,8 +96,9 @@ export default async (interaction, firestore) => {
          .setTitle(`📣 Report a Player`)
          .setDescription(strip`
             ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
-            > - Here, you can report other people for breaking the ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}.
-            > - Use the select menu below to select a report reason...
+            > - If you find anyone who is breaking our ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)} in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, you can report them to us here.
+            > - You can also ${Discord.hyperlink(`report players to Roblox`, `https://en.help.roblox.com/hc/en-us/articles/203312410-How-to-Report-Rule-Violations`)} too, if you think it's necessary.
+            > - Remember that you can always ${Discord.hyperlink(`block`, `https://en.help.roblox.com/hc/en-us/articles/203314270-How-to-Block-Another-User`)} or ${Discord.hyperlink(`mute`, `https://alvarotrigo.com/blog/mute-someone-roblox`)} any players that you don't want to interact with in chat.
          `)
    ];
 
@@ -107,69 +108,25 @@ export default async (interaction, firestore) => {
       new Discord.ActionRowBuilder()
          .setComponents(
             new Discord.StringSelectMenuBuilder()
-               .setCustomId(`report-a-player`)
-               .setPlaceholder(`Select a reason...`)
+               .setCustomId(`report-a-player:0`)
+               .setPlaceholder(`Select an option that best describes what you are reporting someone for.`)
                .setOptions(
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`🥾`)
-                     .setLabel(`False votekicking`)
-                     .setDescription(`You were votekicked for an unfair reason from a server.`)
-                     .setValue(`false-votekicking`),
+                     .setLabel(`During a round`)
+                     .setEmoji(`🎮`)
+                     .setValue(`during-round`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`💣`)
-                     .setLabel(`Griefing`)
-                     .setDescription(`Another player destroyed your build.`)
-                     .setValue(`griefing`),
-                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Chat`)
                      .setEmoji(`💬`)
-                     .setLabel(`Spamming`)
-                     .setDescription(`Another player is flooding the chat.`)
-                     .setValue(`spamming`),
+                     .setValue(`chat`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`💭`)
-                     .setLabel(`Bypassing / Swearing`)
-                     .setDescription(`Another player is saying inappropriate words.`)
-                     .setValue(`bypassing`),
+                     .setLabel(`Player`)
+                     .setEmoji(`👤`)
+                     .setValue(`player`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`🗯️`)
-                     .setLabel(`Toxicity / Harassment`)
-                     .setDescription(`Another player is being a constant bully.`)
-                     .setValue(`toxicity`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`🐛`)
-                     .setLabel(`Bug abusing`)
-                     .setDescription(`Another player is abusing a bug for unfair advantage.`)
-                     .setValue(`bug-abuse`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`🪪`)
-                     .setLabel(`Inappropriate player`)
-                     .setDescription(`Another player is being inappropriate.`)
-                     .setValue(`inappropriate-player`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`💢`)
-                     .setLabel(`Bigotry`)
-                     .setDescription(`Another player is being intolerant of others' opinions.`)
-                     .setValue(`bigotry`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`💻`)
-                     .setLabel(`Exploiting / Hacking`)
-                     .setDescription(`Another player is using exploits.`)
-                     .setValue(`exploiting`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`👥`)
-                     .setLabel(`Ban evading`)
-                     .setDescription(`A previously-banned player is evading a ban.`)
-                     .setValue(`ban-evade`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`🚨`)
-                     .setLabel(`Moderator abuse`)
-                     .setDescription(`An in-game moderator is abusing their powers.`)
-                     .setValue(`mod-abuse`),
-                  new Discord.StringSelectMenuOptionBuilder()
-                     .setEmoji(`❓`)
-                     .setLabel(`Other...`)
-                     .setDescription(`You are reporting a player for a reason not listed here.`)
-                     .setValue(`other`)
+                     .setLabel(`Something else`)
+                     .setEmoji(`📝`)
+                     .setValue(`something-else`)
                )
          )
    ];

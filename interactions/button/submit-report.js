@@ -11,7 +11,7 @@ import { colours, emojis, url, strip, wait } from "@magicalbunny31/awesome-utili
  */
 export default async (interaction, firestore) => {
    // button info
-   const [ _button, type, reportingUserId, reportMessageId, proofRequired ] = interaction.customId.split(`:`);
+   const [ _button, type, reportingUserId, reportMessageId ] = interaction.customId.split(`:`);
 
 
    // this isn't the user who created this report
@@ -33,53 +33,52 @@ export default async (interaction, firestore) => {
    });
 
 
-   // check for proof
-   if (proofRequired === `true`) {
-      // fetch all messages sent by the reporting user in the thread
-      const messages = await (async () => {
-         const fetchedMessages = [];
-         let lastMessage;
+   /* check for proof */
 
-         while (true) {
-            const messages = (await interaction.channel.messages.fetch({ limit: 100, ...fetchedMessages.length ? { before: fetchedMessages.at(-1).id } : {} }))
-               .filter(message => message.author.id === interaction.user.id && !message.system);
+   // fetch all messages sent by the reporting user in the thread
+   const messages = await (async () => {
+      const fetchedMessages = [];
+      let lastMessage;
 
-            fetchedMessages.push(...messages.values());
+      while (true) {
+         const messages = (await interaction.channel.messages.fetch({ limit: 100, ...fetchedMessages.length ? { before: fetchedMessages.at(-1).id } : {} }))
+            .filter(message => message.author.id === interaction.user.id && !message.system);
 
-            if (lastMessage?.id === fetchedMessages.at(-1)?.id)
-               break;
+         fetchedMessages.push(...messages.values());
 
-            else
-               lastMessage = fetchedMessages.at(-1);
+         if (lastMessage?.id === fetchedMessages.at(-1)?.id)
+            break;
 
-            await wait(1000);
-         };
+         else
+            lastMessage = fetchedMessages.at(-1);
 
-         return fetchedMessages;
-      })();
+         await wait(1000);
+      };
 
-      // none of the messages sent have attachments, embeds or urls
-      if (
-         !messages.some(message =>
-            message.attachments?.size || message.embeds?.length || url.test(message.content)
-         )
+      return fetchedMessages;
+   })();
+
+   // none of the messages sent have attachments, embeds or urls
+   if (
+      !messages.some(message =>
+         message.attachments?.size || message.embeds?.length || url.test(message.content)
       )
-         return await interaction.editReply({
-            embeds: [
-               new Discord.EmbedBuilder()
-                  .setColor(colours.flooded_area)
-                  .setTitle(`❌ Cannot submit report`)
-                  .setDescription(strip`
-                     > - You must send at least 1 image/video/link in this thread before you can submit your report.
-                     >  - Examples of sufficient evidence are images or video clips: just text is __not__ valid evidence.
-                     >  - You can also use third-party sites that embed content as images/videos (like ${Discord.hyperlink(`Streamable`, `https://streamable.com`)}, ${Discord.hyperlink(`Medal`, `https://medal.tv`)}, ${Discord.hyperlink(`ShareX`, `https://getsharex.com`)}...).
-                     > - There are no chat logs, so do not rely on that!
-                     > - Without evidence, the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} may not be able to do anything.
-                     >  - If you constantly create reports without sufficient evidence, you may be blocked from ${Discord.channelMention(process.env.FA_CHANNEL_REPORT_A_PLAYER)}.
-                  `)
-            ]
-         });
-   };
+   )
+      return await interaction.editReply({
+         embeds: [
+            new Discord.EmbedBuilder()
+               .setColor(colours.flooded_area)
+               .setTitle(`❌ Cannot submit report`)
+               .setDescription(strip`
+                  > - You must send at least 1 image/video/link in this thread before you can submit your report.
+                  >  - Examples of sufficient evidence are images or video clips: just text is not valid evidence.
+                  >  - You can also use third-party sites that embed content as images/videos (like ${Discord.hyperlink(`Streamable`, `https://streamable.com`)}, ${Discord.hyperlink(`Medal`, `https://medal.tv`)}, ${Discord.hyperlink(`ShareX`, `https://getsharex.com`)}...).
+                  > - There are no chat logs, so do not rely on that!
+                  > - Without evidence, the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} may not be able to do anything.
+                  >  - If you constantly create reports without sufficient evidence, you may be blocked from ${Discord.channelMention(process.env.FA_CHANNEL_REPORT_A_PLAYER)}.
+               `)
+         ]
+      });
 
 
    // edit the interaction's reply
@@ -173,17 +172,21 @@ export default async (interaction, firestore) => {
       content: strip`
          📣 Report a Player > ${
             {
-               "false-votekicking":    `False votekicking`,
-               "spamming":             `Spamming`,
-               "bypassing":            `Bypassing / Swearing`,
-               "toxicity":             `Toxicity / Harassment`,
-               "bug-abuse":            `Bug abusing`,
-               "inappropriate-player": `Inappropriate player`,
-               "bigotry":              `Bigotry`,
-               "exploiting":           `Exploiting / Hacking`,
-               "ban-evade":            `Ban evading`,
-               "mod-abuse":            `Moderator abuse`,
-               "other":                `Other`
+               "false-votekicking":    `Started an invalid votekick`,
+               "harassed-people":      `Verbally harassed me or someone else`,
+               "threatened-people":    `Threatened violence or real world harm`,
+               "hate-speech":          `Promoted hate based on identity or vulnerability`,
+               "violence":             `Celebrated or glorified acts of violence`,
+               "swore-in-chat":        `Used offensive language`,
+               "sexual-in-chat":       `Said something explicit or sexual`,
+               "inappropriate-avatar": `Inappropriate avatar`,
+               "exploiting":           `Using exploits, cheats, or hacks`,
+               "bug-abuse":            `Abusing a bug or glitch to gain an unfair advantage`,
+               "sexual-build":         `Built something explicit or sexual`,
+               "being-sexual":         `Being suggestive or sexual in-game`,
+               "ban-evasion":          `Evading a ban with an alternate account`,
+               "moderator-abuse":      `Moderator abusing their powers`,
+               "other":                `Another reason...`
             }[type]
          }
          ${roleToMention}

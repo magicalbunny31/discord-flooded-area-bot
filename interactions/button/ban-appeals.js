@@ -80,11 +80,28 @@ export default async (interaction, firestore) => {
          .setTitle(`🔨 Ban Appeals`)
          .setDescription(strip`
             ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
-            > - Here, you can appeal a ban that you've received in-game.
-            >  - Generally, we'll will only accept appeals if you believe you were banned in error.
-            >  - This includes bans where you believe there was no proof for.
-            > - Before creating an appeal, you should read the ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)} to understand our rules.
+            > - All players has the right to appeal against moderative actions against them in ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}.
+            > - We try hard to only moderate when necessary, but we're not perfect: mistakes may happen!
+            > - Note that we can't help you with actions taken against your Roblox account - if you wish to appeal against that, contact them via their ${Discord.hyperlink(`support forum`, `https://www.roblox.com/support`)}.
+
+            ### ✅ You can submit an appeal for...
+            > - Moderation taken for a reason you don't know
+            > - A ban that you think is too harsh/long
+            > - Still being banned after your ban gets appealed
+            > - Believing we banned the wrong player
+
+            ### ❌ You cannot submit an appeal for...
+            > - Being banned from Roblox
+            > - Not being banned from ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}
+            > - Apologising
+            > - Confessing
+            > - Pleading that you will change
+            > - Acting clueless about your actions
+            > - Being moderated for doing something you did knowingly against the #rules
          `)
+         .setFooter({
+            text: `If you think your account was falsely moderated, you can appeal below.`
+         })
    ];
 
 
