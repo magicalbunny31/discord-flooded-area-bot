@@ -14,13 +14,7 @@ export default async (interaction, firestore) => {
 
 
    // the report embed (it changes before responding to the interaction)
-   const messageEmbed = new Discord.EmbedBuilder(interaction.message.embeds[0].data)
-      .setFooter({
-         text: strip`
-            🌊 Flooded Area Modmail
-            📬 Keep your DMs on to receive and respond to messages.
-         `
-      });
+   const messageEmbed = new Discord.EmbedBuilder(interaction.message.embeds[0].data);
 
 
    // update the interaction
@@ -42,9 +36,6 @@ export default async (interaction, firestore) => {
       content: Discord.roleMention(process.env.FA_ROLE_HEAD_OF_MODERATION),
       embeds: [
          messageEmbed
-            .setFooter({
-               text: null
-            })
       ],
       components: [
          new Discord.ActionRowBuilder()
@@ -94,6 +85,12 @@ export default async (interaction, firestore) => {
          return await interaction.user.send({
             embeds: [
                messageEmbed
+                  .setFooter({
+                     text: strip`
+                        🌊 Flooded Area Modmail
+                        📬 Keep your DMs on to receive and respond to messages.
+                     `
+                  })
             ],
             components: [
                new Discord.ActionRowBuilder()
