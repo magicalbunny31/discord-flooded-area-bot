@@ -2,7 +2,7 @@ export const name = "modmail";
 export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 import Discord from "discord.js";
-import { choice } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ButtonInteraction} interaction
@@ -13,33 +13,59 @@ export default async (interaction, firestore) => {
    const [ _button ] = interaction.customId.split(`:`);
 
 
-   // TODO
-   await interaction.reply({
-      content: choice([
-         `look behind you.`,
-         `what did i tell you..`,
-         `<:fear:1143234934128001125>`,
-         `....`,
-         `you have made a grave mistake !!`,
-         `misfortune`,
-         `you couldn't even follow simple instructions ,,`,
-         `disappointing`,
-         `pitiful`,
-         `such failure`,
-         `stop PRESSING IT!!!!!!!!!!!!!!!!!`,
-         `grr ///`,
-         `wah`,
-         `why`,
-         `no`,
-         `nuh uh`,
-         `nuh`,
-         `sobbing`,
-         `why did you do that`,
-         `you have been CURSED now`,
-         `the`,
-         `guh`,
-         `CURSE OF RA 𓀀 𓀁 𓀂 𓀃 𓀄 𓀅 𓀆 𓀇 𓀈 𓀉 𓀊 𓀋 𓀌 𓀍 𓀎 𓀏 𓀐 𓀑 𓀒 𓀓 𓀔 𓀕 𓀖 𓀗 𓀘 𓀙 𓀚 𓀛 𓀜 𓀝 𓀞 𓀟 𓀠 𓀡 𓀢 𓀣 𓀤 𓀥 𓀦 𓀧 𓀨 𓀩 𓀪 𓀫 𓀬 𓀭 𓀮 𓀯 𓀰 𓀱 𓀲 𓀳 𓀴 𓀵 𓀶 𓀷 𓀸 𓀹 𓀺 𓀻 𓀼 𓀽 𓀾 𓀿 𓁀 𓁁 𓁂 𓁃 𓁄 𓁅 𓁆 𓁇 𓁈 𓁉 𓁊 𓁋 𓁌 𓁍 𓁎 𓁏 𓁐 𓁑 𓀄 𓀅 𓀆`
-      ]),
+   // defer the interaction
+   await interaction.deferReply({
       ephemeral: true
+   });
+
+
+   // embeds
+   const embeds = [
+      new Discord.EmbedBuilder()
+         .setColor(colours.flooded_area)
+         .setTitle(`📬 Modmail Submissions`)
+         .setDescription(strip`
+            ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
+            > - Any member can submit ${interaction.channel} to send a message, or server-related question to the ${Discord.roleMention(process.env.FA_ROLE_HEAD_OF_MODERATION)}.
+
+            ### ✅ You can submit modmail for...
+            > - A message to the ${Discord.roleMention(process.env.FA_ROLE_HEAD_OF_MODERATION)}
+            > - A server-related query or question
+            > - Claiming a ${Discord.channelMention(process.env.FA_CHANNEL_GIVEAWAYS)}
+            > - Concerns about another person here
+            > - Issues with moderation in this server
+            > - Help on something about this server
+
+            ### ❌ You cannot submit modmail for:
+            > - Reporting players in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)} use ${Discord.channelMention(process.env.FA_CHANNEL_REPORT_A_PLAYER)}
+            > - Appealing against moderative actions in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, use ${Discord.channelMention(process.env.FA_CHANNEL_BAN_APPEALS)}
+            > - Reporting bugs in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, use ${Discord.channelMention(process.env.FA_CHANNEL_BUG_REPORTS)}
+            > - Exposing a person here
+            > - Reporting a member in this server for breaking the ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}, notify a member of the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} instead
+            > - Sending silly messages for no reason
+         `)
+         .setFooter({
+            text: `Press the button below to open a form.`
+         })
+   ];
+
+
+   // components
+   const components = [
+      new Discord.ActionRowBuilder()
+         .setComponents(
+            new Discord.ButtonBuilder()
+               .setCustomId(`create-modmail`)
+               .setLabel(`Create modmail`)
+               .setEmoji(`🗒️`)
+               .setStyle(Discord.ButtonStyle.Success)
+         )
+   ];
+
+
+   // edit the deferred interaction
+   return await interaction.editReply({
+      embeds,
+      components
    });
 };

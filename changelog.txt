@@ -6,7 +6,6 @@
 
 # https://discord.com/channels/977254354589462618/987047618918105118
 
-
 ## <:happ:906683365791502366> new stuffs!!
 
 ### /currency
@@ -63,7 +62,6 @@
 > - commands will no longer randomly error, and will instead display some helpful information about why the command can't be used
 > - ..but you don't know what *that* means, right? <a:furthinking:817599069098606602>
 
-
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
 ### commands
@@ -85,7 +83,6 @@
 ### tickets
 > - fixed some text formatting in the "you need to provide proof" embed for https://discord.com/channels/977254354589462618/1072945802256855170 tickets
 >  - there was a double space in the embed!!
-
 
 ## <@490178047325110282>'s notes
 
@@ -125,13 +122,11 @@
 
 # https://discord.com/channels/977254354589462618/987047618918105118
 
-
 ## <:happ:906683365791502366> new stuffs!!
 
 ### day -1 update
 > - commands can only be used in https://discord.com/channels/977254354589462618/977267452050280498 or in threads (excludes <:flooded_area:995461994989756526> </votekick:1116857516324827152> and staff)
 > - that one "oh moderators!" gif is sent when opening a ticket in https://discord.com/channels/977254354589462618/1072945802256855170 and https://discord.com/channels/977254354589462618/1082650454044979210
-
 
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
@@ -151,7 +146,6 @@
 
 # https://discord.com/channels/977254354589462618/987047618918105118
 
-
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
 ### commands
@@ -170,7 +164,6 @@
 
 
 # https://discord.com/channels/977254354589462618/987047618918105118
-
 
 ## <:happ:906683365791502366> new stuffs!!
 
@@ -205,7 +198,6 @@
 >  - this will save some database read usages: that's real good for me!
 >  - commands which display this info will still filter the data, the above *just* updates the database
 
-
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
 ### /america <a:haha_uhh:1112599343715864637>
@@ -236,7 +228,6 @@
 ### /music-player
 > - fixed <:area_communities_bot:1135719948224843856> </music-player view-tracks:1132730748370174046> not replying ephemerally when you use the select menu of another user's command
 
-
 ## <@490178047325110282>'s notes
 
 ### these stuffs are coming in a future update
@@ -262,7 +253,6 @@
 
 # https://discord.com/channels/977254354589462618/987047618918105118
 
-
 ## <:happ:906683365791502366> new stuffs!!
 
 ### the emoji update
@@ -285,7 +275,6 @@
 
 
 # https://discord.com/channels/977254354589462618/987047618918105118
-
 
 ## <:happ:906683365791502366> new stuffs!!
 
@@ -333,7 +322,6 @@
 > - added `@Archived Access` to <@983126054619189370>'s <#1002631503248892077>
 > - text-based commands (used out of <#977267452050280498>) will now auto-delete the alert and the command message
 
-
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
 ### /currency
@@ -342,7 +330,6 @@
 
 ### /votekick
 > - fixed already timed out users and bot users being able to be <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>ed
-
 
 ## <@490178047325110282>'s notes
 
@@ -368,7 +355,6 @@
 
 # https://discord.com/channels/977254354589462618/987047618918105118
 
-
 ## <:happ:906683365791502366> new stuffs!!
 
 ### bunny what did you do to votekicks
@@ -379,8 +365,29 @@
 >  - you will always get @mentioned for failed votekicks
 >  - people who got their 🪙 1,000 coins can keep them
 
-
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
 ### /leaderboards
 > - fixed <:area_communities_bot:1135719948224843856> </leaderboards:1150546246625406986> trying to display [discord's deleted user id placeholder](<https://twitter.com/Squibbus/status/1321853863708733447>) even though said user id is invalid
+
+
+
+------------
+==============
+==============
+------------
+01/oct/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+## <:happ:906683365791502366> new stuffs!!
+
+### support ✨
+> - https://discord.com/channels/977254354589462618/1072945802256855170
+>  - updated report types/reasons
+>  - updated formatting
+> - https://discord.com/channels/977254354589462618/1082650454044979210
+>  - updated formatting
+> - added https://discord.com/channels/977254354589462618/1150530337227689994
