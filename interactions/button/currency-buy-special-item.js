@@ -62,16 +62,27 @@ export default async (interaction, firestore) => {
    const userCurrencyDocSnap = await userCurrencyDocRef.get();
    const userCurrencyDocData = userCurrencyDocSnap.data() || {};
 
+   const userItems = userCurrencyDocData.items || [];
+
 
    // this item's information
    const item = specialItems.find(item => item.name === itemName);
 
 
    // who's in charge of bunny's shop
-   // halo  : 10:00 - 21:59
-   // bunny : 22:00 - 09:59
-   const isHalo = 10 <= dayjs.utc().hour() && dayjs.utc().hour() < 22;
-   const responses = shopResponses[`special-items`][isHalo ? `halo` : `bunny`];
+   /**
+    * halo  : 10:00 - 03:59  |  halo         : 10:00 - 15:59
+    *                        |  halo + bunny : 16:00 - 03:59
+    * bunny : 16:00 - 09:59  |         bunny : 04:00 - 09:59
+    */
+   const bunnyShopShopkeeper = (() => {
+      const hour = dayjs.utc().hour();
+      switch (true) {
+         case 10 <= hour && hour < 16: return shopResponses[`special-items`].halo;
+         default:                      return shopResponses[`special-items`].haloBunny;
+         case  4 <= hour && hour < 10: return shopResponses[`special-items`].    bunny;
+      };
+   })();
 
 
    // embeds
@@ -192,6 +203,15 @@ export default async (interaction, firestore) => {
       await interaction.member.roles.add(item.role);
 
 
+   // update this user's items
+   else {
+      userItems.push({
+         "bought-for": item.price,
+         name:         item.name
+      });
+   };
+
+
    // update this user's currency
    const userExpenditure = {
       coins: priceToPay,
@@ -200,7 +220,8 @@ export default async (interaction, firestore) => {
 
    await userCurrencyDocRef.update({
       "24-hour-stats.expenditure": FieldValue.arrayUnion(userExpenditure),
-      coins:                       FieldValue.increment(-priceToPay)
+      coins:                       FieldValue.increment(-priceToPay),
+      items:                       userItems
    });
 
 
@@ -221,10 +242,10 @@ export default async (interaction, firestore) => {
 
    // embeds
    embeds[0]
-      .setColor(responses.colour)
+      .setColor(bunnyShopShopkeeper.colour)
       .setDescription(strip`
          ### 🛍️ ${item.name} bought!
-         >>> ${responses.purchase}
+         >>> ${bunnyShopShopkeeper.purchase}
       `)
       .setFooter({
          text: `🪙 ${(userCoins - priceToPay).toLocaleString()} ${userCurrencyDocData.coins === 1 ? `coin` : `coins`}`

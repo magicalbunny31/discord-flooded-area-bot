@@ -406,7 +406,7 @@
 
 ## <:happ:906683365791502366> new stuffs!!
 
-### report a player
+### https://discord.com/channels/977254354589462618/1072945802256855170
 > - slightly updated formatting
 > - fixed grammatical errors
 
@@ -414,3 +414,22 @@
 > - updated formatting
 > - new posts now have default reactions ⬆️ ↔️ ⬇️
 > - suggestions won't automatically lock and close - they're now controlled by quick access buttons that staff control
+
+
+
+------------
+==============
+==============
+------------
+__/___/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118
+
+
+## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### currency
+> - fixed bunny's shop showing incorrect buy responses for special items
+> - fixed special items which don't give roles not being added to your items
