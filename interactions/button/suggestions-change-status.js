@@ -2,7 +2,7 @@ export const name = "suggestions-change-status";
 export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 import Discord from "discord.js";
-import { strip } from "@magicalbunny31/awesome-utility-stuff/types";
+import { strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ButtonInteraction} interaction

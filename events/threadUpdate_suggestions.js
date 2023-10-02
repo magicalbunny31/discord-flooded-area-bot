@@ -30,8 +30,8 @@ export default async (oldThread, newThread, firestore) => {
    const closureTags = [ addedTag, addedInGameTag, deniedTag ];
 
 
-   // the newThread's tags contains a closure tag
-   if (newPostTags.some(tag => closureTags.includes(tag)) && !(newThread.locked || newThread.archived)) {
+   // the newThread's tags contains a closure tag and the oldThread doesn't
+   if (!oldPostTags.some(tag => closureTags.includes(tag)) && newPostTags.some(tag => closureTags.includes(tag))) {
       // send a message in the post
       await newThread.sendTyping();
       await newThread.send({
@@ -49,7 +49,7 @@ export default async (oldThread, newThread, firestore) => {
             new Discord.ActionRowBuilder()
                .setComponents(
                   new Discord.ButtonBuilder()
-                     .setCustomId(`suggestions-change-status:lick`)
+                     .setCustomId(`suggestions-change-status:lock`)
                      .setLabel(`Lock post`)
                      .setEmoji(`🔒`)
                      .setStyle(Discord.ButtonStyle.Secondary),
