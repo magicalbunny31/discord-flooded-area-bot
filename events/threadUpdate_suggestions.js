@@ -43,7 +43,6 @@ export default async (oldThread, newThread, firestore) => {
                      ? `✅ This suggestion has been approved`
                      : `❌ This suggestion has been denied`
                )
-               .setDescription(`> - ${newThread} will now be locked and closed.`)
          ],
          components: [
             new Discord.ActionRowBuilder()
