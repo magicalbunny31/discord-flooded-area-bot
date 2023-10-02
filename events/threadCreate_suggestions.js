@@ -33,13 +33,25 @@ export default async (thread, newlyCreated, firestore) => {
    await thread.sendTyping();
 
 
+   // application commands
+   const commands = await thread.guild.commands.fetch();
+
+   const jumpToTopCommandId = commands.find(command => command.name === `jump-to-top`)?.id || 0;
+
+
    // information content
+   const emoji = {
+      [process.env.FA_CHANNEL_GAME_SUGGESTIONS]:   `🎮`,
+      [process.env.FA_CHANNEL_SERVER_SUGGESTIONS]: `📂`,
+      [process.env.FA_CHANNEL_PART_SUGGESTIONS]:   `🧱`
+   }[thread.parent.id];
+
    const suggestionsInformation = strip`
-      - Thanks for submitting to ${Discord.channelMention(thread.parent.id)}!
-      - __Accept votes and discuss__ with the community to make ${thread} even more awesome.
-      - __Edit the starter message ${starterMessage.url}__ so it's easier for others to read your edits.
-      - Once this post reaches __10 reactions__, it'll receive the \`🎉 Popular\` tag.
-      - Check the Pinned Messages to __scroll to this post's starter message__.
+      ### ${emoji} Thanks for submitting to ${Discord.channelMention(thread.parent.id)}!
+      > - Accept votes and discuss with the community to make ${thread} even more awesome.
+      > - Edit the starter message ${starterMessage.url} so it's easier for others to read your edits.
+      > - Once this post reaches 10 reactions, it'll receive the \`🎉 Popular\` tag.
+      > - Check the Pinned Messages or use to ${Discord.chatInputApplicationCommandMention(`jump-to-top`, jumpToTopCommandId)} scroll to this post's starter message.
    `;
 
 

@@ -411,3 +411,6 @@
 > - fixed grammatical errors
 
 ### suggestions
+> - updated formatting
+> - new posts now have default reactions ⬆️ ↔️ ⬇️
+> - suggestions won't automatically lock and close - they're now controlled by quick access buttons that staff control

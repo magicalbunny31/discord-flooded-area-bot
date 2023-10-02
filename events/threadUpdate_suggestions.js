@@ -44,14 +44,26 @@ export default async (oldThread, newThread, firestore) => {
                      : `❌ This suggestion has been denied`
                )
                .setDescription(`> - ${newThread} will now be locked and closed.`)
+         ],
+         components: [
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`suggestions-change-status:lick`)
+                     .setLabel(`Lock post`)
+                     .setEmoji(`🔒`)
+                     .setStyle(Discord.ButtonStyle.Secondary),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`suggestions-change-status:close`)
+                     .setLabel(`Lock and close post`)
+                     .setEmoji(`📪`)
+                     .setStyle(Discord.ButtonStyle.Danger)
+               )
          ]
       });
 
-      // lock this post
-      await newThread.setLocked(true);
-
-      // close this post
-      return await newThread.setArchived(true);
+      // stop here
+      return;
    };
 
 
