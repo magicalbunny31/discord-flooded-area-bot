@@ -4,7 +4,7 @@ export const cron = {
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { colours, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, noop, strip, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {import("discord.js").Client} client
@@ -108,12 +108,12 @@ export default async (client, firestore) => {
 
 
          // remind this user to submit their report
-         const message = await thread.send({
+         const alert = await thread.send({
             content: strip`
                ### ${Discord.userMention(reportingUserId)}, remember to submit your report!
                > - You can do so by clicking the **📬 Submit report** button at the start of this thread.
-               >  - If you don't, the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} __may not be able to take action__ on your report.
-               >  - This thread will be __automatically deleted__ ${Discord.time(dayjs(thread.createdAt).startOf(`hour`).add(1, `hour`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}.
+               >  - If you don't, the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} may not be able to take action on your report.
+               >  - This thread will be automatically deleted ${Discord.time(dayjs(thread.createdAt).startOf(`hour`).add(1, `hour`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}.
             `,
             allowedMentions: {
                users: [ reportingUserId ],
@@ -121,9 +121,13 @@ export default async (client, firestore) => {
             }
          });
 
-         await wait(300000);
-
-         await message.delete();
+         setTimeout(async () => {
+            try {
+               await alert.delete();
+            } catch {
+               noop;
+            };
+         }, 3.6e+6);
       });
    };
 };
