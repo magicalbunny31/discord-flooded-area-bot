@@ -15,6 +15,16 @@ import { emojis, autoArray, choice, sum } from "@magicalbunny31/awesome-utility-
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
+   // this wasn't run in the america thread
+   const americaThreadId = `1160224987853115433`;
+
+   if (interaction.channel.id !== americaThreadId)
+      return await interaction.reply({
+         content: `### ➡️ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`america`, interaction.commandId)} can only be used in ${Discord.channelMention(americaThreadId)}`,
+         ephemeral: true
+      });
+
+
    // defer the interaction
    await interaction.deferReply();
 
