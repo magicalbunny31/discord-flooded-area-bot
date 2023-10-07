@@ -428,7 +428,27 @@ __/___/2023
 # https://discord.com/channels/977254354589462618/987047618918105118
 
 
+## <:happ:906683365791502366> new stuffs!!
+
+### support ✨
+> - added a feedback message after submitting a report/appeal/submission
+
+### <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
+> - you can now only use <:area_communities_bot:1135719948224843856> </america:1116857516324827146> in https://discord.com/channels/977254354589462618/1160224987853115433
+
+### <:area_communities_bot:1135719948224843856> </votekick:1116857516324827152>
+> - [1 vote now equals 30s of timeout](https://discord.com/channels/977254354589462618/1018616540389711953/1150631737492254760)
+
+### text-based commands
+> - they are now invoked through <:area_communities_bot:1135719948224843856> </cmd:1160259589435048046>
+>  - this is so that command permissions can be managed much more easily, as well as (also) making it easier to add commands
+> - commands are *mostly* filtered by [AutoMod](https://support.discord.com/hc/en-us/articles/4421269296535) rules in the server it's run in, so don't try to bypass it!!
+> - view the list of commands with <:area_communities_bot:1135719948224843856> </cmd:1160259589435048046> \`help\`
+
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
+
+### support ✨
+> - fixed "don't forget to submit your report!" alerts not deleting when the ticket opens before the alert gets deleted
 
 ### currency
 > - fixed bunny's shop showing incorrect buy responses for special items
