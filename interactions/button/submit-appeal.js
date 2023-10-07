@@ -154,4 +154,31 @@ export default async (interaction, firestore) => {
             )
       ]
    });
+
+
+   // support ratings
+   await interaction.followUp({
+      content: `### 🔨 How was the appeal process?`,
+      components: [
+         new Discord.ActionRowBuilder()
+            .setComponents(
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:ban-appeals:bad`)
+                  .setLabel(`Bad`)
+                  .setEmoji(emojis.rip)
+                  .setStyle(Discord.ButtonStyle.Danger),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:ban-appeals:ok`)
+                  .setLabel(`Ok`)
+                  .setEmoji(emojis.mhn)
+                  .setStyle(Discord.ButtonStyle.Primary),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:ban-appeals:good`)
+                  .setLabel(`Good`)
+                  .setEmoji(emojis.yaya)
+                  .setStyle(Discord.ButtonStyle.Success)
+            )
+      ],
+      ephemeral: true
+   });
 };

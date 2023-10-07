@@ -210,4 +210,31 @@ export default async (interaction, firestore) => {
             .setDescription(`✅ Thanks for submitting! A member of the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} will help you with this report soon.`)
       ]
    });
+
+
+   // support ratings
+   await interaction.followUp({
+      content: `### 📣 How was the reporting process?`,
+      components: [
+         new Discord.ActionRowBuilder()
+            .setComponents(
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:report-a-player:bad`)
+                  .setLabel(`Bad`)
+                  .setEmoji(emojis.rip)
+                  .setStyle(Discord.ButtonStyle.Danger),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:report-a-player:ok`)
+                  .setLabel(`Ok`)
+                  .setEmoji(emojis.mhn)
+                  .setStyle(Discord.ButtonStyle.Primary),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:report-a-player:good`)
+                  .setLabel(`Good`)
+                  .setEmoji(emojis.yaya)
+                  .setStyle(Discord.ButtonStyle.Success)
+            )
+      ],
+      ephemeral: true
+   });
 };

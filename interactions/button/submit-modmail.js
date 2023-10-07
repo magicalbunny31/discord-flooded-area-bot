@@ -133,4 +133,31 @@ export default async (interaction, firestore) => {
             .setDescription(`✅ Thanks for submitting! The ${Discord.roleMention(process.env.FA_ROLE_HEAD_OF_MODERATION)} will read your message and may get back to you soon. **Turn on your DMs in this server to receive updates and respond to messages.**`)
       ]
    });
+
+
+   // support ratings
+   await interaction.followUp({
+      content: `### 📬 How was the submission process?`,
+      components: [
+         new Discord.ActionRowBuilder()
+            .setComponents(
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:modmail:bad`)
+                  .setLabel(`Bad`)
+                  .setEmoji(emojis.rip)
+                  .setStyle(Discord.ButtonStyle.Danger),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:modmail:ok`)
+                  .setLabel(`Ok`)
+                  .setEmoji(emojis.mhn)
+                  .setStyle(Discord.ButtonStyle.Primary),
+               new Discord.ButtonBuilder()
+                  .setCustomId(`support-ratings:modmail:good`)
+                  .setLabel(`Good`)
+                  .setEmoji(emojis.yaya)
+                  .setStyle(Discord.ButtonStyle.Success)
+            )
+      ],
+      ephemeral: true
+   });
 };
