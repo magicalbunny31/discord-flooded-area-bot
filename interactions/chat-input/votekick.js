@@ -275,7 +275,7 @@ export default async (interaction, firestore) => {
 
 
       // time out the user depending on how many required votes there were
-      const timedOutFor = requiredVotes * 60 * 1000;
+      const timedOutFor = requiredVotes * 60 * 500;
 
       await member.timeout(timedOutFor, `/votekick by ${interaction.user.tag}`);
 
@@ -283,7 +283,7 @@ export default async (interaction, firestore) => {
       // edit the interaction's original reply
       return await interaction.editReply({
          content: strip`
-            ### ✅ ${user} has been timed out for ${timedOutFor / (60 * 1000)} minutes.
+            ### ✅ ${user} has been timed out for ${timedOutFor / (60 * 500)} minutes.
             > - 📰 Reason: ${reason}
             > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
             ${voters.join(`\n`)}
