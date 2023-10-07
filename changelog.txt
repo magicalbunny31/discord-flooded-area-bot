@@ -421,12 +421,11 @@
 ==============
 ==============
 ------------
-__/___/2023
+07/oct/2023
 
 
 
 # https://discord.com/channels/977254354589462618/987047618918105118
-
 
 ## <:happ:906683365791502366> new stuffs!!
 
@@ -442,8 +441,8 @@ __/___/2023
 ### text-based commands
 > - they are now invoked through <:area_communities_bot:1135719948224843856> </cmd:1160259589435048046>
 >  - this is so that command permissions can be managed much more easily, as well as (also) making it easier to add commands
-> - commands are *mostly* filtered by [AutoMod](https://support.discord.com/hc/en-us/articles/4421269296535) rules in the server it's run in, so don't try to bypass it!!
-> - view the list of commands with <:area_communities_bot:1135719948224843856> </cmd:1160259589435048046> \`help\`
+> - commands are *mostly* filtered by [AutoMod](<https://support.discord.com/hc/en-us/articles/4421269296535>) rules in the server it's run in, so don't try to bypass it!!
+> - view the list of commands with <:area_communities_bot:1135719948224843856> </cmd:1160259589435048046> `help`
 
 ## <:happ:906683365791502366> bugs ~~foxed~~ fixed~
 
@@ -453,3 +452,8 @@ __/___/2023
 ### currency
 > - fixed bunny's shop showing incorrect buy responses for special items
 > - fixed special items which don't give roles not being added to your items
+
+## <@490178047325110282>'s notes
+
+### footnote
+> - /currency stalk market update got delayed (i wanted to play [ready 2 die](<https://www.roblox.com/games/10482275302/Ready-2-Die>) sowwy), so it's coming soon i think

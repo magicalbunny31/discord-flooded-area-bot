@@ -716,7 +716,7 @@ export default async (interaction, firestore) => {
             return await interaction.editReply({
                content: toCommand(strip`
                   The 🦊 has been pet \`${totalPets || 0}\` ${totalPets === 1 ? `time` : `times`} in this server.
-                  You have pet the 🦊 \`${petUserData.pets || 0}\` ${petUserData.pets === 1 ? `time` : `times`} in this server.
+                  You have pet the 🦊 \`${petUserData.pets || 0}\` ${petUserData.pets === 1 ? `time` : `times`}.
                   You can pet it again ${Discord.time(petUserData[`next-pet-at`].seconds, Discord.TimestampStyles.RelativeTime)}.
                `),
                allowedMentions: {
