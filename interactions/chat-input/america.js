@@ -8,9 +8,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 import Discord from "discord.js";
 import { FieldValue } from "@google-cloud/firestore";
-import { emojis, autoArray, choice, sum, wait } from "@magicalbunny31/awesome-utility-stuff";
-
-import cache from "../../data/cache.js";
+import { emojis, autoArray, choice, sum } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.ChatInputCommandInteraction} interaction
