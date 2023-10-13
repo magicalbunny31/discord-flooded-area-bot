@@ -63,10 +63,4 @@ export default async (thread, newlyCreated, firestore) => {
          parse: []
       }
    });
-
-
-   // react to the post with default reactions
-   await starterMessage.react(`⬆️`);
-   await starterMessage.react(`↔️`);
-   await starterMessage.react(`⬇️`);
 };
