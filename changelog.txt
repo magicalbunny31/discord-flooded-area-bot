@@ -470,10 +470,19 @@
 
 # https://discord.com/channels/977254354589462618/987047618918105118
 
-## <:happ:906683365791502366> new stuffs!!
+## <:happ:906683365791502366> brand new things
+
+### <:area_communities_bot:1135719948224843856> </modmail:1162483301215391916>
+> - this is a brand new global command (meaning that it can be used in <@983126054619189370>'s dms) for submitting https://discord.com/channels/977254354589462618/1150530337227689994 (it's good for stuff like when you're muted or banned)
+> - i've decided to make this command accessible for all who share servers with <@983126054619189370> so that modmail could be submitted when you're banned (though they're NOT for ban appeals, those are managed by <@155149108183695360>> through [this form](https://dyno.gg/form/646fbb52))
+> - ..also, since this is the bot's first ever global command, it's got a whole new <:activedev:1042545590640324608> badge!
+
+## <:happ:906683365791502366> stuff that changed
 
 ### <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
 > - moderators can now use <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
 
 ### suggestions
 > - removed default reactions ⬆️ ↔️ ⬇️ from new posts
+
+## <:happ:906683365791502366> bugs fixed

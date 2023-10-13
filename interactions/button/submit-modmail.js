@@ -30,7 +30,8 @@ export default async (interaction, firestore) => {
 
 
    // send the modmail
-   const messagesChannel = await interaction.guild.channels.fetch(process.env.FA_CHANNEL_MODMAIL_MESSAGES);
+   const guild = await interaction.client.guilds.fetch(process.env.GUILD_FLOODED_AREA);
+   const messagesChannel = await guild.channels.fetch(process.env.FA_CHANNEL_MODMAIL_MESSAGES);
 
    const message = await messagesChannel.send({
       content: Discord.roleMention(process.env.FA_ROLE_HEAD_OF_MODERATION),
