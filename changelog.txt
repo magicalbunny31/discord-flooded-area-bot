@@ -472,5 +472,8 @@
 
 ## <:happ:906683365791502366> new stuffs!!
 
+### <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
+> - moderators can now use <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
+
 ### suggestions
 > - removed default reactions ⬆️ ↔️ ⬇️ from new posts
