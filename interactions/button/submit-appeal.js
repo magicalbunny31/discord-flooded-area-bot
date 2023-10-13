@@ -135,6 +135,32 @@ export default async (interaction, firestore) => {
    await roleToMention.delete();
 
 
+   // bulk delete messages in logs that involve the creation of the fake moderation team role
+   // logs take a while to send, so we'll wait about a minute
+   setTimeout(async () => {
+      const logsChannel = await interaction.guild.channels.fetch(process.env.FA_CHANNEL_LOGS);
+      const logsMessages = await logsChannel.messages.fetch({ limit: 100, after: roleToMention.id });
+
+      const dyno = `155149108183695360`;
+      const logsWebhooks = await logsChannel.fetchWebhooks();
+      const logsDynoWebhook = logsWebhooks.find(webhook => webhook.owner.id === dyno);
+
+      const messagesToDelete = logsMessages
+         .filter(message =>
+            message.author.id === logsDynoWebhook.id
+            && (
+               /\*\*<@!?(\d{17,19})> was removed from the `Moderation Team` role\*\*/.test(message.embeds[0]?.description)
+               ||
+               message.embeds[0]?.footer.text.includes(roleToMention.id)
+            )
+         );
+
+      if (messagesToDelete.size)
+         await logsChannel.bulkDelete(messagesToDelete);
+
+   }, 60 * 1000);
+
+
    // edit the interaction's original reply
    await interaction.editReply({
       embeds: [

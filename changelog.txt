@@ -482,7 +482,11 @@
 ### <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
 > - moderators can now use <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
 
-### suggestions
+### suggestions ✨
 > - removed default reactions ⬆️ ↔️ ⬇️ from new posts
+
+### support ✨
+> - log messages relating to the role created to @mention the Moderation Team in tickets (in https://discord.com/channels/977254354589462618/1072945802256855170 and https://discord.com/channels/977254354589462618/1082650454044979210) are now automatically bulk-deleted within 1 minutes
+>  - ..however, the "bulk delete" log isn't deleted (it's staying as a rough "reference" as to when tickets get created/deleted i guess)
 
 ## <:happ:906683365791502366> bugs fixed
