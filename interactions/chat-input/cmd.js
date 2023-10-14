@@ -595,7 +595,7 @@ export default async (interaction, firestore) => {
                      - \`help\`/\`commands\`
                      - \`hi\`/\`hai\`/\`hello\`/\`hewwo\`/\`howdy\`/\`meowdy\`/\`hey\`/\`hoi\`
                      - \`otter\`/\`ot\`/\`squeak\`
-                     - \`p\`/\`pancake\`/\`pancakes\` (\`leaderboard\`/\`leaderboards\`/\`lb\`)
+                     - \`p\`/\`pancake\`/\`pancakes\` (\`lb\`/\`leaderboard\`/\`leaderboards\`)
                      - \`pet\`
                      - \`rabbit\`/\`bunny\`/\`bun\`/\`bunbun\`
                      - \`rate\`
