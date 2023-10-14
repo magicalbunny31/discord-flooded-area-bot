@@ -30,6 +30,20 @@ export default async (interaction, firestore) => {
    const command = interaction.options.getString(`command`);
 
 
+   // function to try to fetch something or return undefined instead of throwing
+   const tryOrUndefined = async promise => {
+      try {
+         return await promise;
+      } catch {
+         return undefined;
+      };
+   };
+
+
+   // function to check if a user is in this guild
+   const userIsInGuild = async userId => !!await tryOrUndefined(interaction.guild.members.fetch(userId));
+
+
    // data to show
    const data = {
       [process.env.GUILD_FLOODED_AREA]: {
@@ -577,7 +591,7 @@ export default async (interaction, firestore) => {
                      - \`help\`/\`commands\`
                      - \`hi\`/\`hai\`/\`hello\`/\`hewwo\`/\`howdy\`/\`meowdy\`/\`hey\`/\`hoi\`
                      - \`otter\`/\`ot\`/\`squeak\`
-                     - \`pancake\`/\`pancakes\`
+                     - \`p\`/\`pancake\`/\`pancakes\` (\`leaderboard\`/\`leaderboards\`/\`lb\`)
                      - \`pet\`
                      - \`rabbit\`/\`bunny\`/\`bun\`/\`bunbun\`
                      - \`rate\`
@@ -626,56 +640,108 @@ export default async (interaction, firestore) => {
       };
 
 
-      // pancake/pancakes
+      // p/pancake/pancakes
+      //                    lb/leaderboard/leaderboards
+      case `p`:
       case `pancake`:
-      case `pancakes`: {
-         await interaction.reply({
-            content: toCommand(emojis.loading),
-            allowedMentions: {
-               parse: []
-            }
-         });
+      case `pancakes`:
+         switch (args[0]?.toLowerCase()) {
+            default: {
+               await interaction.reply({
+                  content: toCommand(emojis.loading),
+                  allowedMentions: {
+                     parse: []
+                  }
+               });
 
-         const pancakeDocRef  = firestore.collection(`pancake`).doc(interaction.guild.id);
-         const pancakeDocSnap = await pancakeDocRef.get();
-         const pancakeDocData = pancakeDocSnap.data() || {};
+               const pancakeDocRef  = firestore.collection(`pancake`).doc(interaction.guild.id);
+               const pancakeDocSnap = await pancakeDocRef.get();
+               const pancakeDocData = pancakeDocSnap.data() || {};
 
-         const pancakeUserData = pancakeDocData[interaction.user.id] || {};
+               const pancakeUserData = pancakeDocData[interaction.user.id] || {};
 
-         const canGetPancake = (pancakeUserData[`next-pancake-at`]?.seconds || 0) < dayjs().unix();
-         if (!canGetPancake)
-            return await interaction.editReply({
-               content: toCommand(strip`
-                  You have 🥞 \`${pancakeUserData.pancakes || 0}\` ${pancakeUserData.pancakes === 1 ? `pancake` : `pancakes`}.
-                  You can redeem another ${Discord.time(dayjs.utc().startOf(`day`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}.
-               `),
-               allowedMentions: {
-                  parse: []
-               }
-            });
+               const canGetPancake = (pancakeUserData[`next-pancake-at`]?.seconds || 0) < dayjs().unix();
+               if (!canGetPancake)
+                  return await interaction.editReply({
+                     content: toCommand(strip`
+                        You have 🥞 \`${pancakeUserData.pancakes || 0}\` ${pancakeUserData.pancakes === 1 ? `pancake` : `pancakes`}.
+                        You can redeem another ${Discord.time(dayjs.utc().startOf(`day`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}.
+                     `),
+                     allowedMentions: {
+                        parse: []
+                     }
+                  });
 
-         await pancakeDocRef.update({
-            [`${interaction.user.id}.next-pancake-at`]: new Timestamp(dayjs.utc().startOf(`day`).add(1, `day`).unix(), 0),
-            [`${interaction.user.id}.pancakes`]:        FieldValue.increment(1)
-         });
+               await pancakeDocRef.update({
+                  [`${interaction.user.id}.next-pancake-at`]: new Timestamp(dayjs.utc().startOf(`day`).add(1, `day`).unix(), 0),
+                  [`${interaction.user.id}.pancakes`]:        FieldValue.increment(1)
+               });
 
-         return await interaction.editReply({
-            content: toCommand(
-               choice([
-                  `Good to see you again, ${interaction.user}. Here is your 🥞 pancake!`,
-                  `Welcome back, fair ${interaction.user}. Your 🥞 pancake is here.`,
-                  `Here is your 🥞 pancake, ${interaction.user}: with ground hazelnuts in the batter.`,
-                  `Here is your fluffy, syrupy 🥞 pancake, ${interaction.user}.`,
-                  `Dear ${interaction.user}, your 🥞 pancake is here.`,
-                  `Hello, ${interaction.user}, your 🥞 pancake awaits you.`,
-                  `The Solstice *is* real, ${interaction.user}. Here is your 🥞 pancake.`
-               ])
-            ),
-            allowedMentions: {
-               parse: []
-            }
-         });
-      };
+               return await interaction.editReply({
+                  content: toCommand(
+                     choice([
+                        `Good to see you again, ${interaction.user}. Here is your 🥞 pancake!`,
+                        `Welcome back, fair ${interaction.user}. Your 🥞 pancake is here.`,
+                        `Here is your 🥞 pancake, ${interaction.user}: with ground hazelnuts in the batter.`,
+                        `Here is your fluffy, syrupy 🥞 pancake, ${interaction.user}.`,
+                        `Dear ${interaction.user}, your 🥞 pancake is here.`,
+                        `Hello, ${interaction.user}, your 🥞 pancake awaits you.`,
+                        `The Solstice *is* real, ${interaction.user}. Here is your 🥞 pancake.`
+                     ])
+                  ),
+                  allowedMentions: {
+                     parse: []
+                  }
+               });
+            };
+
+
+            case `lb`:
+            case `leaderboard`:
+            case `leaderboards`: {
+               await interaction.reply({
+                  content: toCommand(emojis.loading),
+                  allowedMentions: {
+                     parse: []
+                  }
+               });
+
+               const pancakeDocRef  = firestore.collection(`pancake`).doc(interaction.guild.id);
+               const pancakeDocSnap = await pancakeDocRef.get();
+               const pancakeDocData = pancakeDocSnap.data() || {};
+
+               const data = Object.entries(pancakeDocData)
+                  .sort(([ _aKey, a ], [ _bKey, b ]) => b.pancakes - a.pancakes);
+
+               const size = 15;
+               const rawIndex = (+args[1] || 1) - 1;
+               const index = Math.ceil(data.length / size) > rawIndex && rawIndex > 0
+                  ? rawIndex
+                  : 0;
+               const entriesToShow = data.slice(index * size, size + (index * size));
+
+               const page = (
+                  await Promise.all(
+                     entriesToShow
+                        .map(async ([ userId, { pancakes }], i) => {
+                           const placement = (i + 1) + (index * size);
+                           const nameDisplayed = await userIsInGuild(userId)
+                              ? Discord.userMention(userId)
+                              : `@${Discord.escapeMarkdown((await tryOrUndefined(interaction.client.users.fetch(userId)))?.username || userId)}`;
+                           return `${placement}. ${nameDisplayed} : 🥞 \`${pancakes}\``;
+                        })
+                  )
+               )
+                  .join(`\n`);
+
+               return await interaction.editReply({
+                  content: toCommand(page),
+                  allowedMentions: {
+                     parse: []
+                  }
+               });
+            };
+         };
 
 
       // pet
