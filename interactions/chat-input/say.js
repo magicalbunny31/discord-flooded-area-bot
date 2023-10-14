@@ -48,10 +48,11 @@ export default async (interaction, firestore) => {
    const halo           = process.env.USER_HALO;
    const mimi           = process.env.USER_MIMI;
    const yourstruly     = process.env.USER_YOURSTRULY;
+   const ruby           = process.env.USER_RUBY;
 
 
    // this user can't use this command
-   const allowedUsers = [ magicalbunny31, halo, mimi, yourstruly ];
+   const allowedUsers = [ magicalbunny31, halo, mimi, yourstruly, ruby ];
 
    if (!allowedUsers.includes(interaction.user.id))
       return await interaction.reply({
