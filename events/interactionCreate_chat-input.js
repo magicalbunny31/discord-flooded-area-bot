@@ -34,7 +34,7 @@ export default async (interaction, firestore) => {
 
    // slash command permissions
    if (
-      interaction.guild?.id === process.env.GUILD_FLOODED_AREA                                                                         // in flooded area
+      interaction.guild?.id === process.env.GUILD_FLOODED_AREA                                                                        // in flooded area
       && interaction.channel.id !== process.env.FA_CHANNEL_BOT_COMMANDS                                                               // chat-input application commands can only be run in bot commands
       && !interaction.member.roles.cache.has(process.env.FA_ROLE_MODERATION_TEAM)                                                     // by non-staff
       && !interaction.channel.isThread()                                                                                              // excluding threads
