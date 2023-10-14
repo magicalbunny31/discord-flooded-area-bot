@@ -24,14 +24,14 @@ export default async (interaction, firestore) => {
 
    // set this user's bloxlink linked account in the cache
    if (!cache.get(`bloxlink-linked-account`)?.[interaction.user.id]) {
-      const userAgent = `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`;
+      const userAgent = `${pkg.name}/${pkg.version} (https://nuzzles.dev/area-communities-bot)`;
 
       const playerId = await (async () => {
-         const response = await fetch(`https://v3.blox.link/developer/discord/${interaction.user.id}?guildId=${interaction.guild.id}`, {
+         const response = await fetch(`https://api.blox.link/v4/public/guilds/${interaction.guild.id}/discord-to-roblox/${interaction.user.id}`, {
             headers: {
-               "api-key":      process.env.BLOXLINK_API_KEY,
-               "Content-Type": `application/json`,
-               "User-Agent":   userAgent
+               "Accept":        `application/json`,
+               "Authorization": process.env[`BLOXLINK_SERVER_KEY_${interaction.guild.id}`],
+               "User-Agent":    userAgent
             }
          });
 
@@ -39,11 +39,7 @@ export default async (interaction, firestore) => {
             return null;
 
          const data = await response.json();
-
-         if (!data.success)
-            return null;
-
-         return data.user?.primaryAccount;
+         return data.robloxID;
       })();
 
       // get this player's roblox account

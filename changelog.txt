@@ -490,3 +490,7 @@
 >  - ..however, the "bulk delete" log isn't deleted (it's staying as a rough "reference" as to when tickets get created/deleted i guess)
 
 ## <:happ:906683365791502366> bugs fixed
+
+### support ✨
+> - fixed your roblox username sometimes not being automatically filled in (if your account was verified through <@426537812993638400>) when creating a ticket in https://discord.com/channels/977254354589462618/1072945802256855170 or https://discord.com/channels/977254354589462618/1082650454044979210
+>  - in other words, <@983126054619189370> was updated to use the <@426537812993638400> v4 api
