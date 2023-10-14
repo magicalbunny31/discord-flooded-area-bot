@@ -240,7 +240,10 @@ export default async (interaction, firestore) => {
 
    // support ratings
    await interaction.followUp({
-      content: `### 📣 How was the reporting process?`,
+      content: strip`
+         ### 📣 How was the reporting process?
+         > "UwU pwease wate us 5 staws"
+      `,
       components: [
          new Discord.ActionRowBuilder()
             .setComponents(

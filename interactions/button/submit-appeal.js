@@ -184,7 +184,10 @@ export default async (interaction, firestore) => {
 
    // support ratings
    await interaction.followUp({
-      content: `### 🔨 How was the appeal process?`,
+      content: strip`
+         ### 🔨 How was the appeal process?
+         > "UwU pwease wate us 5 staws"
+      `,
       components: [
          new Discord.ActionRowBuilder()
             .setComponents(

@@ -138,7 +138,10 @@ export default async (interaction, firestore) => {
 
    // support ratings
    await interaction.followUp({
-      content: `### 📬 How was the submission process?`,
+      content: strip`
+         ### 📬 How was the submission process?
+         > "UwU pwease wate us 5 staws"
+      `,
       components: [
          new Discord.ActionRowBuilder()
             .setComponents(
