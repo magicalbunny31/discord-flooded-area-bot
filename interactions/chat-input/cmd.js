@@ -563,8 +563,12 @@ export default async (interaction, firestore) => {
       };
 
 
-      // help/commands
+      // h/help/cmd/command/cmds/commands
+      case `h`:
       case `help`:
+      case `cmd`:
+      case `command`:
+      case `cmds`:
       case `commands`: {
          return await interaction.reply({
             content: toCommand(),
