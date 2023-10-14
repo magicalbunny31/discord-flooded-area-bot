@@ -77,7 +77,7 @@ export default async (interaction, firestore) => {
          `### ${interaction.user}: \`$ ${formattedCommand}\``,
          content
             ?.split(`\n`)
-            .map(line => `> ${line.trim()}`)
+            .map(line => `> ${line}`)
             .join(`\n`)
       ]
          .filter(Boolean)
@@ -210,6 +210,13 @@ export default async (interaction, firestore) => {
 
       // america
       case `america`: {
+         const flagUs = `🇺🇸`;
+         const flagGb = `🇬🇧`;
+
+         const flippedAmerica = `<:flipped_america:1116431279185993899>`;
+         const americanFlag   = `<:american_flag:1061290300343066645>`;
+         const prideFlag      = `<:pride_flag:1113838962084155442>`;
+
          await interaction.reply({
             content: toCommand(emojis.loading),
             allowedMentions: {
@@ -220,55 +227,31 @@ export default async (interaction, firestore) => {
          return await interaction.editReply({
             content: toCommand(
                [
-                  strip`
-                     O say can you see, by the dawn's early light,
-                     What so proudly we hail'd at the twilight's last gleaming,
-                     Whose broad stripes and bright stars through the perilous fight
-                     O'er the ramparts we watch'd were so gallantly streaming?
-                     And the rocket's red glare, the bombs bursting in air,
-                     Gave proof through the night that our flag was still there,
-                     O say does that star-spangled banner yet wave
-                     O'er the land of the free and the home of the brave?
-                  `,
-                  ``,
-                  strip`
-                     On the shore dimly seen through the mists of the deep
-                     Where the foe's haughty host in dread silence reposes,
-                     What is that which the breeze, o'er the towering steep,
-                     As it fitfully blows, half conceals, half discloses?
-                     Now it catches the gleam of the morning's first beam,
-                     In full glory reflected now shines in the stream,
-                     'Tis the star-spangled banner - O long may it wave
-                     O'er the land of the free and the home of the brave!
-                  `,
-                  ``,
-                  strip`
-                     And where is that band who so vauntingly swore,
-                     That the havoc of war and the battle's confusion
-                     A home and a Country should leave us no more?
-                     Their blood has wash'd out their foul footstep's pollution.
-                     No refuge could save the hireling and slave
-                     From the terror of flight or the gloom of the grave,
-                     And the star-spangled banner in triumph doth wave
-                     O'er the land of the free and the home of the brave.
-                  `,
-                  ``,
-                  strip`
-                     O thus be it ever when freemen shall stand
-                     Between their lov'd home and the war's desolation!
-                     Blest with vict'ry and peace may the heav'n rescued land
-                     Praise the power that hath made and preserv'd us a nation!
-                     Then conquer we must, when our cause it is just,
-                     And this be our motto - “In God is our trust,”
-                     And the star-spangled banner in triumph shall wave
-                     O'er the land of the free and the home of the brave.
-                  `
+                  `-  \`america\`: 85%`,
+                  ` - ${flagUs}: 40%`,
+                  ` - ${americanFlag}: 40%`,
+                  ` - ${prideFlag}: 20%`,
+                  `- 🌊 \`flood\`: 5%`,
+                  `- 🛰️ \`space\`: 5%`,
+                  `- ${emojis.happ} \`furry\`: 4%`,
+                  ` - ..Or, 50% if you have the ${Discord.roleMention(process.env.FA_ROLE_BUNNY_WAS_HERE)} role!`,
+                  ` - (All other chances balance out to create the other 50%)`,
+                  `- ${flippedAmerica} \`flipped\`: 0.9%`,
+                  `- ✨ \`rare\`: 0.09%`,
+                  `- 🌟 \`rarer\`: 0.009%`,
+                  `- ${flagGb} \`british\`: 0.001%`
                ]
                   .join(`\n`)
             ),
-            files: [
-               new Discord.AttachmentBuilder()
-                  .setFile(`./assets/america/Star_Spangled_Banner_instrumental.ogg`)
+            components: [
+               new Discord.ActionRowBuilder()
+                  .setComponents(
+                     new Discord.ButtonBuilder()
+                        .setLabel(`View raw /america chances`)
+                        .setEmoji(emojis.area_communities_bot)
+                        .setStyle(Discord.ButtonStyle.Link)
+                        .setURL(`https://github.com/magicalbunny31/discord-area-communities-bot/blob/main/interactions/chat-input/america.js#L33-L74`)
+                  )
             ],
             allowedMentions: {
                parse: []

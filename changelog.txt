@@ -486,6 +486,9 @@
 ### <a:slash_command:1148866611227414568> </america:1116857516324827146>
 > - moderators can now use <:area_communities_bot:1135719948224843856> </america:1116857516324827146>
 
+### <a:slash_command:1148866611227414568> </cmd:1160259589435048046> `america`
+> - it now sends the [/america](https://discord.com/channels/977254354589462618/1160224987853115433/1160239801904152588) chances (instead of the [american national anthem](https://discord.com/channels/977254354589462618/1160224987853115433/1160239815271383141))
+
 ### <a:slash_command:1148866611227414568> </view-join-dates at-position:1162852142550352037>, </view-join-dates for-member:1162852142550352037>
 > - renamed from <:area_communities_bot:1135719948224843856> **`/who-joined-at by-position`** and <:area_communities_bot:1135719948224843856> **`/who-joined-at by-position`**
 >  - this is because the old command names were pretty confusing/didn't fit well
