@@ -179,6 +179,10 @@ export default async (interaction, firestore) => {
 
 
          // embeds
+         const index = 0;
+         const size = 15;
+         const itemsToShow = items.slice(index * size, size + (index * size));
+
          embeds[0]
             .setColor(user.accentColor || (await user.fetch(true)).accentColor || data.colour)
             .setAuthor({
@@ -196,11 +200,11 @@ export default async (interaction, firestore) => {
             )
             .setDescription(
                items.length
-                  ? items
+                  ? itemsToShow
                      .map(item =>
                         item.seller
-                           ? `> **\`${item.quantity}\` ${item.name}** sold by ${Discord.userMention(item.seller)}`
-                           : `> **\`${item.quantity}\` ${item.name}**`
+                           ? `> - **\`${item.quantity}\` ${item.name}** sold by ${Discord.userMention(item.seller)}`
+                           : `> - **\`${item.quantity}\` ${item.name}**`
                      )
                      .join(`\n`)
                   : null
@@ -211,7 +215,28 @@ export default async (interaction, firestore) => {
 
 
          // components
-         components.splice(1, 4);
+         const pages = Math.ceil(items.length / size);
+
+         components.splice(1, 4,
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`currency-items:items:${index - 1}:${user.id}`)
+                     .setEmoji(`⬅️`)
+                     .setStyle(Discord.ButtonStyle.Primary)
+                     .setDisabled(index - 1 < 0),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`currency-items:items:${index + 1}:${user.id}`)
+                     .setEmoji(`➡️`)
+                     .setStyle(Discord.ButtonStyle.Primary)
+                     .setDisabled(index + 1 >= pages),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`🦊`)
+                     .setLabel(`${index + 1} / ${pages}`)
+                     .setStyle(Discord.ButtonStyle.Secondary)
+                     .setDisabled(true)
+               )
+         );
 
 
          // break out
@@ -387,11 +412,17 @@ export default async (interaction, firestore) => {
    };
 
 
+   // modify the components when viewing another member
+   if (user.id !== interaction.user.id)
+      if (area === `items`)
+         components.shift();
+      else
+         components.splice(0, 5);
+
+
    // edit the deferred interaction
    await interaction.editReply({
       embeds,
-      ...user.id === interaction.user.id
-         ? { components }
-         : {}
+      components
    });
 };

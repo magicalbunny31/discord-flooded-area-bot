@@ -10,7 +10,7 @@ import { emojis, colours, deferComponents, strip, sum } from "@magicalbunny31/aw
  */
 export default async (interaction, firestore) => {
    // button info
-   const [ _button, area ] = interaction.customId.split(`:`);
+   const [ _button, area, rawIndex, userId = interaction.user.id ] = interaction.customId.split(`:`);
 
 
    // data to show
@@ -48,7 +48,7 @@ export default async (interaction, firestore) => {
 
 
    // this user's currency
-   const userCurrencyDocRef  = firestore.collection(`currency`).doc(interaction.guild.id).collection(`users`).doc(interaction.user.id);
+   const userCurrencyDocRef  = firestore.collection(`currency`).doc(interaction.guild.id).collection(`users`).doc(userId);
    const userCurrencyDocSnap = await userCurrencyDocRef.get();
    const userCurrencyDocData = userCurrencyDocSnap.data() || {};
 
@@ -166,28 +166,34 @@ export default async (interaction, firestore) => {
 
 
          // embeds
+         const user = await interaction.client.users.fetch(userId);
+
+         const index = +rawIndex;
+         const size = 15;
+         const itemsToShow = items.slice(index * size, size + (index * size));
+
          embeds[0]
-            .setColor(interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || data.colour)
+            .setColor(user.accentColor || (await user.fetch(true)).accentColor || data.colour)
             .setAuthor({
-               name: `@${interaction.user.username}`,
-               iconURL: interaction.user.displayAvatarURL()
+               name: `@${user.username}`,
+               iconURL: user.displayAvatarURL()
             })
-            .setTitle(`🎒 Your items`)
+            .setTitle(`🎒 ${user.id === interaction.user.id ? `Your` : `Their`} items`)
             .setFields(
                items.length
                   ? []
                   : {
-                     name: `You've got no items`,
+                     name: `${user.id === interaction.user.id ? `You've` : `They've`} got no items`,
                      value: `> Buy some items at bunny's shop with ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`currency`, `shop`, commandCurrencyId)}`
                   }
             )
             .setDescription(
                items.length
-                  ? items
+                  ? itemsToShow
                      .map(item =>
                         item.seller
-                           ? `> **\`${item.quantity}\` ${item.name}** sold by ${Discord.userMention(item.seller)}`
-                           : `> **\`${item.quantity}\` ${item.name}**`
+                           ? `> - **\`${item.quantity}\` ${item.name}** sold by ${Discord.userMention(item.seller)}`
+                           : `> - **\`${item.quantity}\` ${item.name}**`
                      )
                      .join(`\n`)
                   : null
@@ -198,7 +204,28 @@ export default async (interaction, firestore) => {
 
 
          // components
-         components.splice(1, 4);
+         const pages = Math.ceil(items.length / size);
+
+         components.splice(1, 4,
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`currency-items:items:${index - 1}:${userId}`)
+                     .setEmoji(`⬅️`)
+                     .setStyle(Discord.ButtonStyle.Primary)
+                     .setDisabled(index - 1 < 0),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`currency-items:items:${index + 1}:${userId}`)
+                     .setEmoji(`➡️`)
+                     .setStyle(Discord.ButtonStyle.Primary)
+                     .setDisabled(index + 1 >= pages),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`🦊`)
+                     .setLabel(`${index + 1} / ${pages}`)
+                     .setStyle(Discord.ButtonStyle.Secondary)
+                     .setDisabled(true)
+               )
+         );
 
 
          // break out
@@ -372,6 +399,14 @@ export default async (interaction, firestore) => {
 
 
    };
+
+
+   // modify the components when viewing another member
+   if (userId !== interaction.user.id)
+      if (area === `items`)
+         components.shift();
+      else
+         components.splice(0, 5);
 
 
    // edit the deferred interaction

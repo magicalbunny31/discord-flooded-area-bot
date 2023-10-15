@@ -167,6 +167,10 @@ export default async (interaction, firestore) => {
 
 
          // embeds
+         const index = 0;
+         const size = 15;
+         const itemsToShow = items.slice(index * size, size + (index * size));
+
          embeds[0]
             .setColor(interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || data.colour)
             .setAuthor({
@@ -184,11 +188,11 @@ export default async (interaction, firestore) => {
             )
             .setDescription(
                items.length
-                  ? items
+                  ? itemsToShow
                      .map(item =>
                         item.seller
-                           ? `> **\`${item.quantity}\` ${item.name}** sold by ${Discord.userMention(item.seller)}`
-                           : `> **\`${item.quantity}\` ${item.name}**`
+                           ? `> - **\`${item.quantity}\` ${item.name}** sold by ${Discord.userMention(item.seller)}`
+                           : `> - **\`${item.quantity}\` ${item.name}**`
                      )
                      .join(`\n`)
                   : null
@@ -199,7 +203,28 @@ export default async (interaction, firestore) => {
 
 
          // components
-         components.splice(1, 4);
+         const pages = Math.ceil(items.length / size);
+
+         components.splice(1, 4,
+            new Discord.ActionRowBuilder()
+               .setComponents(
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`currency-items:items:${index - 1}`)
+                     .setEmoji(`⬅️`)
+                     .setStyle(Discord.ButtonStyle.Primary)
+                     .setDisabled(index - 1 < 0),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`currency-items:items:${index + 1}`)
+                     .setEmoji(`➡️`)
+                     .setStyle(Discord.ButtonStyle.Primary)
+                     .setDisabled(index + 1 >= pages),
+                  new Discord.ButtonBuilder()
+                     .setCustomId(`🦊`)
+                     .setLabel(`${index + 1} / ${pages}`)
+                     .setStyle(Discord.ButtonStyle.Secondary)
+                     .setDisabled(true)
+               )
+         );
 
 
          // break out

@@ -506,6 +506,7 @@
 >  - think of this change as the "/currency balance changes" or something :3
 > - your personal item can now be listed for up to 🪙 `999,999` coins (from 🪙 `999` coins)
 > - the **🎒 Items** menu now shows the total value of all your items
+> - the **🎒 Items** menu now displays up to 15 items per section, which can be controlled by ⬅️ and ➡️ buttons
 
 ### <a:slash_command:1148866611227414568> </currency shop:1116857516324827148>
 > - to reflect with the max personal item stock changes, you can now buy up to 50 items at once
