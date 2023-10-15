@@ -2,7 +2,7 @@ export const name = "currency-items";
 export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
 
 import Discord from "discord.js";
-import { emojis, colours, deferComponents, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, colours, deferComponents, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.StringSelectMenuInteraction} interaction
@@ -160,6 +160,11 @@ export default async (interaction, firestore) => {
          )
             .filter(Boolean); // some sellerIds may have no personal items: remove them from the list
 
+         const userItemsValue = sum(
+            userItems.map(item => item[`bought-for`]),
+            0
+         );
+
 
          // embeds
          embeds[0]
@@ -187,7 +192,10 @@ export default async (interaction, firestore) => {
                      )
                      .join(`\n`)
                   : null
-            );
+            )
+            .setFooter({
+               text: `💰 Total value: ${userItemsValue.toLocaleString()} ${userItemsValue === 1 ? `coin` : `coins`}`
+            });
 
 
          // components

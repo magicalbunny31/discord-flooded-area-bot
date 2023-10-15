@@ -505,6 +505,7 @@
 >  - people who currently had over 50 personal items stocked have been refunded the amount they bought the stock for, or the current price of their item (whichever's lowest)
 >  - think of this change as the "/currency balance changes" or something :3
 > - your personal item can now be listed for up to 🪙 `999,999` coins (from 🪙 `999` coins)
+> - the **🎒 Items** menu now shows the total value of all your items
 
 ### <a:slash_command:1148866611227414568> </currency shop:1116857516324827148>
 > - to reflect with the max personal item stock changes, you can now buy up to 50 items at once
