@@ -570,3 +570,6 @@
 
 ### <a:slash_command:1148866611227414568> </modmail:1162483301215391916>
 > - fixed command not responding when not used in dms/flooded area community
+
+### support ✨
+> - fixed moderators who set no mentions for https://discord.com/channels/977254354589462618/1072945802256855170 being @mentioned for all tickets (as if they never set their mentions to begin with)

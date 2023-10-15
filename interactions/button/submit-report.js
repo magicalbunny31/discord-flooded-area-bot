@@ -151,11 +151,15 @@ export default async (interaction, firestore) => {
 
    const membersToMention = members
       .map(member => {
-         const { members = [], mentions = [] } = ticketsDocData.moderators[member.id] || {};
+         const { members = [], mentions } = ticketsDocData.moderators[member.id] || {};
          return {
             member,
-            mention: (!members.includes(interaction.user.id))      // this member is muted
-               &&    (!mentions.length || mentions.includes(type)) // this moderator doesn't want to be mentioned for this ticket reason
+            mention: (!members.includes(interaction.user.id)) // this member isn't muted
+               &&    (
+                  mentions
+                     ? mentions.includes(type)                // this moderator wants to be mentioned for this ticket reason
+                     : true                                   // this moderator hasn't set their mentions yet
+               )
          };
       })
       .filter(({ mention }) => mention)

@@ -106,8 +106,8 @@ export default async (interaction, firestore) => {
          const { members = [], "ban-appeals": banAppeals = true } = ticketsDocData.moderators[member.id] || {};
          return {
             member,
-            mention: (!members.includes(interaction.user.id)) // this member is muted
-               &&    (banAppeals)                             // this moderator doesn't want to be mentioned for ban appeals
+            mention: (!members.includes(interaction.user.id)) // this member isn't muted
+               &&    (banAppeals)                             // this moderator wants to be mentioned for ban appeals
          };
       })
       .filter(({ mention }) => mention)
