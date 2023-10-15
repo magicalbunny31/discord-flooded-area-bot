@@ -601,10 +601,6 @@ export default {
                strip`
                   ${emojis.currency_shopkeeper_halo} you must be nuts to buy this
                   ${emojis.currency_shopkeeper_bunny} uhm..
-               `,
-               strip`
-                  ${emojis.currency_shopkeeper_halo} you must be nuts to buy this
-                  ${emojis.currency_shopkeeper_bunny} uhm..
                `
             ]);
          },
