@@ -484,7 +484,7 @@
 ### <a:slash_command:1148866611227414568> </cmd:1160259589435048046> `pancake leaderboard`
 > - it shows the people with the highest number of 🥞 pancakes
 >  - add a number at the end of the command to view a specific pages
-> - aliases: \`lb\`/\`leaderboard\`/\`leaderboards\`
+> - aliases: `lb`/`leaderboard`/`leaderboards`
 
 ## <:happ:906683365791502366> stuff that changed
 
