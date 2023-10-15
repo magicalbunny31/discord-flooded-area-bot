@@ -34,11 +34,11 @@ export default async (interaction, firestore) => {
 
    // slash command permissions
    if (
-      interaction.guild?.id === process.env.GUILD_FLOODED_AREA                                                                        // in flooded area
-      && interaction.channel.id !== process.env.FA_CHANNEL_BOT_COMMANDS                                                               // chat-input application commands can only be run in bot commands
-      && !interaction.member.roles.cache.has(process.env.FA_ROLE_MODERATION_TEAM)                                                     // by non-staff
-      && !interaction.channel.isThread()                                                                                              // excluding threads
-      && ![ `create-event`, `get-map-info`, `get-part-info`, `jump-to-top`, `mention`, `votekick` ].includes(interaction.commandName) // excluding /create-event, /get-map-info, /get-part-info, /jump-to-top, /mention, /votekick
+      interaction.guild?.id === process.env.GUILD_FLOODED_AREA                                                                               // in flooded area
+      && interaction.channel.id !== process.env.FA_CHANNEL_BOT_COMMANDS                                                                      // chat-input application commands can only be run in bot commands
+      && !interaction.member.roles.cache.has(process.env.FA_ROLE_MODERATION_TEAM)                                                            // by non-staff
+      && !interaction.channel.isThread()                                                                                                     // excluding threads
+      && ![ `create-event`, `get-map-info`, `get-part-info`, `jump-to-top`, `mention`, `say`, `votekick` ].includes(interaction.commandName) // excluding /create-event, /get-map-info, /get-part-info, /jump-to-top, /mention, /say, /votekick
    )
       return await interaction.reply({
          content: `### ❌ Commands can only be used in ${Discord.channelMention(process.env.FA_CHANNEL_BOT_COMMANDS)} or in threads.`,
