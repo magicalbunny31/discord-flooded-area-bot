@@ -474,10 +474,10 @@
 
 ### <a:slash_command:1148866611227414568> </modmail:1162483301215391916>
 > - this is a brand new global command (meaning that it can be used in <@983126054619189370>'s dms) for submitting https://discord.com/channels/977254354589462618/1150530337227689994 (it's good for stuff like when you're muted or banned)
-> - i've decided to make this command accessible for all who share servers with <@983126054619189370> so that modmail could be submitted when you're banned (though they're NOT for ban appeals, those are managed by <@155149108183695360>> through [this form](https://dyno.gg/form/646fbb52))
+> - i've decided to make this command accessible for all who share servers with <@983126054619189370> so that modmail could be submitted when you're banned (though they're NOT for ban appeals, those are managed by <@155149108183695360> through [this form](https://dyno.gg/form/646fbb52))
 > - ..also, since this is the bot's first ever global command, it's got a whole new <:activedev:1042545590640324608> badge!
 
-### <a:context_menu_command:1148866148696346654> View Join dates
+### <a:context_menu_command:1148866148696346654> View Join Dates
 > - this is a user context command: you can run this command by right-clicking/long-pressing a member ➡️ Apps ➡️ <:area_communities_bot:1135719948224843856> View Join Dates
 > - this is basically just <:area_communities_bot:1135719948224843856> </view-join-dates for-member:1162852142550352037>
 
