@@ -553,3 +553,20 @@
 ### footnote
 > - ..</currency events:1116857516324827148>? oh, next time..
 >  - <a:foxsleep:701941646719451146>
+
+
+
+------------
+==============
+==============
+------------
+15/oct/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.5.1`
+
+## <:happ:906683365791502366> bugs fixed
+
+### <a:slash_command:1148866611227414568> </modmail:1162483301215391916>
+> - fixed command not responding when not used in dms/flooded area community

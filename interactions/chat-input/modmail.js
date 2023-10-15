@@ -22,7 +22,7 @@ export default async (interaction, firestore) => {
 
    // this command was run in a guild not from flooded area community
    if (interaction.inGuild() && interaction.guild.id !== process.env.GUILD_FLOODED_AREA)
-      return await interaction.reply({
+      return await interaction.editReply({
          content: strip`
             ### 📬 ${Discord.chatInputApplicationCommandMention(interaction.commandName, interaction.commandId)} is for submitting modmail in Flooded Area Community
             > - To use it, run this command in my DMs, or in Flooded Area Community.
