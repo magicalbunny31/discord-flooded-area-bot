@@ -518,6 +518,19 @@
 > - removed `check-first-join` option
 >  - this has been merged with the command, which'll show both current and historical members
 
+### stalk market 🥕
+> - new patterns! see what they do in </currency shop:1116857516324827148> ⬅️ **🥕 Stalk market** ➡️ **<:currency_shopkeeper_deerie:1136538082875817986> A deer's guide to the stalk market** or below~
+>  - `decreasing`: prices slowly decrease
+>  - `increasing`: prices slowly increase
+>  - `small-spike`: prices decrease with a small bump
+>  - `large-spike`: prices decrease with a large bump
+>  - `false-spike`: prices decrease with a very small bump
+>  - `low-random`: random low prices
+>  - `high-random`: random high prices
+>  - `starting-mirror`: high starting price, low midweek price, slightly higher ending price
+>  - `ending-mirror`: mediocre starting price, low midweek price, high ending price
+>  - `peak`: low starting and ending prices, high midweek price
+
 ### suggestions ✨
 > - removed default reactions ⬆️ ↔️ ⬇️ from new posts
 

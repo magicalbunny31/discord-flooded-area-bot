@@ -491,8 +491,8 @@ export default async (interaction, firestore) => {
                .setComponents(
                   new Discord.ButtonBuilder()
                      .setCustomId(`currency-how-stalk-market-works`)
-                     .setLabel(`How does the stalk market work?`)
-                     .setEmoji(`❓`)
+                     .setLabel(`A deer's guide to the stalk market`)
+                     .setEmoji(emojis.currency_shopkeeper_deerie)
                      .setStyle(Discord.ButtonStyle.Secondary)
                )
          );
