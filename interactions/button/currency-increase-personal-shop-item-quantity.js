@@ -22,9 +22,9 @@ export default async (interaction, firestore) => {
                new Discord.TextInputBuilder()
                   .setCustomId(`quantity`)
                   .setLabel(`INCREASE THIS ITEM'S QUANTITY BY`)
-                  .setPlaceholder(`Enter a number from 1-999...`)
+                  .setPlaceholder(`Enter a number from 1-50...`)
                   .setStyle(Discord.TextInputStyle.Short)
-                  .setMaxLength(3)
+                  .setMaxLength(2)
                   .setRequired(true)
             )
       );

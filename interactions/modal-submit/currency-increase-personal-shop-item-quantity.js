@@ -149,6 +149,22 @@ export default async (interaction, firestore) => {
    };
 
 
+   // the inputted quantity exceeds the max personal item quantity (50)
+   if (shopItem.quantity + quantity > 50) {
+      embeds[0]
+         .setDescription(strip`
+            ### ❌ Can't increase quantity.
+            > - You can only stock up to 50 personal items.
+            >  - You currently have \`${shopItem.quantity}\` in stock: you can stock \`${50 - shopItem.quantity}\` more.
+         `);
+
+      return await interaction.editReply({
+         embeds,
+         components
+      });
+   };
+
+
    // the price to pay
    const price = userItem.price === 1
       ? 1

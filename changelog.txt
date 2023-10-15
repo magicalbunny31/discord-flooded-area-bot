@@ -500,6 +500,16 @@
 ### <a:slash_command:1148866611227414568> </cmd:1160259589435048046> `pancake`
 > - added `p` as an alias
 
+### <a:slash_command:1148866611227414568> </currency items:1116857516324827148>
+> - you can now only stock up to 50 personal items
+>  - people who currently had over 50 personal items stocked have been refunded the amount they bought the stock for, or the current price of their item (whichever's lowest)
+>  - think of this change as the "/currency balance changes" or something :3
+> - your personal item can now be listed for up to 🪙 `999,999` coins (from 🪙 `999` coins)
+
+### <a:slash_command:1148866611227414568> </currency shop:1116857516324827148>
+> - to reflect with the max personal item stock changes, you can now buy up to 50 items at once
+> - you can now list items on the flea market for up to 🪙 `999,999` coins (from 🪙 `999` coins)
+
 ### <a:slash_command:1148866611227414568> </view-join-dates at-position:1162852142550352037>, </view-join-dates for-member:1162852142550352037>
 > - renamed from <:area_communities_bot:1135719948224843856> **`/who-joined-at by-position`** and <:area_communities_bot:1135719948224843856> **`/who-joined-at by-position`**
 >  - this is because the old command names were pretty confusing/didn't fit well

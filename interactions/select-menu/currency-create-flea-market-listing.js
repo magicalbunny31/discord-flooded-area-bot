@@ -23,9 +23,9 @@ export default async (interaction, firestore) => {
                new Discord.TextInputBuilder()
                   .setCustomId(`price`)
                   .setLabel(`HOW MUCH DO YOU WANT TO LIST IT FOR?`)
-                  .setPlaceholder(`Enter a number from 1-999...`)
+                  .setPlaceholder(`Enter a number from 1-999999...`)
                   .setStyle(Discord.TextInputStyle.Short)
-                  .setMaxLength(3)
+                  .setMaxLength(6)
                   .setRequired(true)
             )
       );

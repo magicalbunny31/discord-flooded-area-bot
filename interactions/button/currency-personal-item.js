@@ -45,10 +45,10 @@ export default async (interaction, firestore) => {
                new Discord.TextInputBuilder()
                   .setCustomId(`price`)
                   .setLabel(`HOW MUCH IS YOUR ITEM?`)
-                  .setPlaceholder(`Enter a number from 1-999...`)
+                  .setPlaceholder(`Enter a number from 1-999999...`)
                   .setStyle(Discord.TextInputStyle.Short)
                   .setValue(userItem.price ? `${userItem.price}` : ``)
-                  .setMaxLength(3)
+                  .setMaxLength(6)
                   .setRequired(true)
             )
       );
