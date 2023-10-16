@@ -424,14 +424,14 @@ export default async (client, firestore) => {
             })(),
 
             "small-spike": (() => {
-               const prices = [ number(40, 50) ];
+               const prices = [ number(45, 55) ];
                let [ price ] = prices;
                let endPrice;
 
                spikeIndex = number(1, 7);
                for (let i = 0; i < 11; i ++) {
                   if ([ spikeIndex, spikeIndex + 1, spikeIndex + 2 ].includes(i))
-                     price += number(40, 50);
+                     price += number(20, 25);
                   else if (i > spikeIndex) {
                      const pricesAfterThis = 11 - i;
                      if (i === spikeIndex + 3)
@@ -447,18 +447,18 @@ export default async (client, firestore) => {
             })(),
 
             "large-spike": (() => {
-               const prices = [ number(40, 50) ];
+               const prices = [ number(45, 65) ];
                let [ price ] = prices;
                let endPrice;
 
                spikeIndex = number(0, 6);
                for (let i = 0; i < 11; i ++) {
                   if (i === spikeIndex)
-                     price += number(50, 75);
+                     price += number(15, 25);
                   else if (i === spikeIndex + 1)
-                     price -= number(25, 50);
+                     price -= number(10, 20);
                   else if ([ spikeIndex + 2, spikeIndex + 3 ].includes(i))
-                     price += number(100, 150);
+                     price += number(30, 50);
                   else if (i > spikeIndex) {
                      const pricesAfterThis = 11 - i;
                      if (i === spikeIndex + 4)
@@ -474,14 +474,14 @@ export default async (client, firestore) => {
             })(),
 
             "false-spike": (() => {
-               const prices = [ number(40, 50) ];
+               const prices = [ number(45, 65) ];
                let [ price ] = prices;
                let endPrice;
 
                spikeIndex = number(0, 6);
                for (let i = 0; i < 11; i ++) {
                   if (i === spikeIndex)
-                     price += number(50, 75);
+                     price += number(30, 50);
                   else if (i > spikeIndex) {
                      const pricesAfterThis = 11 - i;
                      if (i === spikeIndex + 1)
@@ -497,15 +497,15 @@ export default async (client, firestore) => {
             })(),
 
             "low-random": (() => {
-               return autoArray(12, () => number(25, 75));
+               return autoArray(12, () => number(25, 60));
             })(),
 
             "high-random": (() => {
-               return autoArray(12, () => number(50, 100));
+               return autoArray(12, () => number(45, 80));
             })(),
 
             "starting-mirror": (() => {
-               const prices = [ number(75, 100) ];
+               const prices = [ number(70, 90) ];
                let [ price ] = prices;
                let endPrice;
 
@@ -514,14 +514,14 @@ export default async (client, firestore) => {
                   if (i < spikeIndex) {
                      const pricesToNewsDate = spikeIndex - i;
                      if (i === 0)
-                        endPrice = number(16, 36);
+                        endPrice = number(20, 30);
                      const decreaseBy = Math.round(((price - endPrice) / pricesToNewsDate) - number(0, 3));
                      price -= decreaseBy;
-                  } else if (i >= spikeIndex) {
+                  } else {
                      const pricesAfterThis = 11 - i;
                      if (i === spikeIndex)
-                        endPrice = number(50, 75);
-                     const increaseBy = Math.round(((endPrice - price) / pricesAfterThis) + number(0, 3));
+                        endPrice = number(45, 55);
+                     const increaseBy = Math.round(((endPrice - price) / pricesAfterThis) + number(0, 1));
                      price += increaseBy;
                   };
                   prices.push(price);
@@ -531,7 +531,7 @@ export default async (client, firestore) => {
             })(),
 
             "ending-mirror": (() => {
-               const prices = [ number(50, 75) ];
+               const prices = [ number(45, 55) ];
                let [ price ] = prices;
                let endPrice;
 
@@ -540,13 +540,13 @@ export default async (client, firestore) => {
                   if (i < spikeIndex) {
                      const pricesToNewsDate = spikeIndex - i;
                      if (i === 0)
-                        endPrice = number(16, 36);
+                        endPrice = number(20, 30);
                      const decreaseBy = Math.round(((price - endPrice) / pricesToNewsDate) - number(0, 3));
                      price -= decreaseBy;
-                  } else if (i >= spikeIndex) {
+                  } else {
                      const pricesAfterThis = 11 - i;
                      if (i === spikeIndex)
-                        endPrice = number(75, 100);
+                        endPrice = number(70, 90);
                      const increaseBy = Math.round(((endPrice - price) / pricesAfterThis) + number(0, 3));
                      price += increaseBy;
                   };
@@ -566,7 +566,7 @@ export default async (client, firestore) => {
                   if (i < spikeIndex) {
                      const pricesToNewsDate = spikeIndex - i;
                      if (i === 0)
-                        endPrice = number(75, 125);
+                        endPrice = number(75, 95);
                      const increaseBy = Math.round(((endPrice - price) / pricesToNewsDate) + number(0, 5));
                      price += increaseBy;
                   } else if (i >= spikeIndex) {

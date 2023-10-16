@@ -576,3 +576,22 @@
 
 ### support ✨
 > - fixed moderators who set no mentions for https://discord.com/channels/977254354589462618/1072945802256855170 being @mentioned for all tickets (as if they never set their mentions to begin with)
+
+
+
+------------
+==============
+==============
+------------
+16/oct/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.5.2`
+
+## <:happ:906683365791502366> stuff that changed
+
+### stalk market 🥕
+> - decreased all carrot sell prices slightly so that people will make less money overall on the stalk market
+>  - don't worry - trends are still the same as before
+>  - for example: `large-spike`'s max price was decreased from 200-350 to 110-150 (i don't know the exact figures)
