@@ -583,7 +583,7 @@
 ==============
 ==============
 ------------
-16/oct/2023
+17/oct/2023
 
 
 
@@ -595,3 +595,10 @@
 > - decreased all carrot sell prices slightly so that people will make less money overall on the stalk market
 >  - don't worry - trends are still the same as before
 >  - for example: `large-spike`'s max price was decreased from 200-350 to 110-150 (i don't know the exact figures)
+
+## <:happ:906683365791502366> bugs fixed
+
+### <a:slash_command:1148866611227414568> </cmd:1160259589435048046>
+> - removed automod checking
+>  - it wasn't really good at blocking messages and even had some false positives
+>  - sure it's bypassable but, at that point, please just beg for the attention of the nearest staff person kthxbaii
