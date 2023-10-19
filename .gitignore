@@ -2,6 +2,9 @@
 .vscode/
 *.code-workspace
 
+# 📜 lua
+lua/
+
 # 📜 .env
 .env
 

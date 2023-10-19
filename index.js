@@ -6,8 +6,9 @@
  */
 
 
+
 // some awesome utilities that i pretty much need or else my code will suck 🐾
-import { colours, noop } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, noop, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 
 // filesystem
@@ -73,11 +74,19 @@ server.get(`/`, async (request, response) => {
    // this means that it processed a moderation request
    // the below code in this block will display a message to the command user
 
-   if ([ `Ban`, `Kick`, `Unban` ].includes(request.headers[`method`])) {
+   const action = request.headers[`method`];
+
+   if ([ `Ban`, `Kick`, `Unban` ].includes(action)) {
+      // constants
+      const emojiSuccess = `<a:ingame_moderation_success:1123766876749713508>`;
+      const emojiError   = `<a:ingame_moderation_error:1123766878167367770>`;
+
+
       // get the message to edit
-      const guild   = await client .guilds  .fetch(request.headers[`guild`]);
-      const channel = await guild  .channels.fetch(request.headers[`channel`]);
-      const message = await channel.messages.fetch(request.headers[`message`]);
+      const guild      = await client .guilds  .fetch(request.headers[`guild`]);
+      const channel    = await guild  .channels.fetch(request.headers[`channel`]);
+      const message    = await channel.messages.fetch(request.headers[`message`]);
+      const embedIndex = +request.headers[`embedindex`];
 
 
       // there was a roblox error
@@ -86,33 +95,37 @@ server.get(`/`, async (request, response) => {
 
       // the payload for editing the message
       const payload = {
-         content: `
-            ${receivedRobloxError ? `❌` : `✅`} **${
-               request.headers[`length`]
-                  ? `Temporary ban`
-                  : request.headers[`method`] === `Ban`
-                     ? `Ban`
-                     : request.headers[`method`] === `Kick`
-                        ? `Kick`
-                        : `Ban revoke`
-            } ${receivedRobloxError ? `failed.` : `successful!`}**
-         `,
-
-         ...receivedRobloxError
-            ? {
-               embeds: [
-                  ...message.embeds,
-                  new Discord.EmbedBuilder()
-                     .setColor(colours.red)
-                     .setDescription(Discord.codeBlock(receivedRobloxError))
-               ]
-            }
-            : {},
+         embeds: message.embeds.map(embed =>
+            new Discord.EmbedBuilder(embed.data)
+         ),
 
          allowedMentions: {
             repliedUser: false
          }
       };
+
+      if (!receivedRobloxError)
+         payload.embeds[embedIndex]
+            .setDescription(`### ${emojiSuccess} ${
+               {
+                  "Ban":   `banned player!`,
+                  "Kick":  `kicked player from server!`,
+                  "Unban": `revoked player's ban!`
+               }[action]
+            }`);
+
+      else
+         payload.embeds[embedIndex]
+            .setColor(colours.red)
+            .setDescription(strip`
+               ### ${emojiError} ${
+                  {
+                     "Ban":   `failed to ban player`,
+                     "Kick":  `failed to kick player from server`,
+                     "Unban": `failed to revoke player's ban`
+                  }[action]
+               }
+            `);
 
 
       try {
