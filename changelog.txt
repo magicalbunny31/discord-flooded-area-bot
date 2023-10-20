@@ -527,8 +527,8 @@
 >  - `false-spike`: prices decrease with a very small bump
 >  - `low-random`: random low prices
 >  - `high-random`: random high prices
->  - `starting-mirror`: high starting price, low midweek price, slightly higher ending price
->  - `ending-mirror`: mediocre starting price, low midweek price, high ending price
+>  - `starting-mirror`: high starting price, low midweek price, normal ending price
+>  - `ending-mirror`: normal starting price, low midweek price, high ending price
 >  - `peak`: low starting and ending prices, high midweek price
 
 ### suggestions ✨
