@@ -26,6 +26,7 @@ export default async (client, firestore) => {
 
       const items = shopDocData?.[`shop-items`] || [];
 
+      const event = {};
       const stalkMarket = shopDocData[`stalk-market`] || {};
 
 
@@ -47,6 +48,25 @@ export default async (client, firestore) => {
       };
 
 
+      // create a new event this week (every sunday midnight)
+      if (!dayjs.utc().day() && !dayjs.utc().hour()) {
+         if (number(0, 1)) // 50% chance for an event this week
+            Object.assign(event,
+               choice(
+                  [{
+                     "event":           `market-crash`,
+                     "news-date-index": number(0, 7)
+                  }, {
+                     "event":           `bull-market`,
+                     "news-date-index": number(0, 7)
+                  }, {
+                     "event":           `market-switch`,
+                     "news-date-index": number(0, 7)
+                  }]
+               )
+            );
+      };
+
       // update the stalk market (every sunday midnight)
       // https://nookipedia.com/wiki/Stalk_Market
       if (!dayjs.utc().day() && !dayjs.utc().hour()) {
@@ -54,313 +74,313 @@ export default async (client, firestore) => {
             const trendChanceData = {
                "decreasing": [{
                   name:   `decreasing`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (1 / 30).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (5 / 30).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (4 / 30).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (3 / 30).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 30).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 30).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (3 / 30).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 30).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 30).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 30).toFixed(5)
                }],
                "increasing": [{
                   name:   `decreasing`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (1 / 26).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (1 / 26).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (3 / 26).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (3 / 26).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 26).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (3 / 15).toFixed(5)
+                  chance: (4 / 26).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (4 / 26).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (3 / 26).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (3 / 26).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 26).toFixed(5)
                }],
                "small-spike": [{
                   name:   `decreasing`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (1 / 25).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (1 / 25).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (1 / 25).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (4 / 25).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (4 / 25).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 25).toFixed(5)
                }],
                "large-spike": [{
                   name:   `decreasing`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (1 / 24).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 24).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 24).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (1 / 24).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (3 / 15).toFixed(5)
+                  chance: (2 / 24).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (5 / 24).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (5 / 24).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 24).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 24).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 24).toFixed(5)
                }],
                "false-spike": [{
                   name:   `decreasing`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (1 / 27).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (5 / 27).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (3 / 15).toFixed(5)
+                  chance: (3 / 27).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (3 / 27).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (1 / 27).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (2 / 15).toFixed(5)
+                  chance: (3 / 27).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (3 / 15).toFixed(5)
+                  chance: (3 / 27).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (3 / 27).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (3 / 27).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 15).toFixed(5)
+                  chance: (2 / 27).toFixed(5)
                }],
                "low-random": [{
                   name:   `decreasing`,
-                  chance: (1 / 18).toFixed(5)
+                  chance: (1 / 25).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (2 / 18).toFixed(5)
+                  chance: (5 / 25).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (2 / 18).toFixed(5)
+                  chance: (4 / 25).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (3 / 18).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (1 / 18).toFixed(5)
+                  chance: (2 / 25).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (1 / 18).toFixed(5)
+                  chance: (1 / 25).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (2 / 18).toFixed(5)
+                  chance: (1 / 25).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (2 / 18).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (2 / 18).toFixed(5)
+                  chance: (3 / 25).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (2 / 18).toFixed(5)
+                  chance: (2 / 25).toFixed(5)
                }],
                "high-random": [{
                   name:   `decreasing`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (1 / 22).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (4 / 22).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (3 / 22).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (2 / 22).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (2 / 22).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (1 / 22).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (1 / 22).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 22).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (3 / 22).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 22).toFixed(5)
                }],
                "starting-mirror": [{
                   name:   `decreasing`,
-                  chance: (2 / 13).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (2 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (2 / 13).toFixed(5)
+                  chance: (5 / 23).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (4 / 23).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }],
                "ending-mirror": [{
                   name:   `decreasing`,
-                  chance: (2 / 13).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (2 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (2 / 13).toFixed(5)
+                  chance: (4 / 23).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (5 / 23).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 13).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }],
                "peak": [{
                   name:   `decreasing`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }, {
                   name:   `increasing`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `small-spike`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `large-spike`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }, {
                   name:   `false-spike`,
-                  chance: (3 / 16).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `low-random`,
-                  chance: (2 / 16).toFixed(5)
+                  chance: (5 / 23).toFixed(5)
                }, {
                   name:   `high-random`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (5 / 23).toFixed(5)
                }, {
                   name:   `starting-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `ending-mirror`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (2 / 23).toFixed(5)
                }, {
                   name:   `peak`,
-                  chance: (1 / 16).toFixed(5)
+                  chance: (1 / 23).toFixed(5)
                }]
             }[stalkMarket.trend || `decreasing`];
 
@@ -574,6 +594,7 @@ export default async (client, firestore) => {
 
       // update the database
       await shopDocRef.update({
+         "event":        event,
          "shop-items":   items,
          "stalk-market": stalkMarket
       });

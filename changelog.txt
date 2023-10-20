@@ -519,7 +519,7 @@
 >  - this has been merged with the command, which'll show both current and historical members
 
 ### stalk market 🥕
-> - new patterns! see what they do in </currency shop:1116857516324827148> ⬅️ **🥕 Stalk market** ➡️ **<:currency_shopkeeper_deerie:1136538082875817986> A deer's guide to the stalk market** or below~
+> - new patterns! see what they do in </currency shop:1116857516324827148> ➡️ **🥕 Stalk market** ➡️ **<:currency_shopkeeper_deerie:1136538082875817986> A deer's guide to the stalk market** or below~
 >  - `decreasing`: prices slowly decrease
 >  - `increasing`: prices slowly increase
 >  - `small-spike`: prices decrease with a small bump
@@ -560,7 +560,7 @@
 ==============
 ==============
 ------------
-15/oct/2023
+16/oct/2023
 
 
 
@@ -571,6 +571,9 @@
 ### <a:slash_command:1148866611227414568> </modmail:1162483301215391916>
 > - fixed command not responding when not used in dms/flooded area community
 
+### stalk market 🥕
+> - fixed incorrect next trend chances
+
 ### support ✨
 > - fixed moderators who set no mentions for https://discord.com/channels/977254354589462618/1072945802256855170 being @mentioned for all tickets (as if they never set their mentions to begin with)
 
@@ -580,7 +583,7 @@
 ==============
 ==============
 ------------
-16/oct/2023
+17/oct/2023
 
 
 
@@ -592,3 +595,10 @@
 > - decreased all carrot sell prices slightly so that people will make less money overall on the stalk market
 >  - don't worry - trends are still the same as before
 >  - for example: `large-spike`'s max price was decreased from 200-350 to 110-150 (i don't know the exact figures)
+
+## <:happ:906683365791502366> bugs fixed
+
+### <a:slash_command:1148866611227414568> </cmd:1160259589435048046>
+> - removed automod checking
+>  - it wasn't really good at blocking messages and even had some false positives
+>  - sure it's bypassable but, at that point, please just beg for the attention of the nearest staff person kthxbaii
