@@ -602,3 +602,21 @@
 > - removed automod checking
 >  - it wasn't really good at blocking messages and even had some false positives
 >  - sure it's bypassable but, at that point, please just beg for the attention of the nearest staff person kthxbaii
+
+
+
+------------
+==============
+==============
+------------
+30/oct/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.0`
+
+## <:happ:906683365791502366> stuff that changed
+
+### statuses
+> - removed a, uh, rule-breaking status
+> - added a few more "flooded area reference" statuses
