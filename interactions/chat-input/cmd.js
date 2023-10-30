@@ -697,8 +697,8 @@ export default async (interaction, firestore) => {
          const totalPets = sum(Object.values(petDocData).map(data => data.pets));
          const petUserData = petDocData[interaction.user.id] || {};
 
-         const canGetPancake = (petUserData[`next-pet-at`]?.seconds || 0) < dayjs().unix();
-         if (!canGetPancake)
+         const canPet = (petUserData[`next-pet-at`]?.seconds || 0) < dayjs().unix();
+         if (!canPet)
             return await interaction.editReply({
                content: toCommand(strip`
                   The 🦊 has been pet \`${totalPets || 0}\` ${totalPets === 1 ? `time` : `times`} in this server.
