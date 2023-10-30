@@ -7,7 +7,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 
 import Discord from "discord.js";
-import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { colours } from "@magicalbunny31/awesome-utility-stuff";
 
 import pkg from "../../package.json" assert { type: "json" };
 
