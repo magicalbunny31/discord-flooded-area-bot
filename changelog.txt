@@ -620,3 +620,21 @@
 ### statuses
 > - removed a, uh, rule-breaking status
 > - added a few more "flooded area reference" statuses
+
+
+
+------------
+==============
+==============
+------------
+06/nov/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.1`
+
+## <:happ:906683365791502366> stuff that changed
+
+### things you probably won't understand
+> - upgraded `fennec-utilities`
+>  - this is the thing i use to monitor all my bots!

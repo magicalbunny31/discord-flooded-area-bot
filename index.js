@@ -85,7 +85,7 @@ await client.login(process.env.TOKEN);
 
 
 // set-up fennec-utilities
-const fennecGuild = await client.guilds.fetch(process.env.GUILD_BOT_LOGS);
+const fennecGuild = await client.guilds.fetch(process.env.GUILD_APPLICATION_STATUS);
 const fennecMember = await fennecGuild.members.fetch(client.user);
 
 client.fennec = new Client({
@@ -107,9 +107,7 @@ client.fennec = new Client({
    }
 });
 
-client.fennec.updater(
-   async () => client.application.approximateGuildCount || (await client.application.fetch()).approximateGuildCount
-);
+client.fennec.updater(client);
 
 client.blacklist = await client.fennec.getGlobalBlacklist();
 setInterval(async () => client.blacklist = await client.fennec.getGlobalBlacklist(), 3.6e+6);
