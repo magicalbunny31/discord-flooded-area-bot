@@ -532,6 +532,7 @@ export default async (interaction, firestore) => {
                   .setColor(data.colour)
                   .setTitle(`📋 Commands for ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(interaction.commandName, interaction.commandId)}`)
                   .setDescription(strip`
+                     - \`:3\`
                      - \`617\`
                      - \`8ball\`
                      - \`america\`
