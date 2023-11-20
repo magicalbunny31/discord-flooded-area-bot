@@ -32,7 +32,7 @@ export default async (interaction, firestore) => {
    if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
       return await interaction.reply({
          content: strip`
-            ### ❌ This command can't be used.
+            ### ❌ This command can't be used
             > - The wiki for this game must be public.
             > - Contact <@490178047325110282> to set-up this command.
          `,
@@ -70,7 +70,7 @@ export default async (interaction, firestore) => {
 
 
    // user-agent string
-   const userAgent = `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`;
+   const userAgent = `${pkg.name}/${pkg.version} (https://nuzzles.dev/area-communities-bot)`;
 
 
    // base url for requests
@@ -169,7 +169,7 @@ export default async (interaction, firestore) => {
                .setTitle(foundPage.title)
                .setURL(encodeURI(`${baseUrl}/wiki/${foundPage.title}`))
                .setDescription(strip`
-                  ### ❌ Page "${foundPage.title}" not found.
+                  ### ❌ Page "${foundPage.title}" not found
                   > - Try selecting an option from the inline autocomplete choices when using ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`wiki`, interaction.commandId)}.
                   > - Or, this page may not exist on the ${Discord.hyperlink(wiki.name, `${wiki.url}/wiki`)} yet - ${Discord.hyperlink(`create this page yourself here`, encodeURI(`${baseUrl}/wiki/${foundPage.title}?action=edit`))}.
                `)
@@ -281,7 +281,7 @@ export default async (interaction, firestore) => {
                .setTitle(foundPage.title)
                .setURL(encodeURI(`${baseUrl}/wiki/${foundPage.title}`))
                .setDescription(strip`
-                  ### 📃 Page "${foundPage.title}" too large to view on Discord.
+                  ### 📃 Page "${foundPage.title}" too large to view on Discord
                   > - ${Discord.hyperlink(`View the full page online here`, encodeURI(`${baseUrl}/wiki/${foundPage.title}`))}.
                `)
                .setThumbnail(`attachment://removed.png`)

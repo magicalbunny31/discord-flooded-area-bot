@@ -51,7 +51,7 @@ export default async (interaction, firestore) => {
    } catch (error) {
       // an error occurred
       try {
-         await interaction.client.fennec.respondToInteractionWithError(interaction);
+         await interaction.client.fennec.respondToInteractionWithError(interaction, error);
          await interaction.client.fennec.sendError(error, Math.floor(interaction.createdTimestamp / 1000), interaction);
 
       } catch {

@@ -112,7 +112,7 @@ export default async (interaction, firestore) => {
    if (userCoins < 100) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't ${hasPersonalItem ? `edit` : `create`} personal item.
+            ### ❌ Can't ${hasPersonalItem ? `edit` : `create`} personal item
             > - It costs 🪙 \`100\` coins to ${hasPersonalItem ? `edit` : `create`} your personal item.
          `);
 
@@ -127,7 +127,7 @@ export default async (interaction, firestore) => {
    if (isNaN(price) || !Number.isSafeInteger(price)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't ${hasPersonalItem ? `edit` : `create`} personal item.
+            ### ❌ Can't ${hasPersonalItem ? `edit` : `create`} personal item
             > - \`${rawPrice}\` isn't a valid integer.
          `);
 
@@ -142,7 +142,7 @@ export default async (interaction, firestore) => {
    if (price <= 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't ${hasPersonalItem ? `edit` : `create`} personal item.
+            ### ❌ Can't ${hasPersonalItem ? `edit` : `create`} personal item
             > - Enter a number greater than or equal to 1.
          `);
 

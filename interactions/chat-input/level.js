@@ -91,7 +91,7 @@ export default async (interaction, firestore) => {
    // this is a bot
    if (user.bot)
       return await interaction.reply({
-         content: `### ❌ Bots aren't part of the levelling system.`,
+         content: `### ❌ Bots aren't part of the levelling system`,
          ephemeral: true
       });
 

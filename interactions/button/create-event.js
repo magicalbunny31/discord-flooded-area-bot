@@ -93,7 +93,7 @@ export default async (interaction, firestore) => {
    // embeds
    embeds[0]
       .setDescription(strip`
-         ### ⌚ Select a date and time.
+         ### ⌚ Select a date and time
          > - At ${Discord.time(timestamp, Discord.TimestampStyles.LongDateTime)}.
       `);
 

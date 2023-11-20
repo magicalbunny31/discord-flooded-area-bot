@@ -1,4 +1,4 @@
-export const cron = `0,30 * * * *`; // every half an hour
+export const cron = `0,30 * * * *`; // at every half hour
 
 import dayjs from "dayjs";
 import { FieldValue } from "@google-cloud/firestore";
@@ -25,7 +25,7 @@ export default async (client, firestore) => {
 
 
    // user-agent string
-   const userAgent = `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`;
+   const userAgent = `${pkg.name}/${pkg.version} (https://nuzzles.dev/area-communities-bot)`;
 
 
    // fetch info on these games

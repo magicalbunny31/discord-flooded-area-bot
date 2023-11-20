@@ -261,7 +261,7 @@ export default async (interaction, firestore) => {
 
 
    // update the interaction
-   return await interaction.editReply({
+   await interaction.editReply({
       embeds,
       components
    });

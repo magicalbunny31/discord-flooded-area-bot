@@ -104,7 +104,7 @@ export default async (interaction, firestore) => {
    if (isBuying && dayjs.utc().day() !== 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy carrots.
+            ### ❌ Can't buy carrots
             > - You can only buy carrots on \`Sunday\`s.
             >  - This will be ${Discord.time(dayjs.utc().startOf(`week`).add(1, `week`).toDate(), Discord.TimestampStyles.RelativeTime)}.
          `);
@@ -120,7 +120,7 @@ export default async (interaction, firestore) => {
    if (!isBuying && dayjs.utc().day() === 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't sell carrots.
+            ### ❌ Can't sell carrots
             > - You't sell carrots on \`Sunday\`s.
             >  - Come back again ${Discord.time(dayjs.utc().startOf(`day`).add(1, `day`).toDate(), Discord.TimestampStyles.RelativeTime)}.
          `);
@@ -136,7 +136,7 @@ export default async (interaction, firestore) => {
    if (isNaN(quantity) || !Number.isSafeInteger(quantity)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't ${isBuying ? `buy` : `sell`} carrots.
+            ### ❌ Can't ${isBuying ? `buy` : `sell`} carrots
             > - \`${rawQuantity}\` isn't a valid integer.
          `);
 
@@ -151,7 +151,7 @@ export default async (interaction, firestore) => {
    if (quantity <= 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't sell carrots.
+            ### ❌ Can't sell carrots
             > - Enter a number greater than or equal to 1.
          `);
 
@@ -166,7 +166,7 @@ export default async (interaction, firestore) => {
    if (!isBuying && quantity > (userCurrencyDocData.carrots?.quantity || 0)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't sell carrots.
+            ### ❌ Can't sell carrots
             > - You can't sell more carrots than you have: you have 🥕 \`${userCurrencyDocData.carrots?.quantity || 0}\` ${userCurrencyDocData.carrots?.quantity === 1 ? `carrot` : `carrots`}.
             > - Wait until next \`Sunday\` to buy more carrots.
             >  - This will be ${Discord.time(dayjs.utc().startOf(`week`).add(1, `week`).toDate(), Discord.TimestampStyles.RelativeTime)}.
@@ -196,7 +196,7 @@ export default async (interaction, firestore) => {
    if (isBuying && price > userCoins) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy carrots.
+            ### ❌ Can't buy carrots
             > - You need 🪙 \`${price.toLocaleString()}\` coins to buy \`${quantity}\` ${quantity === 1 ? `carrot` : `carrots`}: you have 🪙 \`${userCoins.toLocaleString()}\` ${userCoins === 1 ? `coin` : `coins`}.
          `);
 

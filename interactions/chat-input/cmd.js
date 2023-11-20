@@ -17,7 +17,7 @@ import Discord from "discord.js";
 import dayjs from "dayjs";
 import fs from "fs/promises";
 import { FieldValue, Timestamp } from "@google-cloud/firestore";
-import { colours, emojis, choice, number, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, choice, number, partition, strip, sum, wait } from "@magicalbunny31/awesome-utility-stuff";
 
 import pkg from "../../package.json" assert { type: "json" };
 
@@ -101,6 +101,28 @@ export default async (interaction, firestore) => {
 
    // run command
    switch (commandName) {
+
+
+      // :3
+      case `:3`: {
+         await interaction.reply({
+            content: toCommand(emojis.loading),
+            allowedMentions: {
+               parse: []
+            }
+         });
+
+         return await interaction.editReply({
+            content: toCommand(),
+            files: [
+               new Discord.AttachmentBuilder()
+                  .setFile(`./assets/cmd/colon-three.png`)
+            ],
+            allowedMentions: {
+               parse: []
+            }
+         });
+      };
 
 
       // 617
@@ -534,6 +556,7 @@ export default async (interaction, firestore) => {
                      - \`rate\`
                      - \`roll\`/\`dice\`
                      - \`red-panda\`/\`wah\`
+                     - \`unique-username-statistics\`/\`unique\`/\`username\`/\`usernames\`/\`uus\`
                      - \`wolf\`/\`awoo\`
                   `)
                   .setFooter({
@@ -765,6 +788,66 @@ export default async (interaction, firestore) => {
 
          return await interaction.reply({
             content: toCommand(`🎲 ${number(1, max)} (1-${max})`),
+            allowedMentions: {
+               parse: []
+            }
+         });
+      };
+
+
+      // unique-username-statistics/unique/username/usernames/uus
+      case `unique-username-statistics`:
+      case `unique`:
+      case `username`:
+      case `usernames`:
+      case `uus`: {
+         await interaction.reply({
+            content: toCommand(emojis.loading),
+            allowedMentions: {
+               parse: []
+            }
+         });
+
+         const members = await (async () => {
+            const fetchedMembers = [];
+            let lastMember;
+            while (true) {
+               const members = (await interaction.guild.members.list({ limit: 1000, ...fetchedMembers.length ? { after: fetchedMembers.at(-1).id } : {} }));
+               fetchedMembers.push(...members.values());
+               if (lastMember?.id === fetchedMembers.at(-1).id)
+                  break;
+               else
+                  lastMember = fetchedMembers.at(-1);
+               await wait(1000);
+            };
+
+            return fetchedMembers;
+         })();
+
+         const [ uniqueUsernameMembers, oldUsernameMembers ] = partition(members, member => member.user.discriminator === `0`);
+
+         const colour = {
+            [process.env.GUILD_FLOODED_AREA]: colours.flooded_area,
+            [process.env.GUILD_SPACED_OUT]:   colours.spaced_out
+         }[interaction.guild.id];
+
+         const embeds = [
+            new Discord.EmbedBuilder()
+               .setColor(colour)
+               .setFields({
+                  name: `Members with Unique Usernames (\`@${choice(uniqueUsernameMembers).user.username}\`)`,
+                  value: `> ${uniqueUsernameMembers.length.toLocaleString()} members`,
+                  inline: true
+               }, {
+                  name: `Members with old usernames (\`@${choice(oldUsernameMembers).user.tag}\`)`,
+                  value: `> ${oldUsernameMembers.length.toLocaleString()} members`,
+                  inline: true
+               })
+         ];
+
+         return await interaction.editReply({
+            content: toCommand(),
+            embeds,
             allowedMentions: {
                parse: []
             }

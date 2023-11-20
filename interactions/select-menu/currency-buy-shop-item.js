@@ -160,7 +160,7 @@ export default async (interaction, firestore) => {
       embeds[0]
          .setColor(data.colour)
          .setDescription(strip`
-            ### ❌ Can't view item.
+            ### ❌ Can't view item
             > - This seller's personal item no longer exists.
          `);
 

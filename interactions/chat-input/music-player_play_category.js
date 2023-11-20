@@ -24,7 +24,7 @@ export default async (interaction, firestore) => {
    if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
       return await interaction.reply({
          content: strip`
-            ### ❌ Tracks aren't available.
+            ### ❌ Tracks aren't available
             > - ${interaction.client.user} does not have access to the music for this game.
             > - Contact <@490178047325110282> to set-up this command.
          `,
@@ -129,7 +129,7 @@ export default async (interaction, firestore) => {
    if (musicPlayer[data.name].filter(data => data.categoryId === categoryId).length === 1)
       return await interaction.reply({
          content: strip`
-            ### ❌ There's only 1 track in this category.
+            ### ❌ There's only 1 track in this category
             > - Use ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`music-player`, `play`, `track`, interaction.commandId)} instead to listen to this category's singular track.
          `,
          ephemeral: true
@@ -144,7 +144,7 @@ export default async (interaction, firestore) => {
    if (!track)
       return await interaction.reply({
          content: strip`
-            ### ❌ Category not found.
+            ### ❌ Category not found
             > - Try selecting an option from the inline autocomplete choices when using ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`music-player`, `play`, `category`, interaction.commandId)}.
          `,
          ephemeral: true
@@ -155,7 +155,7 @@ export default async (interaction, firestore) => {
    if (!interaction.member.voice.channel)
       return await interaction.reply({
          content: strip`
-            ### ❌ Can't start music player.
+            ### ❌ Can't start music player
             > - You need to join a voice channel for ${interaction.client.user} to stream music to.
          `,
          ephemeral: true

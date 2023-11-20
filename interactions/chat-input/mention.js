@@ -63,7 +63,7 @@ export default async (interaction, firestore) => {
    // @Moderation Team or @Event Host role needed to @mention @Events
    if (![ moderationTeam, eventHost ].some(role => roles.has(role)) && roleId === events)
       return await interaction.reply({
-         content: `### ❌ You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(eventHost)} to @mention ${roleToMention}.`,
+         content: `### ❌ You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(eventHost)} to @mention ${roleToMention}`,
          allowedMentions: {
             parse: []
          },
@@ -74,7 +74,7 @@ export default async (interaction, firestore) => {
    // @Moderation Team or @Challenge Host role needed to @mention @Challenges
    if (![ moderationTeam, challengeHost ].some(role => roles.has(role)) && roleId === challenges)
       return await interaction.reply({
-         content: `### ❌ You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(challengeHost)} to @mention ${roleToMention}.`,
+         content: `### ❌ You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(challengeHost)} to @mention ${roleToMention}`,
          allowedMentions: {
             parse: []
          },
@@ -85,7 +85,7 @@ export default async (interaction, firestore) => {
    // @Moderation Team role needed to @mention other roles
    if (!roles.has(moderationTeam) && ![ events, challenges ].includes(roleId))
       return await interaction.reply({
-         content: `### ❌ You need the role ${Discord.roleMention(moderationTeam)} to @mention ${roleToMention}.`,
+         content: `### ❌ You need the role ${Discord.roleMention(moderationTeam)} to @mention ${roleToMention}`,
          allowedMentions: {
             parse: []
          },
@@ -94,7 +94,7 @@ export default async (interaction, firestore) => {
 
 
    // @mention this role
-   return await interaction.reply({
+   await interaction.reply({
       content: roleToMention,
       allowedMentions: {
          roles: [ roleId ]

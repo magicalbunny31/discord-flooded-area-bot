@@ -55,5 +55,5 @@ export default async (interaction, firestore) => {
 
 
    // show the modal
-   return await interaction.showModal(modal);
+   await interaction.showModal(modal);
 };

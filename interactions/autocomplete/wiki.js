@@ -26,7 +26,7 @@ export default async (interaction, firestore) => {
 
 
    // user-agent string
-   const userAgent = `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`;
+   const userAgent = `${pkg.name}/${pkg.version} (https://nuzzles.dev/area-communities-bot)`;
 
 
    // request url and query string

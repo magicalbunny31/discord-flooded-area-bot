@@ -109,7 +109,7 @@ export default async (interaction, firestore) => {
    if (!item) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - This item no longer exists.
             > - It may have been removed before you could've bought it.
          `)
@@ -138,7 +138,7 @@ export default async (interaction, firestore) => {
 
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - You need to be \`Level ${item.level}\` to buy this item.
             >  - View your level with ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`level`, commandLevelId)}.
          `)
@@ -157,7 +157,7 @@ export default async (interaction, firestore) => {
    if (item.role && interaction.member.roles.cache.has(item.role)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - This item gives you the ${Discord.roleMention(item.role)} role: you already have this role.
          `)
          .setFooter({
@@ -184,7 +184,7 @@ export default async (interaction, firestore) => {
    if (priceToPay > userCoins) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - You need 🪙 \`${priceToPay.toLocaleString()}\` ${priceToPay === 1 ? `coin` : `coins`} to buy this item.
          `)
          .setFooter({

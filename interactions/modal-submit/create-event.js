@@ -35,7 +35,7 @@ export default async (interaction, firestore) => {
          embeds: [
             embeds[0]
                .setDescription(strip`
-                  ### ❌ Cannot create scheduled event.
+                  ### ❌ Cannot create scheduled event
                   > - You must input an event topic.
                `)
          ],
@@ -60,7 +60,7 @@ export default async (interaction, firestore) => {
    // embeds
    embeds[0]
       .setDescription(strip`
-         ### ⌚ Select a date and time.
+         ### ⌚ Select a date and time
          > - At ${Discord.time(timestamp, Discord.TimestampStyles.LongDateTime)}.
       `);
 

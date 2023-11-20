@@ -34,7 +34,7 @@ export default async (interaction, firestore) => {
    // this is a bot
    if (user.bot)
       return await interaction.reply({
-         content: `### ❌ Bots aren't part of the currency system.`,
+         content: `### ❌ Bots aren't part of the currency system`,
          ephemeral: true
       });
 

@@ -57,7 +57,7 @@ export default async (interaction, firestore) => {
 
 
    // reply to the interaction
-   return await interaction.reply({
+   await interaction.reply({
       embeds,
       components,
       ephemeral: true

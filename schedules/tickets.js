@@ -1,5 +1,6 @@
 export const cron = {
-   minute: 0 // run every hour
+   // at every hour
+   minute: 0
 };
 
 import Discord from "discord.js";

@@ -133,7 +133,7 @@ export default async (interaction, firestore) => {
                   ### 👤 They're currently the ${currentPosition.toLocaleString()}${getOrdinalSuffix(currentPosition)} member
                   > - Joined at ${Discord.time(member.joinedAt)}
                `
-               : `### ❌ ${user} isn't in this server.`
+               : `### ❌ ${user} isn't in this server`
          )
          .setFooter({
             text: `${currentMembers.length.toLocaleString()} members`,
@@ -162,7 +162,7 @@ export default async (interaction, firestore) => {
                   ### 👤 They're historically the ${historicalPosition.toLocaleString()}${getOrdinalSuffix(historicalPosition)} member
                   > - First joined at ${Discord.time(historicalMemberJoinedTimestamp)}
                `
-               : `### ❌ ${user} has never joined this server.`
+               : `### ❌ ${user} has never joined this server`
          )
          .setFooter({
             text: `${historicalMembers.length.toLocaleString()} total members`,

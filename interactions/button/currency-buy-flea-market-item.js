@@ -97,7 +97,7 @@ export default async (interaction, firestore) => {
    if (!item) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - This item no longer exists.
             > - Someone may have bought it before you.
          `)
@@ -156,7 +156,7 @@ export default async (interaction, firestore) => {
       // embeds
       embeds[0]
          .setDescription(strip`
-            ### 💸 \`${itemName}\` returned to your items.
+            ### 💸 \`${itemName}\` returned to your items
             > - View your items with ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`currency`, `items`, commandCurrencyId)}.
          `);
 
@@ -178,7 +178,7 @@ export default async (interaction, firestore) => {
    if (priceToPay > userCoins) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - You need 🪙 \`${priceToPay.toLocaleString()}\` ${priceToPay === 1 ? `coin` : `coins`} to buy this item.
          `)
          .setFooter({

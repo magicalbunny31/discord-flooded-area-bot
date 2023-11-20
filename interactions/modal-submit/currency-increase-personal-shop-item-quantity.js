@@ -108,7 +108,7 @@ export default async (interaction, firestore) => {
    if (!hasPersonalItem || !shopItem) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't increase quantity.
+            ### ❌ Can't increase quantity
             > - You need to create your personal item first.
          `);
 
@@ -123,7 +123,7 @@ export default async (interaction, firestore) => {
    if (isNaN(quantity) || !Number.isSafeInteger(quantity)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't increase quantity.
+            ### ❌ Can't increase quantity
             > - \`${rawQuantity}\` isn't a valid integer.
          `);
 
@@ -138,7 +138,7 @@ export default async (interaction, firestore) => {
    if (quantity <= 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't increase quantity.
+            ### ❌ Can't increase quantity
             > - Enter a number greater than or equal to 1.
          `);
 
@@ -153,7 +153,7 @@ export default async (interaction, firestore) => {
    if (shopItem.quantity + quantity > 50) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't increase quantity.
+            ### ❌ Can't increase quantity
             > - You can only stock up to 50 personal items.
             >  - You currently have \`${shopItem.quantity}\` in stock: you can stock \`${50 - shopItem.quantity}\` more.
          `);
@@ -181,7 +181,7 @@ export default async (interaction, firestore) => {
    if (priceToPay > userCoins) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't increase quantity.
+            ### ❌ Can't increase quantity
             > - You need 🪙 \`${priceToPay.toLocaleString()}\` ${priceToPay === 1 ? `coin` : `coins`} to increase this item's quantity by ${quantity}: you have 🪙 \`${userCoins.toLocaleString()}\` ${userCoins === 1 ? `coin` : `coins`}.
          `);
 

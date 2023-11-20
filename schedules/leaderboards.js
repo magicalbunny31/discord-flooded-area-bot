@@ -1,5 +1,5 @@
 export const cron = {
-   // run every day at 00:00
+   // at every midnight
    minute: 0,
    hour: 0
 };

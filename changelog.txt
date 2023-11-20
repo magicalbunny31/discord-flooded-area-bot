@@ -638,3 +638,77 @@
 ### things you probably won't understand
 > - upgraded `fennec-utilities`
 >  - this is the thing i use to monitor all my bots!
+
+
+
+------------
+==============
+==============
+------------
+20/nov/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.2`
+
+## <:happ:906683365791502366> new stuffs!!
+
+### <a:slash_command:1148866611227414568> </cmd:1160259589435048046>
+> - added **<a:slash_command:1148866611227414568> </cmd:1160259589435048046> `:3`**
+> - moved **<a:slash_command:1148866611227414568> /unique-username-statistics** to **<a:slash_command:1148866611227414568> </cmd:1160259589435048046> `unique-username-statistics`/`unique`/`username`/`usernames`/`uus`**
+
+### <a:slash_command:1148866611227414568> </game-info:1132730748370174044>
+> - completely revamped this command to include fancy new menus !
+> - you can now view all experiences ([Flooded Area](<https://www.roblox.com/games/3976767347/Flooded-Area>), [Spaced Out](<https://www.roblox.com/games/13672239919/Spaced-Out>)) from any server, as well as cancelled experiences from welololol too (Sword Fight Area, Obby Area, Boss Area)
+
+### <a:slash_command:1148866611227414568> </leaderboards:1150546246625406986>
+> - (finally) added currency to the leaderboards
+>  - the database was always being fetched alongside levels, i just never had the time to format it until now lol
+
+### statuses
+> - <@983126054619189370>'s status now shows [Flooded Area](<https://www.roblox.com/games/3976767347/Flooded-Area>) and [Spaced Out](<https://www.roblox.com/games/13672239919/Spaced-Out>)'s current player count
+
+## <:happ:906683365791502366> bugs ~~foxed~~ *fixed*
+
+### <a:slash_command:1148866611227414568> </leaderboards:1150546246625406986>
+> - fixed users being ordered incorrectly
+>  - this was because of a member somehow having `null` experience, which somehow threw the whole thing off
+> - fixed the command sometimes being referred to as "**/leaderboard**"
+
+### <a:slash_command:1148866611227414568> </level:1150546246625406987>
+> - fixed image/embed perms being given to members starting from lvl 15
+>  - i've somehow managed to forgor to update the level in the code <:rip:1112599292851523644>
+
+### <a:slash_command:1148866611227414568> </votekick:1116857516324827152>
+> - fixed the "member has been </votekick:1116857516324827152>ed for `x` minutes" showing the old votekick times (old: 1 vote = 1 min; new: 1 vote = 30 sec)
+
+### schedules
+> - fixed missing catch statement in the schedules' error handler
+>  - without it, it would've caused this error handler to throw an error (..think about it: an error in an error? that's not good at all)
+
+## <:happ:906683365791502366> stuff that changed
+
+### application commands
+> - reformatted to remove emojis from option choices
+
+### <a:slash_command:1148866611227414568> </currency shop:1116857516324827148>
+> - updated **<:currency_shopkeeper_deerie:1136538082875817986> A deer's guide to the stalk market**
+
+### schedules
+> - moved statuses to its own schedule
+>  - removed unnecessary `state` parameter in presence activity metadata
+> - reformatted cron comments
+
+### the code in general
+> - removed unnecessary returns
+> - reformatted titles to not include "."s
+> - made all [User-Agent](<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent>) strings the same (to: "discord-area-communities-bot/<VERSION> (https://nuzzles.dev/area-communities-bot)")
+>  - i *know* these were all meant to be the same in the first place and, to any api developer, i'm sorry for not doing so earlier
+
+### `@magicalbunny31/fennec-utilities`
+> - error responses now include the error log
+
+### packages
+> - upgraded `@discordjs/voice`
+> - upgraded `@magicalbunny31/fennec-utilities` again
+> - upgraded `discord.js`

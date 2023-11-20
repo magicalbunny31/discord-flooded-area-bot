@@ -145,7 +145,7 @@ export default async (interaction, firestore) => {
 
 
    // edit the deferred interaction
-   return await interaction.editReply({
+   await interaction.editReply({
       content: strip`
          Pronoun roles are simply here to make it easier for everyone to refer to one another!
          Misusing the roles will result in punishment: please be mature about this.

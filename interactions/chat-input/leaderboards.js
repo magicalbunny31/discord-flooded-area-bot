@@ -21,7 +21,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
 
 import Keyv from "keyv";
 import { KeyvFile } from "keyv-file";
@@ -109,68 +109,13 @@ export default async (interaction, firestore) => {
 
       // currency
       case `currency`: {
-         // TODO
-
-
-         switch (null) {
-
-
-            // current balance
-            default: {
-               // embeds
-               embeds[0]
-                  .setTitle(`💰 Currency leaderboards`)
-                  .setDescription(`*It's...empty in here.* ${emojis.foxsleep}`);
-
-
-               // break out
-               break;
-            };
-
-
-            // net worth
-            case `net-worth`: {
-               // embeds
-               embeds[0]
-                  .setTitle(`💰 Currency leaderboards`)
-                  .setDescription(`*It's...empty in here.* ${emojis.foxsleep}`);
-
-
-               // break out
-               break;
-            };
-
-
-            // coins earned from talking
-            case `total-coins-earned`: {
-               // embeds
-               embeds[0]
-                  .setTitle(`💰 Currency leaderboards`)
-                  .setDescription(`*It's...empty in here.* ${emojis.foxsleep}`);
-
-
-               // break out
-               break;
-            };
-
-
-            // total items owned
-            case `items`: {
-               // embeds
-               embeds[0]
-                  .setTitle(`💰 Currency leaderboards`)
-                  .setDescription(`*It's...empty in here.* ${emojis.foxsleep}`);
-
-
-               // break out
-               break;
-            };
-
-
-         };
+         // get currency data
+         const data = Object.entries(await keyv.get(interaction.guild.id));
 
 
          // components
+         const submenu = `balance`;
+
          components.splice(1, 4,
             new Discord.ActionRowBuilder()
                .setComponents(
@@ -182,31 +127,316 @@ export default async (interaction, firestore) => {
                            .setEmoji(`🪙`)
                            .setLabel(`Current balance`)
                            .setValue(`balance`)
-                           .setDefault(true),
+                           .setDefault(submenu === `balance`),
                         new Discord.StringSelectMenuOptionBuilder()
                            .setEmoji(`💰`)
                            .setLabel(`Net worth`)
-                           .setValue(`net-worth`),
+                           .setValue(`net-worth`)
+                           .setDefault(submenu === `net-worth`),
                         new Discord.StringSelectMenuOptionBuilder()
                            .setEmoji(`👛`)
                            .setLabel(`Coins earned from talking`)
-                           .setValue(`total-coins-earned`),
+                           .setValue(`total-coins-earned`)
+                           .setDefault(submenu === `total-coins-earned`),
                         new Discord.StringSelectMenuOptionBuilder()
                            .setEmoji(`📦`)
                            .setLabel(`Total items owned`)
                            .setValue(`items`)
+                           .setDefault(submenu === `items`)
                      )
-                     .setDisabled(true)
                ),
 
             new Discord.ActionRowBuilder()
                .setComponents(
                   new Discord.UserSelectMenuBuilder()
-                     .setCustomId(`leaderboards-user:currency:balance:user`)
+                     .setCustomId(`leaderboards-user:currency:${submenu}:user`)
                      .setPlaceholder(`Scroll to a specific person's entry on this leaderboard...`)
-                     .setDisabled(true)
                )
          );
+
+
+         // menus
+         switch (submenu) {
+
+
+            case `balance`: {
+               // sort data
+               data.sort(([ _aKey, a ], [ _bKey, b ]) => (b.coins || 0) - (a.coins || 0));
+
+
+               // show the 15 entries at this index
+               const index = 0;
+               const size = 15;
+               const entriesToShow = data.slice(index * size, size + (index * size));
+
+               const page = (
+                  await Promise.all(
+                     entriesToShow
+                        .map(async ([ userId, data ], i) => {
+                           const placement = (i + 1) + (index * size);
+                           const nameDisplayed = await userIsInGuild(userId)
+                              ? Discord.userMention(userId)
+                              : `@${Discord.escapeMarkdown((await interaction.client.users.fetch(userId)).username)}`;
+                           return `${placement}. ${nameDisplayed} : \`🪙 ${(data.coins || 0).toLocaleString()} ${data.coins === 1 ? `coin` : `coins`}\``;
+                        })
+                  )
+               )
+                  .join(`\n`);
+
+
+               // embeds
+               embeds[0]
+                  .setTitle(`💰 Currency leaderboards`)
+                  .setDescription(strip`
+                     ${page}
+
+                     > Last updated ${Discord.time(dayjs().startOf(`day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                     > Next update ${Discord.time(dayjs().startOf(`day`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                  `);
+
+
+               // components
+               const pages = Math.ceil(data.length / size);
+
+               components.splice(3, 2,
+                  new Discord.ActionRowBuilder()
+                     .setComponents(
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:balance:${index - 1}`)
+                           .setEmoji(`⬅️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index - 1 < 0),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:balance:${index + 1}`)
+                           .setEmoji(`➡️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index + 1 >= pages),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`🦊`)
+                           .setLabel(`${index + 1} / ${pages}`)
+                           .setStyle(Discord.ButtonStyle.Secondary)
+                           .setDisabled(true)
+                     )
+               );
+
+
+               // break out
+               break;
+            };
+
+
+            case `net-worth`: {
+               // function to get total coins
+               const getTotalCoins = data =>
+                  (data.coins || 0)
+                     + (data.item?.price || 0)
+                     + sum(data.items?.map(item => item[`bought-for`]) || [], 0)
+                     + (
+                        data.carrots?.[`expires-at`].seconds < dayjs().unix()
+                           ? 0
+                           : (data.carrots?.quantity || 0) * (data.carrots?.price || 0)
+                     );
+
+
+               // sort data
+               data.sort(([ _aKey, a ], [ _bKey, b ]) => getTotalCoins(b) - getTotalCoins(a));
+
+
+               // show the 15 entries at this index
+               const index = 0;
+               const size = 15;
+               const entriesToShow = data.slice(index * size, size + (index * size));
+
+               const page = (
+                  await Promise.all(
+                     entriesToShow
+                        .map(async ([ userId, data ], i) => {
+                           const placement = (i + 1) + (index * size);
+                           const nameDisplayed = await userIsInGuild(userId)
+                              ? Discord.userMention(userId)
+                              : `@${Discord.escapeMarkdown((await interaction.client.users.fetch(userId)).username)}`;
+                           return `${placement}. ${nameDisplayed} : \`🪙 ${getTotalCoins(data).toLocaleString()} ${getTotalCoins(data) === 1 ? `coin` : `coins`}\``;
+                        })
+                  )
+               )
+                  .join(`\n`);
+
+
+               // embeds
+               embeds[0]
+                  .setTitle(`💰 Currency leaderboards`)
+                  .setDescription(strip`
+                     ${page}
+
+                     > Last updated ${Discord.time(dayjs().startOf(`day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                     > Next update ${Discord.time(dayjs().startOf(`day`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                  `);
+
+
+               // components
+               const pages = Math.ceil(data.length / size);
+
+               components.splice(3, 2,
+                  new Discord.ActionRowBuilder()
+                     .setComponents(
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:net-worth:${index - 1}`)
+                           .setEmoji(`⬅️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index - 1 < 0),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:net-worth:${index + 1}`)
+                           .setEmoji(`➡️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index + 1 >= pages),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`🦊`)
+                           .setLabel(`${index + 1} / ${pages}`)
+                           .setStyle(Discord.ButtonStyle.Secondary)
+                           .setDisabled(true)
+                     )
+               );
+
+
+               // break out
+               break;
+            };
+
+
+            case `total-coins-earned`: {
+               // sort data
+               data.sort(([ _aKey, a ], [ _bKey, b ]) => (b[`total-coins-earned`] || 0) - (a[`total-coins-earned`] || 0));
+
+
+               // show the 15 entries at this index
+               const index = 0;
+               const size = 15;
+               const entriesToShow = data.slice(index * size, size + (index * size));
+
+               const page = (
+                  await Promise.all(
+                     entriesToShow
+                        .map(async ([ userId, data ], i) => {
+                           const placement = (i + 1) + (index * size);
+                           const nameDisplayed = await userIsInGuild(userId)
+                              ? Discord.userMention(userId)
+                              : `@${Discord.escapeMarkdown((await interaction.client.users.fetch(userId)).username)}`;
+                           return `${placement}. ${nameDisplayed} : \`🪙 ${(data[`total-coins-earned`] || 0).toLocaleString()} ${data[`total-coins-earned`] === 1 ? `coin` : `coins`}\``;
+                        })
+                  )
+               )
+                  .join(`\n`);
+
+
+               // embeds
+               embeds[0]
+                  .setTitle(`💰 Currency leaderboards`)
+                  .setDescription(strip`
+                     ${page}
+
+                     > Last updated ${Discord.time(dayjs().startOf(`day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                     > Next update ${Discord.time(dayjs().startOf(`day`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                  `);
+
+
+               // components
+               const pages = Math.ceil(data.length / size);
+
+               components.splice(3, 2,
+                  new Discord.ActionRowBuilder()
+                     .setComponents(
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:total-coins-earned:${index - 1}`)
+                           .setEmoji(`⬅️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index - 1 < 0),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:total-coins-earned:${index + 1}`)
+                           .setEmoji(`➡️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index + 1 >= pages),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`🦊`)
+                           .setLabel(`${index + 1} / ${pages}`)
+                           .setStyle(Discord.ButtonStyle.Secondary)
+                           .setDisabled(true)
+                     )
+               );
+
+
+               // break out
+               break;
+            };
+
+
+            // total items owned
+            case `items`: {
+               // sort data
+               data.sort(([ _aKey, a ], [ _bKey, b ]) => (b.items?.length || 0) - (a.items?.length || 0));
+
+
+               // show the 15 entries at this index
+               const index = 0;
+               const size = 15;
+               const entriesToShow = data.slice(index * size, size + (index * size));
+
+               const page = (
+                  await Promise.all(
+                     entriesToShow
+                        .map(async ([ userId, data ], i) => {
+                           const placement = (i + 1) + (index * size);
+                           const nameDisplayed = await userIsInGuild(userId)
+                              ? Discord.userMention(userId)
+                              : `@${Discord.escapeMarkdown((await interaction.client.users.fetch(userId)).username)}`;
+                           return `${placement}. ${nameDisplayed} : \`${(data.items?.length || 0).toLocaleString()} ${data.items?.length === 1 ? `item` : `items`}\``;
+                        })
+                  )
+               )
+                  .join(`\n`);
+
+
+               // embeds
+               embeds[0]
+                  .setTitle(`💰 Currency leaderboards`)
+                  .setDescription(strip`
+                     ${page}
+
+                     > Last updated ${Discord.time(dayjs().startOf(`day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                     > Next update ${Discord.time(dayjs().startOf(`day`).add(1, `day`).unix(), Discord.TimestampStyles.RelativeTime)}
+                  `);
+
+
+               // components
+               const pages = Math.ceil(data.length / size);
+
+               components.splice(3, 2,
+                  new Discord.ActionRowBuilder()
+                     .setComponents(
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:items:${index - 1}`)
+                           .setEmoji(`⬅️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index - 1 < 0),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`leaderboards:currency:items:${index + 1}`)
+                           .setEmoji(`➡️`)
+                           .setStyle(Discord.ButtonStyle.Primary)
+                           .setDisabled(index + 1 >= pages),
+                        new Discord.ButtonBuilder()
+                           .setCustomId(`🦊`)
+                           .setLabel(`${index + 1} / ${pages}`)
+                           .setStyle(Discord.ButtonStyle.Secondary)
+                           .setDisabled(true)
+                     )
+               );
+
+
+               // break out
+               break;
+            };
+
+
+         };
 
 
          // break out
@@ -223,7 +453,7 @@ export default async (interaction, firestore) => {
          // get levelling data
          const data = Object.entries(await keyv.get(interaction.guild.id));
 
-         data.sort(([ _aKey, a ], [ _bKey, b ]) => b.experience - a.experience);
+         data.sort(([ _aKey, a ], [ _bKey, b ]) => (b.experience || 0) - (a.experience || 0));
 
 
          // show the 15 entries at this index

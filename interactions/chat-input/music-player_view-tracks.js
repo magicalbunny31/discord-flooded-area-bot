@@ -35,7 +35,7 @@ export default async (interaction, firestore) => {
    if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
       return await interaction.reply({
          content: strip`
-            ### ❌ Tracks aren't available.
+            ### ❌ Tracks aren't available
             > - ${interaction.client.user} does not have access to the music for this game.
             > - Contact <@490178047325110282> to set-up this command.
          `,

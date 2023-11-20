@@ -7,7 +7,7 @@
 
 
 // awesome utilities 🐾
-import { choice, colours, set } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, set, noop } from "@magicalbunny31/awesome-utility-stuff";
 
 
 // utilities for interacting with fennec 💻
@@ -62,9 +62,8 @@ const client = new Discord.Client({
    presence: {
       status: Discord.PresenceUpdateStatus.DoNotDisturb,
       activities: [{
-         name:  `recently started: hold tight~ 🌊🌌`,
-         state: `recently started: hold tight~ 🌊🌌`,
-         type:  Discord.ActivityType.Custom
+         name: `recently started: hold tight~ 🌊🌌`,
+         type: Discord.ActivityType.Custom
       }]
    },
 
@@ -89,25 +88,23 @@ const fennecGuild = await client.guilds.fetch(process.env.GUILD_APPLICATION_STAT
 const fennecMember = await fennecGuild.members.fetch(client.user);
 
 client.fennec = new Client({
-   avatarURL: client.user.avatarURL({
-      extension: `png`,
-      size: 4096
-   }),
-   colour: colours.flooded_area,
-   formattedName: fennecMember.displayName,
    firestore: {
-      clientEmail: process.env.FENNEC_GCP_CLIENT_EMAIL,
-      privateKey:  process.env.FENNEC_GCP_PRIVATE_KEY,
-      projectId:   process.env.FENNEC_GCP_PROJECT_ID
+      clientEmail:  process.env.FENNEC_GCP_CLIENT_EMAIL,
+      documentName: process.env.FENNEC_ID,
+      privateKey:   process.env.FENNEC_GCP_PRIVATE_KEY,
+      projectId:    process.env.FENNEC_GCP_PROJECT_ID
    },
-   id: process.env.FENNEC_ID,
-   threadId: process.env.FENNEC_THREAD,
-   webhook: {
-      url: process.env.FENNEC_WEBHOOK
-   }
+   postSettings: {
+      displayedAvatar: client.user.avatarURL({
+         extension: `png`,
+         size: 4096
+      }),
+      displayedName: fennecMember.displayName,
+      embedColour: colours.flooded_area,
+      threadId: process.env.FENNEC_THREAD
+   },
+   supportGuild: process.env.SUPPORT_GUILD
 });
-
-client.fennec.updater(client);
 
 client.blacklist = await client.fennec.getGlobalBlacklist();
 setInterval(async () => client.blacklist = await client.fennec.getGlobalBlacklist(), 3.6e+6);
@@ -167,107 +164,18 @@ for (const file of schedules) {
 
    job.on(`error`, async error => {
       try {
-         return await client.fennec.sendError(error, Math.floor(Date.now() / 1000), `job/${file}`);
+         await client.fennec.sendError(error, Math.floor(Date.now() / 1000), `job/${file}`);
+
+      } catch {
+         noop;
 
       } finally {
          console.warn(`error in schedule! see below~`);
          console.error(error.stack);
-         return process.exit(1);
+         process.exit(1);
       };
    });
 };
-
-
-// statuses
-setInterval(async () => {
-   // offline-soon or maintenance
-   const fennecStatus = await client.fennec.getStatus();
-   if ([ `offline-soon`, `maintenance` ].includes(fennecStatus))
-      return client.user.setPresence({
-         status: Discord.PresenceUpdateStatus.DoNotDisturb,
-         activities: [{
-            name:  `${fennecStatus === `offline-soon` ? `i'll be offline soon~` : `currently in maintenance!`} 🔧`,
-            state: `${fennecStatus === `offline-soon` ? `i'll be offline soon~` : `currently in maintenance!`} 🔧`,
-            type:  Discord.ActivityType.Custom
-         }]
-      });
-
-   // list of statuses
-   const statuses = [
-      `Flooded Area 🌊`,
-      `Spaced Out 🌌`,
-      `visit bunny's shop with /currency shop`,
-      `view your level with /levels`,
-      `your suggestions are cool`,
-      `star messages to get them on the starboard!`,
-      `try fox bot`,
-      `STOP GRIEFING ME!!!!!`,
-      `don't touch the waves :scary:`,
-      `when will there be a new challenge?`,
-      `trying to build a boat`,
-      `trying to build a rocket`,
-      `when's the next event?`,
-      `hello, chat!`,
-      `hello world`,
-      `don't dm me for modmail`,
-      `i got votekicked for eating bread`,
-      `@everyone`,
-      `hi`,
-      `i hate flooded a`,
-      `zzz`,
-      `what are you looking at?!`,
-      `🤓☝️`,
-      `why are you in this server`,
-      `balls`,
-      `whar`,
-      `:3`,
-      `/cmd pancakes`,
-      `raphael ate ALL my balls and now i'm sad`,
-      `erm, what the tuna?`,
-      `fish issue`,
-      `#hugo2023`,
-      `le tape`,
-      `rawr ✨`,
-      `halo is a cutie`,
-      `can i have cool role`,
-      `don't get rabies it's bad for you`,
-      `why does the sun give us light when it's already bright`,
-      `flooded area lost the braincells it never had from spaced out`,
-      `flooded area mfs when their family members drown inside a flood and die (flooded area reference)`,
-      `thousands of players active (flooded area reference)`,
-      `boat = flooded area`,
-      `/america`,
-      `this bot was made by a furry`,
-      `sily !`,
-      `need a dispenser here`,
-      `spy!`,
-      `his mom its a cancer`,
-      `good morning let's basketball`,
-      `HUH`,
-      `YOU MASH`,
-      `the streets aint for u cuzzz`,
-      `NOT READING ALLAT 🤦‍♂️🤣`,
-      `be nice to each other`,
-      `go back to your cage you animal`,
-      `boop haiii`,
-      `i forgor`,
-      `cheese`,
-      `bread`,
-      `[BLIZZARD] WAS HERE!!`,
-      `boo!`
-   ];
-   const status = choice(statuses);
-
-   // set presence
-   client.user.setPresence({
-      status: Discord.PresenceUpdateStatus.Online,
-      activities: [{
-         name:  status,
-         state: status,
-         type:  Discord.ActivityType.Custom
-      }]
-   });
-}, 600000); // 10 minutes
 
 
 // process events

@@ -36,7 +36,7 @@ export default async (oldState, newState, firestore) => {
       newState.client.voiceChannelDisconnector.set(guildId, timeout);
 
 
-   } else { // the isn't alone in the voice channel
+   } else { // the bot isn't alone in the voice channel
       // create a timeout leave this voice channel (if it exists)
       const timeout = newState.client.voiceChannelDisconnector.get(guildId);
       if (timeout)

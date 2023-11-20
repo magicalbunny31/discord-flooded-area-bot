@@ -41,7 +41,7 @@ export default async (interaction, firestore) => {
 
 
    // get the banned player
-   const userAgent = `${pkg.name}/${pkg.version} (https://github.com/${pkg.author}/${pkg.name})`;
+   const userAgent = `${pkg.name}/${pkg.version} (https://nuzzles.dev/area-communities-bot)`;
 
    const [ bannedPlayerData ] = await (async () => {
       const response = await fetch(`https://users.roblox.com/v1/usernames/users`, {

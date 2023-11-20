@@ -41,7 +41,7 @@ export default async (interaction, firestore) => {
 
    if (!member)
       return await interaction.reply({
-         content: `### ❌ ${user} isn't in this server.`,
+         content: `### ❌ ${user} isn't in this server`,
          ephemeral: true
       });
 
@@ -49,7 +49,7 @@ export default async (interaction, firestore) => {
    // trying to votekick someone already timed out
    if (member.communicationDisabledUntilTimestamp > Date.now())
       return await interaction.reply({
-         content: `### ❌ ${user} is already timed out.`,
+         content: `### ❌ ${user} is already timed out`,
          ephemeral: true
       });
 
@@ -57,7 +57,7 @@ export default async (interaction, firestore) => {
    // trying to votekick a bot
    if (user.bot)
       return await interaction.reply({
-         content: `### ❌ ${user} is a bot.`,
+         content: `### ❌ ${user} is a bot`,
          ephemeral: true
       });
 
@@ -158,7 +158,7 @@ export default async (interaction, firestore) => {
 
    await interaction.editReply({
       content: strip`
-         ### 👞 A votekick on ${user} has been started by ${interaction.user}.
+         ### 👞 A votekick on ${user} has been started by ${interaction.user}
          > - 📰 Reason: ${reason}
          > - 👥 ${requiredVotes} votes are required ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}.
       `,
@@ -214,7 +214,7 @@ export default async (interaction, firestore) => {
       // update the interaction
       await buttonInteraction.update({
          content: strip`
-            ### 👞 A votekick on ${user} has been started by ${interaction.user}.
+            ### 👞 A votekick on ${user} has been started by ${interaction.user}
             > - 📰 Reason: ${reason}
             > - 👥 ${requiredVotes} votes are required ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}.
             ${voters.join(`\n`)}
@@ -256,7 +256,7 @@ export default async (interaction, firestore) => {
          // edit the original interaction's reply
          return await interaction.editReply({
             content: strip`
-               ### ❌ Votekick on ${user} has failed.
+               ### ❌ Votekick on ${user} has failed
                > - 📰 Reason: ${reason}
                > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
                ${voters.join(`\n`)}
@@ -281,9 +281,9 @@ export default async (interaction, firestore) => {
 
 
       // edit the interaction's original reply
-      return await interaction.editReply({
+      await interaction.editReply({
          content: strip`
-            ### ✅ ${user} has been timed out for ${timedOutFor / (60 * 500)} minutes.
+            ### ✅ ${user} has been timed out for ${requiredVotes / 2} minutes
             > - 📰 Reason: ${reason}
             > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
             ${voters.join(`\n`)}

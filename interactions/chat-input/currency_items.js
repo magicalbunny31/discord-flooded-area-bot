@@ -32,7 +32,7 @@ export default async (interaction, firestore) => {
    // this is a bot
    if (user.bot)
       return await interaction.reply({
-         content: `### ❌ Bots aren't part of the currency system.`,
+         content: `### ❌ Bots aren't part of the currency system`,
          ephemeral: true
       });
 
@@ -40,7 +40,7 @@ export default async (interaction, firestore) => {
    // can only view items when another user is specified
    if (user.id !== interaction.user.id && area !== `items`)
       return await interaction.reply({
-         content: `### ❌ You can only view another user's items.`,
+         content: `### ❌ You can only view another user's items`,
          ephemeral: true
       });
 

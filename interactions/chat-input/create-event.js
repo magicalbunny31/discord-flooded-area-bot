@@ -38,7 +38,7 @@ export default async (interaction, firestore) => {
    // @Moderation Team or @Event Host role needed to @mention @Events
    if (![ moderationTeam, eventHost ].some(role => roles.has(role)))
       return await interaction.reply({
-         content: `### ❌ You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(eventHost)} to create events.`,
+         content: `### ❌ You need the roles ${Discord.roleMention(moderationTeam)} or ${Discord.roleMention(eventHost)} to create events`,
          allowedMentions: {
             parse: []
          },
@@ -50,7 +50,7 @@ export default async (interaction, firestore) => {
    if (coverImage && ![ `jpg`, `jpeg`, `png`, `gif` ].some(ext => coverImage.url.toLowerCase().endsWith(ext)))
       return await interaction.reply({
          content: strip`
-            ### ❌ Invalid cover image.
+            ### ❌ Invalid cover image
             > - Only \`.jpg\`, \`.jpeg\`, \`.png\` and \`.gif\` images are supported. 
          `,
          ephemeral: true
@@ -91,5 +91,5 @@ export default async (interaction, firestore) => {
 
 
    // show the modal
-   return await interaction.showModal(modal);
+   await interaction.showModal(modal);
 };

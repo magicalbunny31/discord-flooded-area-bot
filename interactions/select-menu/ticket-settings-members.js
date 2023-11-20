@@ -81,7 +81,7 @@ export default async (interaction, firestore) => {
 
 
    // edit the interaction's original reply
-   return await interaction.editReply({
+   await interaction.editReply({
       components
    });
 };

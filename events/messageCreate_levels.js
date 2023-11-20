@@ -59,7 +59,7 @@ export default async (message, firestore) => {
 
    // role rewards
    const roleRewards = {
-      15: [
+      20: [
          process.env.FA_ROLE_IMAGE_EMBED_PERMS
       ]
    };

@@ -52,7 +52,7 @@ export default async (interaction, firestore) => {
    // this channel probably has no message
    if (!firstMessage)
       return await interaction.editReply({
-         content: `### ❌ Failed to fetch message.`
+         content: `### ❌ Failed to fetch message`
       });
 
 

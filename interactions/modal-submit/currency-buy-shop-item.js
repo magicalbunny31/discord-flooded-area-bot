@@ -140,7 +140,7 @@ export default async (interaction, firestore) => {
    if (!itemName) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - This seller's personal item no longer exists.
          `)
          .setFooter({
@@ -162,7 +162,7 @@ export default async (interaction, firestore) => {
    if (!item) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - This item no longer exists.
             > - It may have run out of stock already, or expired before you could've bought it.
          `)
@@ -181,7 +181,7 @@ export default async (interaction, firestore) => {
    if (isNaN(quantityWanted) || !Number.isSafeInteger(quantityWanted)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - \`${rawQuantityWanted}\` isn't a valid integer.
          `)
          .setFooter({
@@ -199,7 +199,7 @@ export default async (interaction, firestore) => {
    if (quantityWanted <= 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - Enter a number greater than or equal to 1.
          `)
          .setFooter({
@@ -217,7 +217,7 @@ export default async (interaction, firestore) => {
    if (item.quantity < quantityWanted) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - There ${item.quantity === 1 ? `is` : `are`} only ${item.quantity} of this item left: you have inputted \`${quantityWanted}\`.
          `)
          .setFooter({
@@ -249,7 +249,7 @@ export default async (interaction, firestore) => {
    if (priceToPay > userCoins) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't buy item.
+            ### ❌ Can't buy item
             > - You need 🪙 \`${priceToPay.toLocaleString()}\` ${priceToPay === 1 ? `coin` : `coins`} to buy \`${quantityWanted}\` of this item.
          `)
          .setFooter({

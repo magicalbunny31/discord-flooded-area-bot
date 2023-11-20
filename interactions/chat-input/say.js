@@ -118,5 +118,5 @@ export default async (interaction, firestore) => {
 
 
    // delete the interaction's reply
-   return await interaction.deleteReply();
+   await interaction.deleteReply();
 };

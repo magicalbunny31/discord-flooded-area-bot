@@ -113,7 +113,7 @@ export default async (interaction, firestore) => {
    if (!itemToList) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't list item on the flea market.
+            ### ❌ Can't list item on the flea market
             > - You don't own this item.
          `);
 
@@ -128,7 +128,7 @@ export default async (interaction, firestore) => {
    if (isNaN(price) || !Number.isSafeInteger(price)) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't list item on the flea market.
+            ### ❌ Can't list item on the flea market
             > - \`${rawPrice}\` isn't a valid integer.
          `);
 
@@ -143,7 +143,7 @@ export default async (interaction, firestore) => {
    if (price <= 0) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't list item on the flea market.
+            ### ❌ Can't list item on the flea market
             > - Enter a number greater than or equal to 1.
          `);
 
@@ -170,7 +170,7 @@ export default async (interaction, firestore) => {
    if (!itemName) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't list item on the flea market.
+            ### ❌ Can't list item on the flea market
             > - This seller's personal item no longer exists.
          `);
 
@@ -187,7 +187,7 @@ export default async (interaction, firestore) => {
    if (fleaMarket.length >= 24) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't list item on the flea market.
+            ### ❌ Can't list item on the flea market
             > - The flea market is full (24 items listed). Come back again later when there's a free space!
          `);
 
@@ -209,7 +209,7 @@ export default async (interaction, firestore) => {
    )) {
       embeds[0]
          .setDescription(strip`
-            ### ❌ Can't list item on the flea market.
+            ### ❌ Can't list item on the flea market
             > - You've already listed another of this item on the flea market.
          `);
 

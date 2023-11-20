@@ -69,7 +69,7 @@ export default async (interaction, firestore) => {
 
 
    // edit the deferred interaction
-   return await interaction.editReply({
+   await interaction.editReply({
       embeds,
       components
    });
