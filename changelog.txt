@@ -712,3 +712,20 @@
 > - upgraded `@discordjs/voice`
 > - upgraded `@magicalbunny31/fennec-utilities` again
 > - upgraded `discord.js`
+
+
+
+------------
+==============
+==============
+------------
+24/nov/2023
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.2`
+
+## <:happ:906683365791502366> bugs ~~foxed~~ *fixed*
+
+### statuses
+> - fixed <@983126054619189370>'s status not being online (from idle)

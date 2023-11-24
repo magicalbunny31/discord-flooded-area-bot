@@ -112,7 +112,7 @@ export default async (client, firestore) => {
 
    // set status
    client.user.setPresence({
-      status: Discord.PresenceUpdateStatus.Idle,
+      status: Discord.PresenceUpdateStatus.Online,
       activities: [{
          name: `${status} • 🌊👥${floodedAreaPlayerCount} • 🌌👥${spacedOutPlayerCount}`,
          type: Discord.ActivityType.Custom
