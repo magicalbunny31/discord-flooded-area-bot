@@ -4,7 +4,7 @@ export const cron = {
 };
 
 /**
- * @param {import("@bun-types/client").default} client
+ * @param {import("discord.js").Client} client
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (client, firestore) => {
