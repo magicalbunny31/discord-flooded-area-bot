@@ -35,13 +35,13 @@ export const data = new Discord.SlashCommandBuilder()
                .setName(`menu`)
                .setDescription(`Start the menu at a specific area`)
                .setChoices({
-                  name: `🎒 Items`,
+                  name: `Items`,
                   value: `items`
                }, {
-                  name: `🏷️ Personal item`,
+                  name: `Personal item`,
                   value: `item`
                }, {
-                  name: `💸 Flea market`,
+                  name: `Flea market`,
                   value: `flea-market`
                })
                .setRequired(false)

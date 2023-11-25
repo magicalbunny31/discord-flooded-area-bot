@@ -732,5 +732,8 @@
 
 ## <:happ:906683365791502366> stuff that changed
 
+### application commands
+> - okai i lied last time but this time fr i removed emojis from option choices
+
 ### schedules
 > - added blacklist updating as a schedule

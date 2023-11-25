@@ -9,10 +9,10 @@ export const data = new Discord.SlashCommandBuilder()
          .setName(`menu`)
          .setDescription(`Start the menu at a specific area`)
          .setChoices({
-            name: `💰 Currency`,
+            name: `Currency`,
             value: `currency`
          }, {
-            name: `📈 Levelling`,
+            name: `Levelling`,
             value: `levels`
          })
          .setRequired(false)
