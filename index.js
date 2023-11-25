@@ -99,15 +99,14 @@ client.fennec = new Client({
          extension: `png`,
          size: 4096
       }),
-      displayedName: fennecMember.displayName,
-      embedColour: colours.flooded_area,
-      threadId: process.env.FENNEC_THREAD
+      displayedName:   fennecMember.displayName,
+      embedColour:     colours.flooded_area,
+      threadId:        process.env.FENNEC_THREAD
    },
    supportGuild: process.env.SUPPORT_GUILD
 });
 
 client.blacklist = await client.fennec.getGlobalBlacklist();
-setInterval(async () => client.blacklist = await client.fennec.getGlobalBlacklist(), 3.6e+6);
 
 
 // application commands

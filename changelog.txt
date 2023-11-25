@@ -719,13 +719,18 @@
 ==============
 ==============
 ------------
-24/nov/2023
+25/nov/2023
 
 
 
-# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.2`
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.3`
 
 ## <:happ:906683365791502366> bugs ~~foxed~~ *fixed*
 
 ### statuses
 > - fixed <@983126054619189370>'s status not being online (from idle)
+
+## <:happ:906683365791502366> stuff that changed
+
+### schedules
+> - added blacklist updating as a schedule
