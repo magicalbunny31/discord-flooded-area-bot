@@ -735,5 +735,8 @@
 ### application commands
 > - okai i lied last time but this time fr i removed emojis from option choices
 
+### <a:slash_command:1148866611227414568> </say:1162506192724168715>
+> - added descriptions
+
 ### schedules
 > - added blacklist updating as a schedule

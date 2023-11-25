@@ -3,24 +3,24 @@ export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 export const data = new Discord.SlashCommandBuilder()
    .setName(`say`)
-   .setDescription(`🐰`)
+   .setDescription(`Make the bot say something in chat`)
    .addStringOption(
       new Discord.SlashCommandStringOption()
          .setName(`message`)
-         .setDescription(`🐇`)
+         .setDescription(`Message content to send`)
          .setMaxLength(2000)
          .setRequired(false)
    )
    .addAttachmentOption(
       new Discord.SlashCommandAttachmentOption()
          .setName(`attachment`)
-         .setDescription(`🐇`)
+         .setDescription(`Attachment to upload`)
          .setRequired(false)
    )
    .addStringOption(
       new Discord.SlashCommandStringOption()
          .setName(`reply-to-message-id`)
-         .setDescription(`🐇`)
+         .setDescription(`Reply to this message's id in the channel (@mention off)`)
          .setMinLength(17)
          .setMaxLength(19)
          .setRequired(false)
