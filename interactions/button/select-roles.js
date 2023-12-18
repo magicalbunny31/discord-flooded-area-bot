@@ -19,14 +19,14 @@ export default async (interaction, firestore) => {
    const roles = interaction.member.roles.cache;
 
    const mentionRoles = {
-      "looking-for-group":         process.env.FA_ROLE_LOOKING_FOR_GROUP,
-      "events":                    process.env.FA_ROLE_EVENTS,
-      "polls":                     process.env.FA_ROLE_POLLS,
-      "updates-sneak-peeks":       process.env.FA_ROLE_UPDATES_SNEAK_PEEKS,
-      "giveaways":                 process.env.FA_ROLE_GIVEAWAYS,
-      "challenges":                process.env.FA_ROLE_CHALLENGES,
-      "doruk's-exceptional-pings": process.env.FA_ROLE_DORUKS_EXCEPTIONAL_PINGS,
-      "archived-access":           process.env.FA_ROLE_ARCHIVED_ACCESS
+      "looking-for-group":   process.env.FA_ROLE_LOOKING_FOR_GROUP,
+      "events":              process.env.FA_ROLE_EVENTS,
+      "polls":               process.env.FA_ROLE_POLLS,
+      "updates-sneak-peeks": process.env.FA_ROLE_UPDATES_SNEAK_PEEKS,
+      "giveaways":           process.env.FA_ROLE_GIVEAWAYS,
+      "challenges":          process.env.FA_ROLE_CHALLENGES,
+      "playtest":            process.env.FA_ROLE_PLAYTEST,
+      "archived-access":     process.env.FA_ROLE_ARCHIVED_ACCESS
    };
 
    const pronounRoles = {
@@ -78,10 +78,10 @@ export default async (interaction, firestore) => {
                      .setEmoji(emojis.mention)
                      .setDefault(roles.has(mentionRoles[`challenges`])),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`Doruk's Exceptional Pings`)
-                     .setValue(`doruk's-exceptional-pings`)
+                     .setLabel(`Playtest`)
+                     .setValue(`playtest`)
                      .setEmoji(emojis.mention)
-                     .setDefault(roles.has(mentionRoles[`doruk's-exceptional-pings`])),
+                     .setDefault(roles.has(mentionRoles[`playtest`])),
                   new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`Archived Access`)
                      .setValue(`archived-access`)

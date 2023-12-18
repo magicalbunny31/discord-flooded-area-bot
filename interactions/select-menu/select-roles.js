@@ -21,14 +21,14 @@ export default async (interaction, firestore) => {
    // this member's roles and whether they're set or not
    const setRoles = {
       "mention-roles": [
-         [ `looking-for-group`,         rolesStrings.includes(`looking-for-group`)         ],
-         [ `events`,                    rolesStrings.includes(`events`)                    ],
-         [ `polls`,                     rolesStrings.includes(`polls`)                     ],
-         [ `updates-sneak-peeks`,       rolesStrings.includes(`updates-sneak-peeks`)       ],
-         [ `giveaways`,                 rolesStrings.includes(`giveaways`)                 ],
-         [ `challenges`,                rolesStrings.includes(`challenges`)                ],
-         [ `doruk's-exceptional-pings`, rolesStrings.includes(`doruk's-exceptional-pings`) ],
-         [ `archived-access`,           rolesStrings.includes(`archived-access`)            ]
+         [ `looking-for-group`,   rolesStrings.includes(`looking-for-group`)         ],
+         [ `events`,              rolesStrings.includes(`events`)                    ],
+         [ `polls`,               rolesStrings.includes(`polls`)                     ],
+         [ `updates-sneak-peeks`, rolesStrings.includes(`updates-sneak-peeks`)       ],
+         [ `giveaways`,           rolesStrings.includes(`giveaways`)                 ],
+         [ `challenges`,          rolesStrings.includes(`challenges`)                ],
+         [ `playtest`,            rolesStrings.includes(`playtest`)                  ],
+         [ `archived-access`,     rolesStrings.includes(`archived-access`)           ]
       ],
 
       "pronoun-roles": [
@@ -45,14 +45,14 @@ export default async (interaction, firestore) => {
    // get role ids to set for this member
    const roles = {
       "mention-roles": {
-         "looking-for-group":         process.env.FA_ROLE_LOOKING_FOR_GROUP,
-         "events":                    process.env.FA_ROLE_EVENTS,
-         "polls":                     process.env.FA_ROLE_POLLS,
-         "updates-sneak-peeks":       process.env.FA_ROLE_UPDATES_SNEAK_PEEKS,
-         "giveaways":                 process.env.FA_ROLE_GIVEAWAYS,
-         "challenges":                process.env.FA_ROLE_CHALLENGES,
-         "doruk's-exceptional-pings": process.env.FA_ROLE_DORUKS_EXCEPTIONAL_PINGS,
-         "archived-access":           process.env.FA_ROLE_ARCHIVED_ACCESS
+         "looking-for-group":   process.env.FA_ROLE_LOOKING_FOR_GROUP,
+         "events":              process.env.FA_ROLE_EVENTS,
+         "polls":               process.env.FA_ROLE_POLLS,
+         "updates-sneak-peeks": process.env.FA_ROLE_UPDATES_SNEAK_PEEKS,
+         "giveaways":           process.env.FA_ROLE_GIVEAWAYS,
+         "challenges":          process.env.FA_ROLE_CHALLENGES,
+         "playtest":            process.env.FA_ROLE_PLAYTEST,
+         "archived-access":     process.env.FA_ROLE_ARCHIVED_ACCESS
       },
 
       "pronoun-roles": {

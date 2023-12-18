@@ -719,7 +719,7 @@
 ==============
 ==============
 ------------
-25/nov/2023
+18/dec/2023
 
 
 
@@ -735,7 +735,12 @@
 ### application commands
 > - okai i lied last time but this time fr i removed emojis from option choices
 
-### <a:slash_command:1148866611227414568> </say:1162506192724168715>
+### <shield> doruk's exceptional pings
+> - changed all references of it to `playtest`
+>  - https://discord.com/channels/977254354589462618/1002631503248892077
+>  - <slash_command> </mention:1116857516324827149>
+
+### <slash_command> </say:1162506192724168715>
 > - added descriptions
 
 ### schedules

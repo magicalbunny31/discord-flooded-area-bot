@@ -24,8 +24,8 @@ export const data = new Discord.SlashCommandBuilder()
             name: `Challenges`,
             value: `FA_ROLE_CHALLENGES`
          }, {
-            name: `Doruk's Exceptional Pings`,
-            value: `FA_ROLE_DORUKS_EXCEPTIONAL_PINGS`
+            name: `Playtest`,
+            value: `FA_ROLE_PLAYTEST`
          })
          .setRequired(true)
    );
