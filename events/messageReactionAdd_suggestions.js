@@ -37,15 +37,6 @@ export default async (messageReaction, user, firestore) => {
       return;
 
 
-
-   // remove reactions from suggestions banned people
-   const guild = await tryOrUndefined(messageReaction.client.guilds.fetch(process.env.GUILD_FLOODED_AREA));
-   const member = await tryOrUndefined(guild?.members.fetch(user.id));
-
-   if (member?.roles.cache.has(process.env.FA_ROLE_SUGGESTIONS_BANNED))
-      return await tryOrUndefined(messageReaction.users.remove(user.id));
-
-
    // remove the thread's starter message's author's reaction
    const starterMessage = await tryOrUndefined(messageReaction.message.channel.fetchStarterMessage());
    if (starterMessage?.author.id === user.id)
