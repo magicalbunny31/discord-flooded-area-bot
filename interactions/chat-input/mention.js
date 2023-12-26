@@ -15,7 +15,7 @@ export const data = new Discord.SlashCommandBuilder()
             name: `Events`,
             value: `FA_ROLE_EVENTS`
          }, {
-            name: `Polls`,
+            name: `Opinions`,
             value: `FA_ROLE_POLLS`
          }, {
             name: `Giveaways`,
