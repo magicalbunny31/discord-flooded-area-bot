@@ -93,6 +93,9 @@ export default async (interaction, firestore) => {
          .setDescription(strip`
             ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
             > - If you find anyone who is breaking our ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)} in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, you can report them to us here.
+            > - The ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} may not be able to respond to tickets immediately;
+            >  - If you need them to join your server (due to someone hacking) **and you're unable to get proof of them**, you should mod call instead.
+            > - Uploading images/videos/files for proof but they exceed Discord's file upload limits? Consider using a file upload site such as [Catbox](https://catbox.moe), [YouTube](https://www.youtube.com), or others.
             > - You can also ${Discord.hyperlink(`report players to Roblox`, `https://en.help.roblox.com/hc/en-us/articles/203312410-How-to-Report-Rule-Violations`)} too, if you think it's necessary.
             > - Remember that you can always ${Discord.hyperlink(`block`, `https://en.help.roblox.com/hc/en-us/articles/203314270-How-to-Block-Another-User`)} or ${Discord.hyperlink(`mute`, `https://alvarotrigo.com/blog/mute-someone-roblox`)} any players that you don't want to interact with in chat.
          `)
@@ -105,24 +108,52 @@ export default async (interaction, firestore) => {
          .setComponents(
             new Discord.StringSelectMenuBuilder()
                .setCustomId(`report-a-player:0`)
-               .setPlaceholder(`Select an option that best describes what you are reporting someone for.`)
+               .setPlaceholder(`Select an option that best describes what you are reporting someone for`)
                .setOptions(
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`During a round`)
-                     .setEmoji(`🎮`)
-                     .setValue(`during-round`),
+                     .setLabel(`Started a false votekick`)
+                     .setEmoji(`🥾`)
+                     .setValue(`false-votekicking`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`Chat`)
-                     .setEmoji(`💬`)
-                     .setValue(`chat`),
+                     .setLabel(`Griefed me or someone else`)
+                     .setEmoji(`💣`)
+                     .setValue(`griefing`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`Player`)
-                     .setEmoji(`👤`)
-                     .setValue(`player`),
+                     .setLabel(`Bypassing, swearing, or being inappropriate in chat/game`)
+                     .setEmoji(`🗯️`)
+                     .setValue(`bypassing`),
                   new Discord.StringSelectMenuOptionBuilder()
-                     .setLabel(`Something else`)
-                     .setEmoji(`📝`)
-                     .setValue(`something-else`)
+                     .setLabel(`Being toxic or harassing others`)
+                     .setEmoji(`💢`)
+                     .setValue(`toxicity`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Bigotry`)
+                     .setEmoji(`🗣️`)
+                     .setValue(`bigotry`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Has an inappropriate avatar or built something explicit or sexual`)
+                     .setEmoji(`🔞`)
+                     .setValue(`inappropriate`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Using exploits, cheats, or hacks`)
+                     .setEmoji(`💻`)
+                     .setValue(`exploiting`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Abusing a bug or glitch to gain an unfair advantage`)
+                     .setEmoji(`🐛`)
+                     .setValue(`bug-abuse`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Evading a ban with an alt account`)
+                     .setEmoji(`👥`)
+                     .setValue(`ban-evasion`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Moderator abusing their powers`)
+                     .setEmoji(`🚨`)
+                     .setValue(`moderator-abuse`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Another reason...`)
+                     .setEmoji(`❓`)
+                     .setValue(`other`)
                )
          )
    ];

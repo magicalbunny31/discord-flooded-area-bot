@@ -72,7 +72,7 @@ export default async (interaction, firestore) => {
                .setDescription(strip`
                   > - You must send at least 1 image/video/link in this thread before you can submit your report.
                   >  - Examples of sufficient evidence are images or video clips: just text is not valid evidence.
-                  >  - You can also use third-party sites that embed content as images/videos (like ${Discord.hyperlink(`Streamable`, `https://streamable.com`)}, ${Discord.hyperlink(`Medal`, `https://medal.tv`)}, ${Discord.hyperlink(`ShareX`, `https://getsharex.com`)}...).
+                  >  - You can also use third-party sites that embed content as images/videos (like ${Discord.hyperlink(`Catbox`, `https://catbox.moe`)}, ${Discord.hyperlink(`Medal`, `https://medal.tv`)}, ${Discord.hyperlink(`YouTube`, `https://www.youtube.com`)}...).
                   > - There are no chat logs, so do not rely on that!
                   > - Without evidence, the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} may not be able to do anything.
                   >  - If you constantly create reports without sufficient evidence, you may be blocked from ${Discord.channelMention(process.env.FA_CHANNEL_REPORT_A_PLAYER)}.

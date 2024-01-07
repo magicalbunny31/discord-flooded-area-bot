@@ -36,21 +36,16 @@ export default async (interaction, firestore) => {
 
    // fields
    const typeOfReport = {
-      "false-votekicking":    [ `During a round`, `Started an invalid votekick`                         ],
-      "harassed-people":      [ `Chat`,           `Verbally harassed me or someone else`                ],
-      "threatened-people":    [ `Chat`,           `Threatened violence or real world harm`              ],
-      "hate-speech":          [ `Chat`,           `Promoted hate based on identity or vulnerability`    ],
-      "violence":             [ `Chat`,           `Celebrated or glorified acts of violence`            ],
-      "swore-in-chat":        [ `Chat`,           `Used offensive language`                             ],
-      "sexual-in-chat":       [ `Chat`,           `Said something explicit or sexual`                   ],
-      "inappropriate-avatar": [ `Player`,         `Inappropriate avatar`                                ],
-      "exploiting":           [ `Player`,         `Using exploits, cheats, or hacks`                    ],
-      "bug-abuse":            [ `Player`,         `Abusing a bug or glitch to gain an unfair advantage` ],
-      "sexual-build":         [ `Player`,         `Built something explicit or sexual`                  ],
-      "being-sexual":         [ `Player`,         `Being suggestive or sexual in-game`                  ],
-      "ban-evasion":          [ `Player`,         `Evading a ban with an alternate account`             ],
-      "moderator-abuse":      [ `Something else`, `Moderator abusing their powers`                      ],
-      "other":                [ `Something else`, `Another reason...`                                   ]
+      "false-votekicking": `Started a false votekick`,
+      "bypassing":         `Bypassing, swearing, or being inappropriate in chat/game`,
+      "toxicity":          `Being toxic or harassing others`,
+      "bigotry":           `Bigotry`,
+      "inappropriate":     `Has an inappropriate avatar or built something explicit or sexual`,
+      "exploiting":        `Using exploits, cheats, or hacks`,
+      "bug-abuse":         `Abusing a bug or glitch to gain an unfair advantage`,
+      "ban-evasion":       `Evading a ban with an alt account`,
+      "moderator-abuse":   `Moderator abusing their powers`,
+      "other":             `Another reason...`
    }[type];
 
    const reportingPlayerUsername = interaction.fields.getTextInputValue(`reporting-player`).trim();
@@ -130,9 +125,7 @@ export default async (interaction, firestore) => {
          .setFields(
             [{
                name: `REPORT SUMMARY`,
-               value: typeOfReport
-                  .map(reason => `> - ${reason}`)
-                  .join(`\n`),
+               value: `> ${typeOfReport}`,
                inline: true
             },
             {

@@ -20,10 +20,10 @@ export default async (interaction, firestore) => {
 
 
    // change embeds
-   switch (true) {
+   switch (value) {
 
 
-      case value === `false-votekicking`: {
+      case `false-votekicking`: {
          embeds[0]
             .setDescription(strip`
                ### ❓ False votekicking is...
@@ -32,7 +32,7 @@ export default async (interaction, firestore) => {
                > - Starting a votekick for something that happened in another server.
                > - Using multiple accounts to help votekicks pass.
 
-               ### ✨ Final things
+               ### ✨ Final things!
                > - It'll help us if you provide a screenshot of the votekick modal for us to take action - we don't have in-game logs.
                > - By submitting this report, you confirm that it is truthful and made in good faith. Do not submit false or duplicate reports.
             `);
@@ -41,7 +41,7 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `griefing`: {
+      case `griefing`: {
          embeds[0]
             .setDescription(strip`
                ### ❓ Griefing is...
@@ -55,7 +55,9 @@ export default async (interaction, firestore) => {
       };
 
 
-      case [ `harassed-people`, `threatened-people`, `hate-speech`, `violence`, `swore-in-chat`, `sexual-in-chat` ].includes(value): {
+      case `bypassing`:
+      case `toxicity`:
+      case `bigotry`: {
          embeds[0]
             .setDescription(strip`
                ### ✨ Final things!
@@ -67,10 +69,13 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `inappropriate-avatar`: {
+      case `inappropriate`: {
          embeds[0]
             .setDescription(strip`
                ### ✨ Final things!
+               > - You'll have to show us how this player is being inappropriate
+               >  - For avatars, it can be a screenshot (preferred, as they may change their avatar in the meantime) or a link to their avatar.
+               >  - For builds, show us the build as well as some form of proof that they were the one who built it.
                > - You'll have to show us the player's avatar that you're reporting - whether that's with a screenshot or a link to their profile.
                > - By submitting this report, you confirm that it is truthful and made in good faith. Do not submit false or duplicate reports.
             `);
@@ -79,9 +84,13 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `exploiting`: {
+      case `exploiting`: {
          embeds[0]
             .setDescription(strip`
+               ### 📢 If this player is still exploiting and in a server, consider mod calling instead
+               > - The ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} may not be able to respond to this report immediately.
+               > - Else, record this player using their exploits and create a report.
+
                ### ✨ Final things!
                > - You'll have to show us a video of the player that's using exploits.
                > - By submitting this report, you confirm that it is truthful and made in good faith. Do not submit false or duplicate reports.
@@ -91,14 +100,14 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `bug-abuse`: {
+      case `bug-abuse`: {
          embeds[0]
             .setDescription(strip`
                ### ❓ Abusing bugs is...
                > - Doing something that wasn't intended in-game to gain an unfair advantage over others.
 
                ### ✅ Examples of bugs which aren't allowed in-game and can be reported
-               > - Infinite fly glitches
+               > - Infinite health/fly glitches
                > - Rope flinging
 
                ### ❌ Examples of bugs which are allowed in-game and can't be reported
@@ -116,31 +125,7 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `sexual-build`: {
-         embeds[0]
-            .setDescription(strip`
-               ### ✨ Final things!
-               > - You'll have to show us the build, as well as some form of proof that they were the one who built it.
-               > - By submitting this report, you confirm that it is truthful and made in good faith. Do not submit false or duplicate reports.
-            `);
-
-         break;
-      };
-
-
-      case value === `being-sexual`: {
-         embeds[0]
-            .setDescription(strip`
-               ### ✨ Final things!
-               > - You'll have to show us how the player is being sexual.
-               > - By submitting this report, you confirm that it is truthful and made in good faith. Do not submit false or duplicate reports.
-            `);
-
-         break;
-      };
-
-
-      case value === `ban-evasion`: {
+      case `ban-evasion`: {
          embeds[0]
             .setDescription(strip`
                ### ❓ Ban evasion is...
@@ -157,7 +142,7 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `moderator-abuse`: {
+      case `moderator-abuse`: {
          embeds[0]
             .setDescription(strip`
                ### ❓ Moderator abuse is...
@@ -189,19 +174,6 @@ export default async (interaction, firestore) => {
       };
 
 
-      default: {
-         embeds[0]
-            .setDescription(strip`
-               ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
-               > - If you find anyone who is breaking our ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)} in ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}, you can report them to us here.
-               > - You can also ${Discord.hyperlink(`report players to Roblox`, `https://en.help.roblox.com/hc/en-us/articles/203312410-How-to-Report-Rule-Violations`)} too, if you think it's necessary.
-               > - Remember that you can always ${Discord.hyperlink(`block`, `https://en.help.roblox.com/hc/en-us/articles/203314270-How-to-Block-Another-User`)} or ${Discord.hyperlink(`mute`, `https://alvarotrigo.com/blog/mute-someone-roblox`)} any players that you don't want to interact with in chat.
-            `);
-
-         break;
-      };
-
-
    };
 
 
@@ -220,162 +192,19 @@ export default async (interaction, firestore) => {
 
 
    // change select menus
-   switch (value) {
+   const canMakeReport = ![ `griefing` ].includes(value);
 
-
-      // during a round
-      case `during-round`: {
-         components.splice(1, 4,
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.StringSelectMenuBuilder()
-                     .setCustomId(`report-a-player:1`)
-                     .setPlaceholder(`What happened during the round?`)
-                     .setOptions(
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Started an invalid votekick`)
-                           .setEmoji(`🥾`)
-                           .setValue(`false-votekicking`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Griefed me or someone else`)
-                           .setEmoji(`💣`)
-                           .setValue(`griefing`)
-                     )
-               )
-         );
-
-         break;
-      };
-
-
-      // chat
-      case `chat`: {
-         components.splice(1, 4,
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.StringSelectMenuBuilder()
-                     .setCustomId(`report-a-player:1`)
-                     .setPlaceholder(`What did this player do in chat?`)
-                     .setOptions(
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Verbally harassed me or someone else`)
-                           .setEmoji(`💢`)
-                           .setValue(`harassed-people`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Threatened violence or real world harm`)
-                           .setEmoji(`💢`)
-                           .setValue(`threatened-people`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Promoted hate based on identity or vulnerability`)
-                           .setEmoji(`💢`)
-                           .setValue(`hate-speech`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Celebrated or glorified acts of violence`)
-                           .setEmoji(`💢`)
-                           .setValue(`violence`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Used offensive language`)
-                           .setEmoji(`🗯️`)
-                           .setValue(`swore-in-chat`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Said something explicit or sexual`)
-                           .setEmoji(`🗯️`)
-                           .setValue(`sexual-in-chat`)
-                     )
-               )
-         );
-
-         break;
-      };
-
-
-      // player
-      case `player`: {
-         components.splice(1, 4,
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.StringSelectMenuBuilder()
-                     .setCustomId(`report-a-player:1`)
-                     .setPlaceholder(`Why is this player being reported?`)
-                     .setOptions(
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Inappropriate avatar`)
-                           .setEmoji(`🔞`)
-                           .setValue(`inappropriate-avatar`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Using exploits, cheats, or hacks`)
-                           .setEmoji(`💻`)
-                           .setValue(`exploiting`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Abusing a bug or glitch to gain an unfair advantage`)
-                           .setEmoji(`🐛`)
-                           .setValue(`bug-abuse`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Built something explicit or sexual`)
-                           .setEmoji(`🔞`)
-                           .setValue(`sexual-build`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Being suggestive or sexual in-game`)
-                           .setEmoji(`🔞`)
-                           .setValue(`being-sexual`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Evading a ban with an alternate account`)
-                           .setEmoji(`👥`)
-                           .setValue(`ban-evasion`)
-                     )
-               )
-         );
-
-         break;
-      };
-
-
-      // something else
-      case `something-else`: {
-         components.splice(1, 4,
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.StringSelectMenuBuilder()
-                     .setCustomId(`report-a-player:1`)
-                     .setPlaceholder(`How can the Moderation Team help you?`)
-                     .setOptions(
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Moderator abusing their powers`)
-                           .setEmoji(`🚨`)
-                           .setValue(`moderator-abuse`),
-                        new Discord.StringSelectMenuOptionBuilder()
-                           .setLabel(`Another reason...`)
-                           .setEmoji(`❓`)
-                           .setValue(`other`)
-                     )
-               )
-         );
-
-         break;
-      };
-
-
-      // an end option was set, show the button
-      default: {
-         const canMakeReport = ![ `griefing` ].includes(value);
-
-         components.splice(2, 3,
-            new Discord.ActionRowBuilder()
-               .setComponents(
-                  new Discord.ButtonBuilder()
-                     .setCustomId(`create-report:${value}`)
-                     .setLabel(`Create report`)
-                     .setEmoji(`🗒️`)
-                     .setStyle(Discord.ButtonStyle.Success)
-                     .setDisabled(!canMakeReport)
-               )
-         );
-
-         break;
-      };
-
-
-   };
+   components.splice(1, 4,
+      new Discord.ActionRowBuilder()
+         .setComponents(
+            new Discord.ButtonBuilder()
+               .setCustomId(`create-report:${value}`)
+               .setLabel(`Create report`)
+               .setEmoji(`🗒️`)
+               .setStyle(Discord.ButtonStyle.Success)
+               .setDisabled(!canMakeReport)
+         )
+   );
 
 
    // update the interaction
