@@ -158,7 +158,7 @@ export default async (interaction, firestore) => {
       };
 
 
-      case value === `other`: {
+      case `other`: {
          embeds[0]
             .setDescription(strip`
                ### ❓ Something else you'd like to report?
