@@ -21,8 +21,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { Timestamp } from "@google-cloud/firestore";
-import { emojis, autoArray, choice, noop, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, autoArray, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 import cache from "../../data/cache.js";
 
@@ -141,19 +140,7 @@ export default async (interaction, firestore) => {
    const voters = [];
 
 
-   // components
-   const components = [
-      new Discord.ActionRowBuilder()
-         .setComponents(
-            new Discord.ButtonBuilder()
-               .setCustomId(`${interaction.id}:/vote`)
-               .setLabel(`/vote`)
-               .setStyle(Discord.ButtonStyle.Primary)
-         )
-   ];
-
-
-   // reply to the interaction
+   // edit the deferred interaction
    const voteEndsAt = dayjs().add(2, `minutes`).unix();
 
    await interaction.editReply({
@@ -162,7 +149,15 @@ export default async (interaction, firestore) => {
          > - 📰 Reason: ${reason}
          > - 👥 ${requiredVotes} votes are required ${Discord.time(voteEndsAt, Discord.TimestampStyles.RelativeTime)}.
       `,
-      components,
+      components: [
+         new Discord.ActionRowBuilder()
+            .setComponents(
+               new Discord.ButtonBuilder()
+                  .setCustomId(`${interaction.id}:/vote`)
+                  .setLabel(`/vote`)
+                  .setStyle(Discord.ButtonStyle.Primary)
+            )
+      ],
       allowedMentions: {
          users: [ user.id ],
          roles: []
@@ -178,7 +173,7 @@ export default async (interaction, firestore) => {
 
 
    // create an InteractionCollector
-   const vote = interaction.channel.createMessageComponentCollector({
+   const vote = message.createMessageComponentCollector({
       filter: i => i.customId.startsWith(interaction.id),
       time: 120000
    });
@@ -248,11 +243,6 @@ export default async (interaction, firestore) => {
             ...autoArray(requiredVotes - voters.length, () => `>  - 🗳️`)
          );
 
-         // disable the components
-         for (const actionRow of components)
-            for (const component of actionRow.components)
-               component.data.disabled = true;
-
          // edit the original interaction's reply
          return await interaction.editReply({
             content: strip`
@@ -283,7 +273,7 @@ export default async (interaction, firestore) => {
       // edit the interaction's original reply
       await interaction.editReply({
          content: strip`
-            ### ✅ ${user} has been timed out for ${requiredVotes / 2} minutes
+            ### ✅ ${user} has been timed out for ${requiredVotes / 2} ${requiredVotes / 2 === 1 ? `minute` : `minutes`}
             > - 📰 Reason: ${reason}
             > - ⌚ ${emojis.area_communities_bot} ${Discord.chatInputApplicationCommandMention(`votekick`, interaction.commandId)}s are now on cooldown for 30 seconds.
             ${voters.join(`\n`)}
