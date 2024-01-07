@@ -754,5 +754,8 @@
 ### updated schedules
 > - added blacklist updating as a schedule
 
+### fixed tickets
+> - reminders to open a ticket for https://discord.com/channels/977254354589462618/1072945802256855170 should now properly delete within 5 minutes
+
 ### fixed statuses
 > - changed <@983126054619189370>'s status to online (from idle)

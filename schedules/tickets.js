@@ -122,7 +122,7 @@ export default async (client, firestore) => {
             }
          });
 
-         await wait(3.6e+6);
+         await wait(300000);
 
          try {
             await alert.delete();
