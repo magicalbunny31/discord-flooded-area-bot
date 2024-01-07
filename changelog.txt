@@ -10,7 +10,7 @@
 
 ### /currency
 > - <:flooded_area:995461994989756526> </currency balance:1116857516324827148>: you can view your coins, net worth (coins including value of items) and total coins earned (coins earned from chatting only)
-> - <:flooded_area:995461994989756526> </currency items:1116857516324827148>: see yur bought items, manage your personal item (an item that you create yourself and sell in the shop) and list your items for sale in the flea market
+> - <:flooded_area:995461994989756526> </currency items:1116857516324827148>: see your bought items, manage your personal item (an item that you create yourself and sell in the shop) and list your items for sale in the flea market
 >  - if you had items before, they have been refunded back into your coin balance
 >  - ..\🦊 test items? oh, you'll just have to earn them back another way~
 > - <:flooded_area:995461994989756526> </currency shop:1116857516324827148>: buy things from the hourly-rotating bunny's shop, buy special items like votekick protection, see the flea market listings and participate in the "animal crossing" series-inspired stalk market
@@ -719,29 +719,40 @@
 ==============
 ==============
 ------------
-18/dec/2023
+08/jan/2024
 
 
 
 # https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.3`
 
-## <:happ:906683365791502366> bugs ~~foxed~~ *fixed*
 
-### statuses
-> - fixed <@983126054619189370>'s status not being online (from idle)
+### new command <slash_command> </voteban:1193629326734802976>
+> - only to be used by a select group of people..
 
-## <:happ:906683365791502366> stuff that changed
+### updated slash commands
+> - emojis were removed from option choices
+> - i thought i did this in v`3.6.2` but apparently not so i did it for real now
 
-### application commands
-> - okai i lied last time but this time fr i removed emojis from option choices
+### updated https://discord.com/channels/977254354589462618/1072945802256855170
+> - made the whole reporting process much more simpler (therefore making it easier too) with less menus
+> - updated info and links
 
-### <shield> doruk's exceptional pings
-> - changed all references of it to `playtest`
->  - https://discord.com/channels/977254354589462618/1002631503248892077
->  - <slash_command> </mention:1116857516324827149>
+### updated https://discord.com/channels/977254354589462618/1082650454044979210
+> - updated info to include "you can't appeal for votekick bans"
+> - fixed channel mentions for https://discord.com/channels/977254354589462618/1193614603809214534
 
-### <slash_command> </say:1162506192724168715>
-> - added descriptions
+### <shield> ~~doruk's exceptional pings~~ is now <shield> playtest
+> - https://discord.com/channels/977254354589462618/1002631503248892077
+> - <slash_command> </mention:1116857516324827149>
 
-### schedules
+### updated <slash_command> </say:1162506192724168715>
+> - added proper descriptions for the command and its options
+
+### updated <slash_command> </votekick:1116857516324827152>
+> - "minute" now shows "minutes" if plural
+
+### updated schedules
 > - added blacklist updating as a schedule
+
+### fixed statuses
+> - changed <@983126054619189370>'s status to online (from idle)
