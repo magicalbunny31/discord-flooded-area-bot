@@ -87,13 +87,14 @@ export default async (interaction, firestore) => {
             > - Believing we banned the wrong player
 
             ### ❌ You cannot submit an appeal for...
+            > - A votekick ban
             > - Being banned from Roblox
             > - Not being banned from ${Discord.hyperlink(`Flooded Area`, `https://www.roblox.com/games/3976767347/Flooded-Area`)}
             > - Apologising
             > - Confessing
             > - Pleading that you will change
             > - Acting clueless about your actions
-            > - Being moderated for doing something you did knowingly against the #rules
+            > - Being moderated for doing something you did knowingly against the ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}
          `)
          .setFooter({
             text: `If you think your account was falsely moderated, you can appeal below.`
