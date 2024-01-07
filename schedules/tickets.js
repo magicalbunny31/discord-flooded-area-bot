@@ -122,13 +122,13 @@ export default async (client, firestore) => {
             }
          });
 
-         setTimeout(async () => {
-            try {
-               await alert.delete();
-            } catch {
-               noop;
-            };
-         }, 3.6e+6);
+         await wait(3.6e+6);
+
+         try {
+            await alert.delete();
+         } catch {
+            noop;
+         };
       });
    };
 };
