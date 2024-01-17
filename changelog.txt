@@ -759,3 +759,32 @@
 
 ### fixed statuses
 > - changed <@983126054619189370>'s status to online (from idle)
+
+
+
+------------
+==============
+==============
+------------
+17/jan/2024
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.4`
+
+
+### https://discord.com/channels/977254354589462618/1182258879778795570
+> - <:flooded_area:995461994989756526>
+
+### https://discord.com/channels/977254354589462618/1197259289937592350
+> - use **<a:slash_command:1148866611227414568> </qotd create:1197213866095018035>** to submit a qotd, which get sent to a fifo (first-in-first-out) queue
+>  - one qotd is sent to https://discord.com/channels/977254354589462618/1197259289937592350 at <t:1655463600:t> per day
+>  - mods must review your submissions before they're sent (**<a:slash_command:1148866611227414568> </qotd moderate-queue:1197213866095018035>**), so don't try to break the https://discord.com/channels/977254354589462618/1193614603809214534 or anything
+> - currently, there's no limit or cooldown to how many you can qotds you can submit (i was lazy but we can say that it's because this is new)
+> - from testing, i'm pretty sure the code works! if any issues arise then i'll fix them soon
+
+### goodbye text-based commands #packwatch
+> - removed the warning that "text-based commands were replaced with **<a:slash_command:1148866611227414568> </cmd:1160259589435048046>**" every time you tried to use them
+
+### other stuff
+> - removed unnecessary code (that i forgor to from copy/pasting) in /interactions/chat-input/view-join-dates.js

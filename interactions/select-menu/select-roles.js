@@ -28,7 +28,8 @@ export default async (interaction, firestore) => {
          [ `giveaways`,           rolesStrings.includes(`giveaways`)                 ],
          [ `challenges`,          rolesStrings.includes(`challenges`)                ],
          [ `playtest`,            rolesStrings.includes(`playtest`)                  ],
-         [ `archived-access`,     rolesStrings.includes(`archived-access`)           ]
+         [ `archived-access`,     rolesStrings.includes(`archived-access`)           ],
+         [ `qotd`,                rolesStrings.includes(`qotd`)                      ]
       ],
 
       "pronoun-roles": [
@@ -52,7 +53,8 @@ export default async (interaction, firestore) => {
          "giveaways":           process.env.FA_ROLE_GIVEAWAYS,
          "challenges":          process.env.FA_ROLE_CHALLENGES,
          "playtest":            process.env.FA_ROLE_PLAYTEST,
-         "archived-access":     process.env.FA_ROLE_ARCHIVED_ACCESS
+         "archived-access":     process.env.FA_ROLE_ARCHIVED_ACCESS,
+         "qotd":                process.env.FA_ROLE_QOTD
       },
 
       "pronoun-roles": {

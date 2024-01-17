@@ -26,7 +26,8 @@ export default async (interaction, firestore) => {
       "giveaways":           process.env.FA_ROLE_GIVEAWAYS,
       "challenges":          process.env.FA_ROLE_CHALLENGES,
       "playtest":            process.env.FA_ROLE_PLAYTEST,
-      "archived-access":     process.env.FA_ROLE_ARCHIVED_ACCESS
+      "archived-access":     process.env.FA_ROLE_ARCHIVED_ACCESS,
+      "qotd":                process.env.FA_ROLE_QOTD
    };
 
    const pronounRoles = {
@@ -86,10 +87,15 @@ export default async (interaction, firestore) => {
                      .setLabel(`Archived Access`)
                      .setValue(`archived-access`)
                      .setEmoji(emojis.mention)
-                     .setDefault(roles.has(mentionRoles[`archived-access`]))
+                     .setDefault(roles.has(mentionRoles[`archived-access`])),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`QoTD`)
+                     .setValue(`qotd`)
+                     .setEmoji(emojis.mention)
+                     .setDefault(roles.has(mentionRoles[`qotd`]))
                )
                .setMinValues(0)
-               .setMaxValues(8)
+               .setMaxValues(9)
          ),
 
       new Discord.ActionRowBuilder()

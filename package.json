@@ -1,6 +1,6 @@
 {
    "name": "discord-area-communities-bot",
-   "version": "3.6.3",
+   "version": "3.6.4",
    "description": "🌊🌌 Flooded Area Community and Spaced Out's Discord bot!",
    "main": "index.js",
    "type": "module",
