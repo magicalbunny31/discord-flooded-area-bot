@@ -5,7 +5,7 @@ export const cron = {
 };
 
 import Discord from "discord.js";
-import { colours, choice } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, choice, noop } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {import("discord.js").Client} client
@@ -77,6 +77,18 @@ export default async (client, firestore) => {
          await message.react(reactionChoice.reactionEmoji);
 
 
-   // delete the submission
+   // delete the submission from the database
    await qotdDocSnap.ref.delete();
+
+
+   // delete the submission from the qotd submissions channel
+   try {
+      const submissionChannel = await guild.channels.fetch(process.env.FA_ROLE_QOTD_SUBMISSIONS);
+      const submissionMessage = await submissionChannel.messages.fetch(qotdDocData.message);
+
+      await submissionMessage.delete();
+
+   } catch {
+      noop;
+   };
 };

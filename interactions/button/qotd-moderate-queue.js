@@ -18,100 +18,33 @@ export default async (interaction, firestore) => {
    const qotdDocRef = firestore.collection(`qotd`).doc(id);
 
 
-   // this submission was approved, set it as so
-   if (status === `approve`)
-      await qotdDocRef.update({
-         approved: true
-      });
-
-
    // this submission was denied, delete it
-   else
+   if (status === `deny`) {
       await qotdDocRef.delete();
+      await interaction.message.delete();
+      return;
+   };
 
 
-   // fetch unapproved submissions
-   const qotdColRef  = firestore.collection(`qotd`);
-   const qotdColSnap = await qotdColRef.get();
-
-   const qotdColDocs = qotdColSnap.docs
-      .filter(qotdDocSnap => qotdDocSnap.exists && !qotdDocSnap.data().approved);
-
-
-   // no unapproved submissions
-   if (!qotdColDocs.length)
-      return await interaction.update({
-         content: `### 📂 There are no more ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)} submissions to review`,
-         embeds: [],
-         components: []
-      });
-
-
-   // get the first doc
-   const [ qotdDocSnap ] = qotdColDocs;
-   const qotdDocData = qotdDocSnap.data();
+   // approve this suggestion
+   await qotdDocRef.update({
+      approved: true
+   });
 
 
    // embeds
-   const user = await interaction.client.users.fetch(qotdDocData.user, { force: true });
-   const embedColour = user.accentColor || choice([ colours.red, colours.orange, colours.yellow, colours.green, colours.blue, colours.purple, colours.pink ]);
+   const embeds = interaction.message.embeds.map(embed =>
+      new Discord.EmbedBuilder(embed.data)
+   );
 
-   const embeds = [
-      new Discord.EmbedBuilder()
-         .setColor(embedColour)
-         .setAuthor({
-            name: `@${user.username} (${user.id})`,
-            iconURL: user.displayAvatarURL()
-         }),
-
-      ...qotdDocData.threadName
-         ? [
-            new Discord.EmbedBuilder()
-               .setColor(colours.flooded_area)
-               .setFields({
-                  name: `Thread name`,
-                  value: Discord.escapeMarkdown(qotdDocData.threadName)
-               })
-         ]
-         : []
-   ];
-
-   if (qotdDocData.description)
-      embeds[0].setDescription(qotdDocData.description);
-
-   if (qotdDocData.imageUrl)
-      embeds[0].setImage(qotdDocData.imageUrl);
-
-   if (qotdDocData.reactionChoices?.length)
-      embeds[0].setFields({
-         name: `\u200b`,
-         value: qotdDocData.reactionChoices
-            .map(reactionChoice => `> ${reactionChoice.reactionEmoji} ${reactionChoice.reactionName}`)
-            .join(`\n`)
-      });
-
-
-   // components
-   const components = [
-      new Discord.ActionRowBuilder()
-         .setComponents(
-            new Discord.ButtonBuilder()
-               .setCustomId(`qotd-moderate-queue:approve:${qotdDocSnap.id}`)
-               .setLabel(`Approve`)
-               .setEmoji(`✅`)
-               .setStyle(Discord.ButtonStyle.Success),
-            new Discord.ButtonBuilder()
-               .setCustomId(`qotd-moderate-queue:deny:${qotdDocSnap.id}`)
-               .setLabel(`Deny`)
-               .setEmoji(`❌`)
-               .setStyle(Discord.ButtonStyle.Danger)
-         )
-   ];
+   embeds[0].setFooter({
+      text: `Approved by @${interaction.user.username}`
+   });
 
 
    // update the interaction's original reply
    await interaction.update({
       embeds,
-      components
+      components: []
    });
 };

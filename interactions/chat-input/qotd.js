@@ -8,11 +8,6 @@ export const data = new Discord.SlashCommandBuilder()
       new Discord.SlashCommandSubcommandBuilder()
          .setName(`create`)
          .setDescription(`Create a QoTD`)
-   )
-   .addSubcommand(
-      new Discord.SlashCommandSubcommandBuilder()
-         .setName(`moderate-queue`)
-         .setDescription(`Approve or deny the current QoTD queue, submitted from server members`)
    );
 
 
