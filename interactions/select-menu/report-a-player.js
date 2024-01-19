@@ -73,7 +73,7 @@ export default async (interaction, firestore) => {
          embeds[0]
             .setDescription(strip`
                ### ✨ Final things!
-               > - You'll have to show us how this player is being inappropriate
+               > - You'll have to show us how this player is being inappropriate.
                >  - For avatars, it can be a screenshot (preferred, as they may change their avatar in the meantime) or a link to their avatar.
                >  - For builds, show us the build as well as some form of proof that they were the one who built it.
                > - You'll have to show us the player's avatar that you're reporting - whether that's with a screenshot or a link to their profile.
