@@ -167,7 +167,7 @@ export default async (interaction, firestore) => {
             position <= historicalMembers.length
                ? strip`
                   ### 👤 They're historically the ${position.toLocaleString()}${getOrdinalSuffix(position)} member
-                  > - First joined at ${Discord.time(historicalMember.joinedAt)}
+                  > - First joined at ${Discord.time(historicalMember.joinedTimestamp)}
                `
                : `### ❌ Nobody was historically the ${position.toLocaleString()}${getOrdinalSuffix(position)} member`
          )

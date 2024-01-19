@@ -741,14 +741,14 @@
 > - updated info to include "you can't appeal for votekick bans"
 > - fixed channel mentions for https://discord.com/channels/977254354589462618/1193614603809214534
 
-### <shield> ~~doruk's exceptional pings~~ is now <shield> playtest
+### <a:shield:1197697050763087924> ~~doruk's exceptional pings~~ is now <a:shield:1197697050763087924> playtest
 > - https://discord.com/channels/977254354589462618/1002631503248892077
-> - <slash_command> </mention:1116857516324827149>
+> - <a:slash_command:1193174898546319471> </mention:1116857516324827149>
 
-### updated <slash_command> </say:1162506192724168715>
+### updated <a:slash_command:1193174898546319471> </say:1162506192724168715>
 > - added proper descriptions for the command and its options
 
-### updated <slash_command> </votekick:1116857516324827152>
+### updated <a:slash_command:1193174898546319471> </votekick:1116857516324827152>
 > - "minute" now shows "minutes" if plural
 
 ### updated schedules
@@ -788,3 +788,36 @@
 
 ### other stuff
 > - removed unnecessary code (that i forgor to from copy/pasting) in /interactions/chat-input/view-join-dates.js
+
+
+
+------------
+==============
+==============
+------------
+19/jan/2024
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.5`
+
+
+### updated https://discord.com/channels/977254354589462618/1182258879778795570
+> - submissions now need at least 2 approve/deny votes by staff in order to be approved/denied
+>  - submissions are no longer deleted once sent/denied
+> - use the (new) command **<a:slash_command:1193174898546319471> </qotd submissions-status:1197213866095018035>** to check on the statuses of your submitted qotds
+>  - denied submissions are deleted after 7 days (in the database) so that they'll still be available to see with this command
+> - you can only submit 1 qotd every 12 hours (to prevent chaining/spamming questions)
+> - fixed the https://discord.com/channels/977254354589462618/1197259289937592350/1197264301942112316 timestamp showing incorrectly for some people
+>  - qotd runs off of uk time, however the time was set to june 17th, which is when the uk observes daylight savings time
+>  - for people in countries which don't observe daylight savings (at this date), this time was displayed as an hour before the true time of when qotds are sent
+
+### updated https://discord.com/channels/977254354589462618/1072945802256855170
+> - fixed missing punctuation for the "Has an inappropriate avatar or built something explicit or sexual" reason
+> - fixed outdated report summary in the moderation team @mention message
+
+### updated https://discord.com/channels/977254354589462618/1120048100875182120
+> - updated server booster section to me more up to date
+
+### updated https://discord.com/channels/977254354589462618/1148694055887327242
+> - added missing escape map \`Oceanic Spire\`
