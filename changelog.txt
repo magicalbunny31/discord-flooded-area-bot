@@ -802,7 +802,7 @@
 # https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.5`
 
 
-### updated https://discord.com/channels/977254354589462618/1182258879778795570
+### updated https://discord.com/channels/977254354589462618/1197259289937592350
 > - submissions now need at least 2 approve/deny votes by staff in order to be approved/denied
 >  - submissions are no longer deleted once sent/denied
 > - use the (new) command **<a:slash_command:1193174898546319471> </qotd submissions-status:1197213866095018035>** to check on the statuses of your submitted qotds
