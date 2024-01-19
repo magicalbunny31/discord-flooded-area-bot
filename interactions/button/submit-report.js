@@ -176,21 +176,16 @@ export default async (interaction, firestore) => {
       content: strip`
          📣 Report a Player > ${
             {
-               "false-votekicking":    `Started an invalid votekick`,
-               "harassed-people":      `Verbally harassed me or someone else`,
-               "threatened-people":    `Threatened violence or real world harm`,
-               "hate-speech":          `Promoted hate based on identity or vulnerability`,
-               "violence":             `Celebrated or glorified acts of violence`,
-               "swore-in-chat":        `Used offensive language`,
-               "sexual-in-chat":       `Said something explicit or sexual`,
-               "inappropriate-avatar": `Inappropriate avatar`,
-               "exploiting":           `Using exploits, cheats, or hacks`,
-               "bug-abuse":            `Abusing a bug or glitch to gain an unfair advantage`,
-               "sexual-build":         `Built something explicit or sexual`,
-               "being-sexual":         `Being suggestive or sexual in-game`,
-               "ban-evasion":          `Evading a ban with an alternate account`,
-               "moderator-abuse":      `Moderator abusing their powers`,
-               "other":                `Another reason...`
+               "false-votekicking": `Started a false votekick`,
+               "bypassing":         `Bypassing, swearing, or being inappropriate in chat/game`,
+               "toxicity":          `Being toxic or harassing others`,
+               "bigotry":           `Bigotry`,
+               "inappropriate":     `Has an inappropriate avatar or built something explicit or sexual`,
+               "exploiting":        `Using exploits, cheats, or hacks`,
+               "bug-abuse":         `Abusing a bug or glitch to gain an unfair advantage`,
+               "ban-evasion":       `Evading a ban with an alt account`,
+               "moderator-abuse":   `Moderator abusing their powers`,
+               "other":             `Another reason...`
             }[type]
          }
          ${roleToMention}
