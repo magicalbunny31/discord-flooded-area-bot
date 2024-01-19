@@ -4,6 +4,7 @@ export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
+import { Timestamp } from "@google-cloud/firestore";
 import { colours, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 import cache from "../../data/cache.js";
@@ -29,7 +30,8 @@ export default async (interaction, firestore) => {
          .setColor(colours.flooded_area)
          .setDescription(strip`
             ### 📥 Your QoTD has been submitted
-            > - A member of the ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} will review your QoTD before it gets posted to ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}.
+            > - The ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} will review your QoTD before it gets posted to ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}.
+            > - You can submit another QoTD ${Discord.time(dayjs(interaction.createdAt).add(12, `hours`).toDate(), Discord.TimestampStyles.RelativeTime)}.
             > - New ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}s are posted every day at ${Discord.time(dayjs().startOf(`day`).add(12, `hours`).toDate(), Discord.TimestampStyles.ShortTime)}.
          `)
    ];
@@ -108,12 +110,20 @@ export default async (interaction, firestore) => {
 
 
    // set this data in the database
-   const qotdDocRef = firestore.collection(`qotd`).doc(id);
+   const qotdDocRef = firestore.collection(`qotd`).doc(interaction.guildId).collection(`submissions`).doc(id);
 
    await qotdDocRef.set({
       ...data,
       approved: false,
       message:  message.id,
       user:     interaction.user.id
+   });
+
+
+   // set this person's cooldown
+   const qotdUserDocRef = firestore.collection(`qotd`).doc(interaction.guildId).collection(`users`).doc(interaction.user.id);
+
+   await qotdUserDocRef.set({
+      "next-submission-at": new Timestamp(dayjs(interaction.createdAt).add(12, `hours`).unix(), 0)
    });
 };

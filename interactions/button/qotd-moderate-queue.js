@@ -3,7 +3,8 @@ export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 
 import Discord from "discord.js";
-import { colours, choice } from "@magicalbunny31/awesome-utility-stuff";
+import dayjs from "dayjs";
+import { Timestamp } from "@google-cloud/firestore";
 
 /**
  * @param {Discord.ButtonInteraction} interaction
@@ -15,21 +16,22 @@ export default async (interaction, firestore) => {
 
 
    // the current doc
-   const qotdDocRef = firestore.collection(`qotd`).doc(id);
+   const qotdDocRef  = firestore.collection(`qotd`).doc(interaction.guildId).collection(`submissions`).doc(id);
+   const qotdDocSnap = await qotdDocRef.get();
+   const qotdDocData = qotdDocSnap.data();
+
+   const { approve = [], deny = [] } = qotdDocData;
 
 
-   // this submission was denied, delete it
-   if (status === `deny`) {
-      await qotdDocRef.delete();
-      await interaction.message.delete();
-      return;
-   };
+   // this user has already voted
+   if (approve.includes(interaction.user.id) || deny.includes(interaction.user.id))
+      return await interaction.deferUpdate();
 
 
-   // approve this suggestion
-   await qotdDocRef.update({
-      approved: true
-   });
+   // add this user to the respective array
+   status === `approve`
+      ? approve.push(interaction.user.id)
+      : deny   .push(interaction.user.id);
 
 
    // embeds
@@ -38,13 +40,43 @@ export default async (interaction, firestore) => {
    );
 
    embeds[0].setFooter({
-      text: `Approved by @${interaction.user.username}`
+      text: ((embeds[0].data.footer?.text || ``) + `\n${status === `approve` ? `✅` : `❌`} @${interaction.user.username}`)
+         .trim()
    });
 
 
-   // update the interaction's original reply
-   await interaction.update({
-      embeds,
-      components: []
+   // payload for the message
+   const payload = {
+      embeds
+   };
+
+
+   // this submission was approved
+   if (approve.length >= 2) {
+      await qotdDocRef.update({
+         approved: true
+      });
+
+      payload.components = [];
+   };
+
+
+   // this submission was denied
+   if (deny.length >= 2) {
+      await qotdDocRef.update({
+         delete: new Timestamp(dayjs(interaction.createdAt).add(1, `week`).unix(), 0)
+      });
+
+      payload.components = [];
+   };
+
+
+   // count votes
+   await qotdDocRef.update({
+      approve, deny
    });
+
+
+   // update the interaction's reply
+   await interaction.update(payload);
 };

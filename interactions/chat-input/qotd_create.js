@@ -3,6 +3,7 @@ export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 
 import Discord from "discord.js";
+import dayjs from "dayjs";
 import { colours, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
@@ -10,6 +11,23 @@ import { colours, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
+   // defer the interaction
+   await interaction.deferReply({
+      ephemeral: true
+   });
+
+
+   // this person is on cooldown
+   const qotdUserDocRef  = firestore.collection(`qotd`).doc(interaction.guildId).collection(`users`).doc(interaction.user.id);
+   const qotdUserDocSnap = await qotdUserDocRef.get();
+   const qotdUserDocData = qotdUserDocSnap.data() || {};
+
+   if (qotdUserDocData[`next-submission-at`]?.seconds > dayjs().unix())
+      return await interaction.editReply({
+         content: `### ⌚ You can submit another QoTD ${Discord.time(qotdUserDocData[`next-submission-at`].seconds, Discord.TimestampStyles.RelativeTime)}`
+      });
+
+
    // embeds
    const embedColour = interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || choice([ colours.red, colours.orange, colours.yellow, colours.green, colours.blue, colours.purple, colours.pink ]);
 
@@ -76,9 +94,8 @@ export default async (interaction, firestore) => {
 
 
    // reply to the interaction
-   await interaction.reply({
+   await interaction.editReply({
       embeds,
-      components,
-      ephemeral: true
+      components
    });
 };

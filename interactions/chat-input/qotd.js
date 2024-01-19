@@ -8,6 +8,11 @@ export const data = new Discord.SlashCommandBuilder()
       new Discord.SlashCommandSubcommandBuilder()
          .setName(`create`)
          .setDescription(`Create a QoTD`)
+   )
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`submissions-status`)
+         .setDescription(`View the statuses of your QoTD submissions`)
    );
 
 
