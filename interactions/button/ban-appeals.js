@@ -76,7 +76,7 @@ export default async (interaction, firestore) => {
          .setTitle(`🔨 Ban Appeals`)
          .setDescription(strip`
             ### ${emojis.bun_paw_wave} ${choice([ `Hello`, `Hi`, `Welcome` ])}, ${interaction.user}!
-            > - All players has the right to appeal against moderative actions against them in ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}.
+            > - All players have the right to appeal against moderative actions against them in ${Discord.channelMention(process.env.FA_CHANNEL_RULES_AND_INFO)}.
             > - We try hard to only moderate when necessary, but we're not perfect: mistakes may happen!
             > - Note that we can't help you with actions taken against your Roblox account - if you wish to appeal against that, contact them via their ${Discord.hyperlink(`support forum`, `https://www.roblox.com/support`)}.
 
