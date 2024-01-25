@@ -3,7 +3,7 @@ export const once = false;
 
 
 import Discord from "discord.js";
-import { emojis } from "@magicalbunny31/awesome-utility-stuff";
+import { emojis, choice } from "@magicalbunny31/awesome-utility-stuff";
 
 /**
  * @param {Discord.Message} message
@@ -20,11 +20,12 @@ export default async (message, firestore) => {
       return;
 
 
-   // this message's content doesn't include "flooded area"
-   if (!message.content.toLowerCase().includes(`flooded area`))
-      return;
+   // this message's content includes "flooded area"
+   if (message.content.toLowerCase().includes(`flooded area`))
+      await message.react(emojis.flooded_area);
 
 
-   // react to the message
-   await message.react(emojis.flooded_area);
+   // this message's content includes "617" or "6/17"
+   if ([ `617`, `6/17` ].some(content => message.content.includes(content)))
+      await message.react(choice([ `<:617old:1119577426037575721>`, `<:617:1119576849752793129>`, `<:617__:1197298104282665040>` ]));
 };

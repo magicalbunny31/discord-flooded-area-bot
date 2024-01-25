@@ -821,3 +821,44 @@
 
 ### updated https://discord.com/channels/977254354589462618/1148694055887327242
 > - added missing escape map \`Oceanic Spire\`
+
+
+
+------------
+==============
+==============
+------------
+25/jan/2024
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.6`
+
+
+### added <a:slash_command:1193174898546319471> </qotd queue:1197213866095018035>
+> - this shows the number of approved, denied, and awaiting approval qotd submissions
+
+### <a:slash_command:1193174898546319471> ~~/qotd submissions-status~~ is now <a:slash_command:1193174898546319471> </qotd submissions:1197213866095018035>
+> - it has been reformatted to display information in a more useful way
+> - fixed the approximate send date being wrong if the command was used 12 hours after a https://discord.com/channels/977254354589462618/1197259289937592350 was sent
+
+### updated <a:slash_command:1193174898546319471> </qotd create:1197213866095018035>
+> - you can now only submit 1 qotd every 24 hours
+>  - this actually wasn't a problem beforehand, i'm just curious if this'll make you guys think before submitting
+>  - also added some text reflecting this change
+
+### updated <a:slash_command:1193174898546319471> </game-info:1132730748370174044>
+> - images and videos are now hosted externally (through [nuzzles.dev](<https://nuzzles.dev>) and [youtube](<https://www.youtube.com>)), removing the uploads and *corny* formatting
+>  - for some reason the server couldn't handle the video's file upload of a 12.1 MB so this also indirectly fixes that too
+
+### updated https://discord.com/channels/977254354589462618/1082650454044979210
+> - fixed grammar
+
+### updated https://discord.com/channels/977254354589462618/1120048100875182120
+> - updated content creator section to me more up to date
+
+### updated https://discord.com/channels/977254354589462618/1148694055887327242
+> - added missing boat map \`Titanic\`
+> - added missing two-team elimination map \`Ant Wars\`
+> - added missing free-for-all map \`King of the Hill\`
+> - re-organised escape maps into alphabetical order 
