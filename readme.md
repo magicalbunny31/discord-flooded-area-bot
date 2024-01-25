@@ -11,6 +11,6 @@ in-game moderation for **[Flooded Area Community](https://discord.gg/Btng2qqjgA 
 ## contributors 👥
 based off of [@Stratiz/Discord-To-Roblox](https://github.com/Stratiz/Discord-To-Roblox) by **[@Stratiz](https://github.com/Stratiz)**
 <br>
-integrated into [Flooded Area](https://www.roblox.com/games/3976767347/Flooded-Area) by **[@ActuallyArlo](https://actuallyarlo.dev)**
+integrated into [Flooded Area](https://www.roblox.com/games/3976767347/Flooded-Area) by **[@actuallyarla](https://actuallyarla.dev/)**
 <br>
-rewritten and finalised by **[@magicalbunny31](https://github.com/magicalbunny31)**
+rewritten and finalised by **[@magicalbunny31](https://nuzzles.dev)**
