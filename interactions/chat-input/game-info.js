@@ -23,7 +23,7 @@ export const data = new Discord.SlashCommandBuilder()
 
 
 import Discord from "discord.js";
-import { colours } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 import pkg from "../../package.json" assert { type: "json" };
 
@@ -197,21 +197,11 @@ export default async (interaction, firestore) => {
          embeds.push(
             new Discord.EmbedBuilder()
                .setColor(colours.flooded_area)
-               .setImage(`attachment://other-experiences.png`)
-               .setFooter({
-                  text: `Before anyone asks...Yeah, I have permission from @welololol to share these attachments!`
-               })
-         );
-
-
-         // files
-         files.push(
-            new Discord.AttachmentBuilder()
-               .setFile(`./assets/game-info/other-experiences.png`),
-            new Discord.AttachmentBuilder()
-               .setFile(`./assets/game-info/boss-area.mp4`),
-            new Discord.AttachmentBuilder()
-               .setFile(`./assets/game-info/boss-area.png`)
+               .setDescription(strip`
+                  - **Boss Area**: *demo video* - [view video](https://youtu.be/SoA_wO-f32k)
+                  - **Boss Area**: *victory screenshot* - [view image](https://nuzzles.dev/assets/discord/area-communities-bot/game-info/boss-area-victory-screenshot.png)
+                  - **Sword Fight Area**, **Obby Area**, **Boss Area**: context from @welololol - [view image](https://nuzzles.dev/assets/discord/area-communities-bot/game-info/sword-fight-area-obby-area-boss-area-context-from-welololol.png)
+               `)
          );
 
 
