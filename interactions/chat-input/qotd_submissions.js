@@ -1,4 +1,4 @@
-export const name = "qotd submissions-status";
+export const name = "qotd submissions";
 export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 
@@ -30,8 +30,13 @@ export default async (interaction, firestore) => {
             id: qotdDocSnap.id,
             position: i
          })
-      )
-      .filter(qotdDocData => qotdDocData.user === interaction.user.id);
+      );
+
+   const approvedSubmissions = submissions
+      .filter(submission => submission.approved);
+
+   const userSubmissions = submissions
+      .filter(submission => submission.user === interaction.user.id);
 
 
    // formatting
@@ -53,6 +58,10 @@ export default async (interaction, firestore) => {
          : replaceNewlines(description)
    );
 
+   const approximateSendDate = position => dayjs().unix() < dayjs().startOf(`day`).add(12, `hours`).unix()
+      ? dayjs().startOf(`day`).add(12, `hours`)              .add(position, `days`).toDate()  // before 12:00, choose this day
+      : dayjs().startOf(`day`).add(12, `hours`).add(1, `day`).add(position, `days`).toDate(); // after 12:00,  choose next day
+
 
    // embeds
    const embedColour = interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || choice([ colours.red, colours.orange, colours.yellow, colours.green, colours.blue, colours.purple, colours.pink ]);
@@ -65,20 +74,24 @@ export default async (interaction, firestore) => {
             iconURL: interaction.user.displayAvatarURL()
          })
          .setDescription(
-            submissions
-               .map((submission, i) =>
-                  [
-                     `${i + 1}. ${formatEmoji(submission)} ${isDenied(submission) ? Discord.strikethrough(`"${formatTitle(submission.description)}"`) : `"${formatTitle(submission.description)}"`}`,
-                     ` - Submitted at ${Discord.time(Math.floor(Discord.SnowflakeUtil.timestampFrom(submission.id) / 1000))}`,
+            userSubmissions
+               .map(submission => {
+                  const approvedSubmissionPosition = approvedSubmissions.findIndex(approvedSubmission => approvedSubmission.message === submission.message);
+                  return [
+                     `### ${formatEmoji(submission)} ${isDenied(submission) ? Discord.strikethrough(`"${formatTitle(submission.description)}"`) : `"${formatTitle(submission.description)}"`}`,
+                     `> - Submitted at: ${Discord.time(Math.floor(Discord.SnowflakeUtil.timestampFrom(submission.id) / 1000))}`,
                      ...isApproved(submission)
-                        ? [ ` - Approximate send date: ${Discord.time(dayjs().startOf(`day`).add(12, `hours`).add(submission.position, `days`).unix(), Discord.TimestampStyles.RelativeTime)}` ]
+                        ? [
+                           `> - Position in ${emojis.slash_command} ${Discord.chatInputApplicationCommandMention(`qotd`, `queue`, interaction.commandId)}: \`${approvedSubmissionPosition + 1}\` of \`${approvedSubmissions.length}\``,
+                           `> - Sending to ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}: ${Discord.time(approximateSendDate(approvedSubmissionPosition), Discord.TimestampStyles.RelativeTime)}`
+                        ]
                         : []
                   ]
-                     .join(`\n`)
-               )
+                     .join(`\n`);
+               })
                .join(`\n`)
             || strip`
-               ### 📰 You haven't submitted any ${Discord.channelMention(process.env.FA_ROLE_QOTD)}s yet
+               ### 📰 You haven't submitted any ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}s yet
                > - Create one with ${emojis.slash_command} ${Discord.chatInputApplicationCommandMention(`qotd`, `create`, interaction.commandId)}
             `
          )

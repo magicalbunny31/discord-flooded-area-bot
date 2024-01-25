@@ -5,7 +5,7 @@ export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 import Discord from "discord.js";
 import dayjs from "dayjs";
 import { Timestamp } from "@google-cloud/firestore";
-import { colours, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
+import { colours, emojis, choice, strip } from "@magicalbunny31/awesome-utility-stuff";
 
 import cache from "../../data/cache.js";
 
@@ -22,7 +22,15 @@ export default async (interaction, firestore) => {
    const data = cache.get(`qotd:${id}`);
 
 
+   // application commands
+   const commands = await interaction.guild.commands.fetch();
+
+   const commandQotdId = commands.find(command => command.name === `qotd`)?.id || 0;
+
+
    // embeds
+   const nextSubmissionAt = dayjs(interaction.createdAt).add(24, `hours`);
+
    const embeds = [
       ...interaction.message.embeds,
 
@@ -31,7 +39,9 @@ export default async (interaction, firestore) => {
          .setDescription(strip`
             ### 📥 Your QoTD has been submitted
             > - The ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} will review your QoTD before it gets posted to ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}.
-            > - You can submit another QoTD ${Discord.time(dayjs(interaction.createdAt).add(12, `hours`).toDate(), Discord.TimestampStyles.RelativeTime)}.
+            >  - Use ${emojis.slash_command} ${Discord.chatInputApplicationCommandMention(`qotd`, `submissions`, commandQotdId)} to view the statuses of your submissions.
+            >  - Use ${emojis.slash_command} ${Discord.chatInputApplicationCommandMention(`qotd`, `queue`, commandQotdId)} to view the whole QoTD queue.
+            > - You can submit another QoTD ${Discord.time(nextSubmissionAt.toDate(), Discord.TimestampStyles.RelativeTime)}.
             > - New ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}s are posted every day at ${Discord.time(dayjs().startOf(`day`).add(12, `hours`).toDate(), Discord.TimestampStyles.ShortTime)}.
          `)
    ];
@@ -124,6 +134,6 @@ export default async (interaction, firestore) => {
    const qotdUserDocRef = firestore.collection(`qotd`).doc(interaction.guildId).collection(`users`).doc(interaction.user.id);
 
    await qotdUserDocRef.set({
-      "next-submission-at": new Timestamp(dayjs(interaction.createdAt).add(12, `hours`).unix(), 0)
+      "next-submission-at": new Timestamp(nextSubmissionAt.unix(), 0)
    });
 };

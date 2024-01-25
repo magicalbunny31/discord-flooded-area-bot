@@ -27,7 +27,8 @@ export default async (interaction, id) => {
                   ? []
                   : [ `📝 You need to have [question] and at least one of [discussion thread, reaction choices] to submit this QoTD` ],
                `📥 Once submitted, you won't be able to edit this QoTD again`,
-               `🚨 Staff will review your submitted QoTD before it gets posted`
+               `🚨 Staff will review your submitted QoTD before it gets posted`,
+               `⌚ Only 1 QoTD can be submitted every 24 hours`
             ]
                .join(`\n`)
          })

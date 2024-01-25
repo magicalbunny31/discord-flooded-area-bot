@@ -11,8 +11,13 @@ export const data = new Discord.SlashCommandBuilder()
    )
    .addSubcommand(
       new Discord.SlashCommandSubcommandBuilder()
-         .setName(`submissions-status`)
+         .setName(`submissions`)
          .setDescription(`View the statuses of your QoTD submissions`)
+   )
+   .addSubcommand(
+      new Discord.SlashCommandSubcommandBuilder()
+         .setName(`queue`)
+         .setDescription(`View the current QoTD queue`)
    );
 
 

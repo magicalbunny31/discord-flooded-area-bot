@@ -24,7 +24,7 @@ export default async (interaction, firestore) => {
 
    if (qotdUserDocData[`next-submission-at`]?.seconds > dayjs().unix())
       return await interaction.editReply({
-         content: `### ⌚ You can submit another QoTD ${Discord.time(qotdUserDocData[`next-submission-at`].seconds, Discord.TimestampStyles.RelativeTime)}`
+         content: `### ⌚ You can submit another QoTD ${Discord.time(qotdUserDocData[`next-submission-at`].seconds, Discord.TimestampStyles.RelativeTime)}.`
       });
 
 
@@ -43,6 +43,7 @@ export default async (interaction, firestore) => {
                📝 You need to have [question] and at least one of [discussion thread, reaction choices] to submit this QoTD
                📥 Once submitted, you won't be able to edit this QoTD again
                🚨 Staff will review your submitted QoTD before it gets posted
+               ⌚ Only 1 QoTD can be submitted every 24 hours
             `
          })
    ];
