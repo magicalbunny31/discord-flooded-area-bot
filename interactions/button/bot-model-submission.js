@@ -15,7 +15,7 @@ export default async (interaction, firestore) => {
    // modal
    const modal = new Discord.ModalBuilder()
       .setCustomId(`bot-model-submission`)
-      .setTitle(`Submit level`)
+      .setTitle(`submit level`)
       .setComponents(
          new Discord.ActionRowBuilder()
             .setComponents(
