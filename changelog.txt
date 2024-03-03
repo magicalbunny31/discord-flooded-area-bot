@@ -820,7 +820,7 @@
 > - updated server booster section to me more up to date
 
 ### updated https://discord.com/channels/977254354589462618/1148694055887327242
-> - added missing escape map \`Oceanic Spire\`
+> - added missing escape map `Oceanic Spire`
 
 
 
@@ -858,7 +858,23 @@
 > - updated content creator section to me more up to date
 
 ### updated https://discord.com/channels/977254354589462618/1148694055887327242
-> - added missing boat map \`Titanic\`
-> - added missing two-team elimination map \`Ant Wars\`
-> - added missing free-for-all map \`King of the Hill\`
+> - added missing boat map `Titanic`
+> - added missing two-team elimination map `Ant Wars`
+> - added missing free-for-all map `King of the Hill`
 > - re-organised escape maps into alphabetical order 
+
+
+
+------------
+==============
+==============
+------------
+03/mar/2024
+
+
+
+# https://discord.com/channels/977254354589462618/987047618918105118 v`3.6.7`
+
+
+### <a:context_menu_command:1193174900052066444> added bot model submission functionality
+> - for darkness obby~
