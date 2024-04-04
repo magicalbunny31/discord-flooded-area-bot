@@ -1,5 +1,5 @@
 export const name = "suggest-new-bot-feature";
-export const guilds = [ process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import { colours } from "@magicalbunny31/awesome-utility-stuff";

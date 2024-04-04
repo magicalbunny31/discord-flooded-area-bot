@@ -1,5 +1,5 @@
 export const name = "bot-model-submission";
-export const guilds = [ process.env.GUILD_DARKNESS_OBBY ];
+export const guilds = [ process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 

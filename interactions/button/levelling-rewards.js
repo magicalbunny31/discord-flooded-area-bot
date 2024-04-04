@@ -1,5 +1,5 @@
 export const name = "levelling-rewards";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import { colours, emojis, strip } from "@magicalbunny31/awesome-utility-stuff";
@@ -25,7 +25,7 @@ export default async (interaction, firestore) => {
          colour: colours.flooded_area
       },
 
-      [process.env.GUILD_SPACED_OUT]: {
+      [process.env.GUILD_UNIVERSE_LABORATORIES]: {
          colour: colours.spaced_out
       }
    }[interaction.guild.id];
@@ -50,7 +50,7 @@ export default async (interaction, firestore) => {
                         > - ${Discord.roleMention(process.env.FA_ROLE_IMAGE_EMBED_PERMS)}
                      `
                   }];
-                  case process.env.GUILD_SPACED_OUT: return [{
+                  case process.env.GUILD_UNIVERSE_LABORATORIES: return [{
                      name: `❓ \`No levelling rewards.\``,
                      value: strip`
                         > - ${emojis.foxsleep}

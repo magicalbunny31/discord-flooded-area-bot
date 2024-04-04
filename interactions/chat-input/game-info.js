@@ -1,5 +1,5 @@
 export const name = "game-info";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 export const data = new Discord.SlashCommandBuilder()
    .setName(`game-info`)

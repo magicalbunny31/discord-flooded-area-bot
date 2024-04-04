@@ -1,5 +1,5 @@
 export const name = "update-roblosecurity-cookie";
-export const guilds = [ process.env.GUILD_DARKNESS_OBBY ];
+export const guilds = [ process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import Noblox from "noblox.js";
@@ -51,7 +51,7 @@ export default async (interaction, firestore) => {
    const cipher = crypto.createCipheriv(`aes-256-cbc`, Buffer.from(process.env.ROBLOSECURITY_KEY, `hex`), Buffer.from(process.env.ROBLOSECURITY_IV, `hex`));
    const encryptedCookie = Buffer.concat([ cipher.update(roblosecurityCookie), cipher.final() ]);
 
-   await firestore.collection(`bot-model-submission`).doc(process.env.GUILD_DARKNESS_OBBY).update({
+   await firestore.collection(`bot-model-submission`).doc(process.env.GUILD_UNIVERSE_LABORATORIES).update({
       ROBLOSECURITY: encryptedCookie
    });
 

@@ -1,5 +1,5 @@
 export const name = "wiki";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 export const data = new Discord.SlashCommandBuilder()
    .setName(`wiki`)
@@ -29,7 +29,7 @@ export default async (interaction, firestore) => {
 
 
    // TODO
-   if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
+   if (interaction.guild.id === process.env.GUILD_UNIVERSE_LABORATORIES)
       return await interaction.reply({
          content: strip`
             ### ❌ This command can't be used
@@ -52,7 +52,7 @@ export default async (interaction, firestore) => {
    // colour to show
    const colour = {
       [process.env.GUILD_FLOODED_AREA]: colours.flooded_area,
-      [process.env.GUILD_SPACED_OUT]:   colours.spaced_out
+      [process.env.GUILD_UNIVERSE_LABORATORIES]:   colours.spaced_out
    }[interaction.guild.id];
 
 
@@ -62,7 +62,7 @@ export default async (interaction, firestore) => {
          name: `Flooded Area Official Wiki`,
          url: `https://flooded-area-official.fandom.com`
       },
-      [process.env.GUILD_SPACED_OUT]: {
+      [process.env.GUILD_UNIVERSE_LABORATORIES]: {
          name: `Spaced Out Wiki`,
          url: `https://spacedout1.fandom.com`
       }

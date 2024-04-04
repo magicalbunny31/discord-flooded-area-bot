@@ -1,5 +1,5 @@
 export const name = "suggest-new-bot-feature";
-export const guilds = [ process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 export const data = new Discord.SlashCommandBuilder()
    .setName(`suggest-new-bot-feature`)

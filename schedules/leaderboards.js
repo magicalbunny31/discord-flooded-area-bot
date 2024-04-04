@@ -15,7 +15,7 @@ export default async (client, firestore) => {
    // guilds to fetch
    const guilds = [
       process.env.GUILD_FLOODED_AREA,
-      process.env.GUILD_SPACED_OUT
+      process.env.GUILD_UNIVERSE_LABORATORIES
    ];
 
 

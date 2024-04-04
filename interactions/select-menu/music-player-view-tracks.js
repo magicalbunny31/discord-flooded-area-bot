@@ -1,5 +1,5 @@
 export const name = "music-player-view-tracks";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT, process.env.GUILD_BUNNY_FURFEST, process.env.GUILD_THE_HUB ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES, process.env.GUILD_BUNNY_FURFEST, process.env.GUILD_THE_HUB ];
 
 import Discord from "discord.js";
 import { colours } from "@magicalbunny31/awesome-utility-stuff";
@@ -23,7 +23,7 @@ export default async (interaction, firestore) => {
          name:   `flooded-area`
       },
 
-      [process.env.GUILD_SPACED_OUT]: {
+      [process.env.GUILD_UNIVERSE_LABORATORIES]: {
          colour: colours.spaced_out,
          name:   `spaced-out`
       },

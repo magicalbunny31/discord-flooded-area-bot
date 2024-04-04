@@ -1,5 +1,5 @@
 export const name = "music-player";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT, process.env.GUILD_BUNNY_FURFEST ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_BUNNY_FURFEST ];
 
 export const data = new Discord.SlashCommandBuilder()
    .setName(`music-player`)

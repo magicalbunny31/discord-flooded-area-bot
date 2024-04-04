@@ -1,5 +1,5 @@
 export const name = "music-player play track";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT, process.env.GUILD_BUNNY_FURFEST ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_BUNNY_FURFEST ];
 
 
 import Discord from "discord.js";
@@ -16,17 +16,13 @@ export default async (interaction, firestore) => {
    const input = interaction.options.getFocused();
 
 
-   // TODO
-   if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
-      return await interaction.respond([]);
+   // TODO support for spaced out/darkness obby/anarchy chess
 
 
    // music to show
    const name = {
-      [process.env.GUILD_FLOODED_AREA]:    `flooded-area`,
-      [process.env.GUILD_SPACED_OUT]:      `spaced-out`,
-      [process.env.GUILD_BUNNY_FURFEST]:   `flooded-area`,
-      [process.env.GUILD_THE_HUB]:         `flooded-area`
+      [process.env.GUILD_FLOODED_AREA]:  `flooded-area`,
+      [process.env.GUILD_BUNNY_FURFEST]: `flooded-area`
    }[interaction.guild.id];
 
 

@@ -1,5 +1,5 @@
 export const name = "View Currency Items";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 export const data = new Discord.ContextMenuCommandBuilder()
    .setType(Discord.ApplicationCommandType.User)
@@ -26,7 +26,7 @@ export default async (interaction, firestore) => {
          colour: colours.flooded_area
       },
 
-      [process.env.GUILD_SPACED_OUT]: {
+      [process.env.GUILD_UNIVERSE_LABORATORIES]: {
          colour: colours.spaced_out
       }
    }[interaction.guild.id];

@@ -1,5 +1,5 @@
 export const name = "currency-items";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import { emojis, colours, deferComponents, strip, sum } from "@magicalbunny31/awesome-utility-stuff";
@@ -20,7 +20,7 @@ export default async (interaction, firestore) => {
          colour: colours.flooded_area
       },
 
-      [process.env.GUILD_SPACED_OUT]: {
+      [process.env.GUILD_UNIVERSE_LABORATORIES]: {
          colour: colours.spaced_out
       }
    }[interaction.guild.id];

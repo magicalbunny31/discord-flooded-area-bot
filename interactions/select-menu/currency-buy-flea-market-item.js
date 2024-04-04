@@ -1,5 +1,5 @@
 export const name = "currency-buy-flea-market-item";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import { emojis, deferComponents, strip } from "@magicalbunny31/awesome-utility-stuff";

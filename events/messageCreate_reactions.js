@@ -16,7 +16,7 @@ export default async (message, firestore) => {
 
 
    // this message isn't from these guilds
-   if (![ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ].includes(message.guild?.id))
+   if (![ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ].includes(message.guild?.id))
       return;
 
 

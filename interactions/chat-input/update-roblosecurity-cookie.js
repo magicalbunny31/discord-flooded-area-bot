@@ -1,5 +1,5 @@
 export const name = "update-roblosecurity-cookie";
-export const guilds = [ process.env.GUILD_DARKNESS_OBBY ];
+export const guilds = [ process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 export const data = new Discord.SlashCommandBuilder()
    .setName(`update-roblosecurity-cookie`)

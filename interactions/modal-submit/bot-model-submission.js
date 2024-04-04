@@ -1,5 +1,5 @@
 export const name = "bot-model-submission";
-export const guilds = [ process.env.GUILD_DARKNESS_OBBY ];
+export const guilds = [ process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import Noblox from "noblox.js";
@@ -85,7 +85,7 @@ export default async (interaction, firestore) => {
 
    // get the ROBLOSECURITY cookie
    // ..storing the encrypted cookie on the firestore might not be the best idea..? idk, but we're both happy with it i think so whatever
-   const botModelSubmissionDocRef  = firestore.collection(`bot-model-submission`).doc(process.env.GUILD_DARKNESS_OBBY);
+   const botModelSubmissionDocRef  = firestore.collection(`bot-model-submission`).doc(process.env.GUILD_UNIVERSE_LABORATORIES);
    const botModelSubmissionDocSnap = await botModelSubmissionDocRef.get();
    const botModelSubmissionDocData = botModelSubmissionDocSnap.data();
 

@@ -10,7 +10,7 @@ import { Timestamp } from "@google-cloud/firestore";
  */
 export default async (member, firestore) => {
    // this member isn't from these guilds
-   if (![ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ].includes(member.guild.id))
+   if (![ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ].includes(member.guild.id))
       return;
 
 

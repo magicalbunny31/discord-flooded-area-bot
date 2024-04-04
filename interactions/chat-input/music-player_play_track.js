@@ -1,5 +1,5 @@
 export const name = "music-player play track";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT, process.env.GUILD_BUNNY_FURFEST ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_BUNNY_FURFEST ];
 
 
 import Discord from "discord.js";
@@ -20,28 +20,11 @@ export default async (interaction, firestore) => {
    const behaviour     = interaction.options.getString(`behaviour`);
 
 
-   // TODO
-   if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
-      return await interaction.reply({
-         content: strip`
-            ### ❌ Tracks aren't available
-            > - ${interaction.client.user} does not have access to the music for this game.
-            > - Contact <@490178047325110282> to set-up this command.
-         `,
-         ephemeral: true
-      });
-
-
    // data to show
    const data = {
       [process.env.GUILD_FLOODED_AREA]: {
          colour: colours.flooded_area,
          name:   `flooded-area`
-      },
-
-      [process.env.GUILD_SPACED_OUT]: {
-         colour: colours.spaced_out,
-         name:   `spaced-out`
       },
 
       [process.env.GUILD_BUNNY_FURFEST]: {

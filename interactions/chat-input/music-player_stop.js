@@ -1,5 +1,5 @@
 export const name = "music-player stop";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT, process.env.GUILD_BUNNY_FURFEST ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_BUNNY_FURFEST ];
 
 
 import Discord from "discord.js";
@@ -13,18 +13,6 @@ import cache from "../../data/cache.js";
  * @param {import("@google-cloud/firestore").Firestore} firestore
  */
 export default async (interaction, firestore) => {
-   // TODO
-   if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
-      return await interaction.reply({
-         content: strip`
-            ### ❌ Tracks aren't available
-            > - ${interaction.client.user} does not have access to the music for this game.
-            > - Contact <@490178047325110282> to set-up this command.
-         `,
-         ephemeral: true
-      });
-
-
    // the bot isn't playing anything
    const currentMusicPlayerInfo = cache.get(`music-player:${interaction.guild.id}`);
    const voiceConnection        = getVoiceConnection(interaction.guild.id);

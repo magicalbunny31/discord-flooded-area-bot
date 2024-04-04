@@ -1,5 +1,5 @@
 export const name = "wiki";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA ];
 
 
 import Discord from "discord.js";
@@ -15,9 +15,7 @@ export default async (interaction, firestore) => {
    const input = interaction.options.getFocused();
 
 
-   // TODO
-   if (interaction.guild.id === process.env.GUILD_SPACED_OUT)
-      return await interaction.respond([]);
+   // TODO support for spaced out/darkness obby/anarchy chess
 
 
    // no input
@@ -32,8 +30,8 @@ export default async (interaction, firestore) => {
    // request url and query string
    const baseUrl = (() => {
       switch (interaction.guild.id) {
-         case process.env.GUILD_FLOODED_AREA: return `https://flooded-area-official.fandom.com`;
-         case process.env.GUILD_SPACED_OUT:   return `https://spacedout1.fandom.com`;
+         case process.env.GUILD_FLOODED_AREA:          return `https://flooded-area-official.fandom.com`;
+         case process.env.GUILD_UNIVERSE_LABORATORIES: return `https://spacedout1.fandom.com`;
       };
    })();
 

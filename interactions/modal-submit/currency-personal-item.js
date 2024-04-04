@@ -1,5 +1,5 @@
 export const name = "currency-personal-item";
-export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_SPACED_OUT ];
+export const guilds = [ process.env.GUILD_FLOODED_AREA, process.env.GUILD_UNIVERSE_LABORATORIES ];
 
 import Discord from "discord.js";
 import { FieldValue } from "@google-cloud/firestore";
@@ -27,7 +27,7 @@ export default async (interaction, firestore) => {
          colour: colours.flooded_area
       },
 
-      [process.env.GUILD_SPACED_OUT]: {
+      [process.env.GUILD_UNIVERSE_LABORATORIES]: {
          colour: colours.spaced_out
       }
    }[interaction.guild.id];
