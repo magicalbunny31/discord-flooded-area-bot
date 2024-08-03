@@ -49,40 +49,40 @@ export default async (interaction, firestore) => {
    const progressBar = {
       "flooded-area": {
          empty: {
-            start:  `<a:progress_start_empty:1132387114781266030>`,
-            middle: `<a:progress_middle_empty:1132384494108815371>`,
-            end:    `<a:progress_end_empty:1132384484604526643>`
+            start:  `<:progress_start_empty:1269212982638809122>`,
+            middle: `<:progress_middle_empty:1269213005242040340>`,
+            end:    `<:progress_end_empty:1269213048749690961>`
          },
          full: {
-            start:  `<a:progress_start_full:1132384511045402668>`,
-            middle: `<a:progress_middle_full:1132384498819018865>`,
-            end:    `<a:progress_end_full:1132384489281175592>`
+            start:  `<:progress_start_full:1269213066675884104>`,
+            middle: `<:progress_middle_full:1269213084992667669>`,
+            end:    `<:progress_end_full:1269213104680599622>`
          }
       },
 
       "pride": {
          empty: {
-            start:  `<a:progress_start_empty_pride:1132384507203432598>`,
-            middle: `<a:progress_middle_empty_pride:1132384496621207642>`,
-            end:    `<a:progress_end_empty_pride:1132384485867003944>`
+            start:  `<:progress_start_empty_pride:1269213124310073398>`,
+            middle: `<:progress_middle_empty_pride:1269213140894089256>`,
+            end:    `<:progress_end_empty_pride:1269213158417891378>`
          },
          full: {
-            start:  `<a:progress_start_full_pride:1132384512735715358>`,
-            middle: `<a:progress_middle_full_pride:1132387190681370714>`,
-            end:    `<a:progress_end_full_pride:1132384491550290001>`
+            start:  `<:progress_start_full_pride:1269213172628324352>`,
+            middle: `<:progress_middle_full_pride:1269213203632623691>`,
+            end:    `<:progress_end_full_pride:1269213224021000245>`
          }
       },
 
       "trans": {
          empty: {
-            start:  `<a:progress_start_empty_trans:1132387254640324649>`,
-            middle: `<a:progress_middle_empty_trans:1132384497728491592>`,
-            end:    `<a:progress_end_empty_trans:1132384488123551895>`
+            start:  `<:progress_start_empty_trans:1269213245567270912>`,
+            middle: `<:progress_middle_empty_trans:1269213263468564533>`,
+            end:    `<:progress_end_empty_trans:1269213286692425768>`
          },
          full: {
-            start:  `<a:progress_start_full_trans:1132387256339005562>`,
-            middle: `<a:progress_middle_full_trans:1132384502199627816>`,
-            end:    `<a:progress_end_full_trans:1132384492867293205>`
+            start:  `<:progress_start_full_trans:1269213426258022452>`,
+            middle: `<:progress_middle_full_trans:1269213452438737040>`,
+            end:    `<:progress_end_full_trans:1269213471417827348>`
          }
       }
    };
