@@ -29,8 +29,6 @@ export default async (interaction, firestore) => {
 
 
    // embeds
-   const nextSubmissionAt = dayjs(interaction.createdAt).add(24, `hours`);
-
    const embeds = [
       ...interaction.message.embeds,
 
@@ -41,7 +39,6 @@ export default async (interaction, firestore) => {
             > - The ${Discord.roleMention(process.env.FA_ROLE_MODERATION_TEAM)} will review your QoTD before it gets posted to ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}.
             >  - Use ${emojis.slash_command} ${Discord.chatInputApplicationCommandMention(`qotd`, `submissions`, commandQotdId)} to view the statuses of your submissions.
             >  - Use ${emojis.slash_command} ${Discord.chatInputApplicationCommandMention(`qotd`, `queue`, commandQotdId)} to view the whole QoTD queue.
-            > - You can submit another QoTD ${Discord.time(nextSubmissionAt.toDate(), Discord.TimestampStyles.RelativeTime)}.
             > - New ${Discord.channelMention(process.env.FA_CHANNEL_QOTD)}s are posted every day at ${Discord.time(dayjs().startOf(`day`).add(12, `hours`).toDate(), Discord.TimestampStyles.ShortTime)}.
          `)
    ];
@@ -127,13 +124,5 @@ export default async (interaction, firestore) => {
       approved: false,
       message:  message.id,
       user:     interaction.user.id
-   });
-
-
-   // set this person's cooldown
-   const qotdUserDocRef = firestore.collection(`qotd`).doc(interaction.guildId).collection(`users`).doc(interaction.user.id);
-
-   await qotdUserDocRef.set({
-      "next-submission-at": new Timestamp(nextSubmissionAt.unix(), 0)
    });
 };

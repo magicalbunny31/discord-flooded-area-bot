@@ -17,17 +17,6 @@ export default async (interaction, firestore) => {
    });
 
 
-   // this person is on cooldown
-   const qotdUserDocRef  = firestore.collection(`qotd`).doc(interaction.guildId).collection(`users`).doc(interaction.user.id);
-   const qotdUserDocSnap = await qotdUserDocRef.get();
-   const qotdUserDocData = qotdUserDocSnap.data() || {};
-
-   if (qotdUserDocData[`next-submission-at`]?.seconds > dayjs().unix())
-      return await interaction.editReply({
-         content: `### ⌚ You can submit another QoTD ${Discord.time(qotdUserDocData[`next-submission-at`].seconds, Discord.TimestampStyles.RelativeTime)}.`
-      });
-
-
    // embeds
    const embedColour = interaction.user.accentColor || (await interaction.user.fetch(true)).accentColor || choice([ colours.red, colours.orange, colours.yellow, colours.green, colours.blue, colours.purple, colours.pink ]);
 
