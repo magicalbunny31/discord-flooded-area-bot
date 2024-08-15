@@ -21,6 +21,12 @@ export default async (client, firestore) => {
    }, {
       name: `spaced-out`,
       id: 4746031883
+   }, {
+      name: `darkness-obby`,
+      id: 5745236823
+   }, {
+      name: `anarchy-chess`,
+      id: 5778315325
    }];
 
 

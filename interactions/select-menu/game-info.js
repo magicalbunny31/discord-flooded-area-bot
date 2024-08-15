@@ -37,6 +37,20 @@ export default async (interaction, firestore) => {
          colour:     colours.spaced_out,
          universeId: 4746031883,
          url:        `https://www.roblox.com/games/13672239919/Spaced-Out`
+      },
+
+      "darkness-obby": {
+         name:       `Darkness Obby 💡`,
+         colour:     colours.spaced_out,
+         universeId: 5745236823,
+         url:        `https://www.roblox.com/games/16713821581/Spaced-Out`
+      },
+
+      "anarchy-chess": {
+         name:       `Anarchy Chess ♟️`,
+         colour:     colours.spaced_out,
+         universeId: 5778315325,
+         url:        `https://www.roblox.com/games/16813674681/Anarchy-Chess`
       }
    }[experience];
 
@@ -81,6 +95,14 @@ export default async (interaction, firestore) => {
                      .setLabel(`Spaced Out`)
                      .setValue(`spaced-out`)
                      .setDefault(experience === `spaced-out`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Darkness Obby`)
+                     .setValue(`darkness-obby`)
+                     .setDefault(experience === `darkness-obby`),
+                  new Discord.StringSelectMenuOptionBuilder()
+                     .setLabel(`Anarchy Chess`)
+                     .setValue(`anarchy-chess`)
+                     .setDefault(experience === `anarchy-chess`),
                   new Discord.StringSelectMenuOptionBuilder()
                      .setLabel(`Other experiences`)
                      .setValue(`other-experiences`)
@@ -160,7 +182,7 @@ export default async (interaction, firestore) => {
                         });
 
                         if (response.ok)
-                           return (await response.json()).data[0].imageUrl;
+                           return (await response.json()).data[0]?.imageUrl;
 
                         else
                            return null;
