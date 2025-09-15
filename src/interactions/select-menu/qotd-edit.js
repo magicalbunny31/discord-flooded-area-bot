@@ -45,7 +45,7 @@ export default async interaction => {
                            new Discord.TextInputBuilder()
                               .setCustomId(`emoji`)
                               .setLabel(`EMOJI`)
-                              .setMaxLength(2)
+                              .setMaxLength(3)
                               .setPlaceholder(`Emoji for this reaction choice (custom emojis not allowed)`)
                               .setRequired(true)
                               .setStyle(Discord.TextInputStyle.Short)

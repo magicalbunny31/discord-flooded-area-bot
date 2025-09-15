@@ -9,7 +9,8 @@ import qotd from "../../data/qotd.js";
 
 import Discord from "discord.js";
 import dayjs from "dayjs";
-import { emoji, strip } from "@magicalbunny31/pawesome-utility-stuffs";
+import emoji from "emoji-regex";
+import { strip } from "@magicalbunny31/pawesome-utility-stuffs";
 
 
 /**
@@ -73,7 +74,7 @@ export default async interaction => {
          const reactionName  = interaction.fields.getTextInputValue(`name`) .trim();
 
          // this isn't an emoji
-         if (!reactionEmoji.match(emoji))
+         if (!emoji().test(reactionEmoji))
             return await interaction.reply({
                content: `### ❌ "${Discord.escapeMarkdown(reactionEmoji)}" isn't a valid emoji`,
                ephemeral: true
