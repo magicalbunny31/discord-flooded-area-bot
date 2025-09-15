@@ -1,7 +1,7 @@
 pipeline {
    agent {
       node {
-         label "fox-1 apps"
+         label "fox-3 apps"
          customWorkspace "/home/apps/flooded-area-bot"
       }
    }
